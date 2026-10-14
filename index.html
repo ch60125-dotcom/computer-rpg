@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>雲與鍵的彼端：資訊勇者傳說 RPG</title>
+  <title>雲與鍵的彼端：資訊勇者傳說 RPG (硬核戰術與鍛造擴充版)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;700;900&display=swap');
@@ -56,7 +56,7 @@
           雲與鍵的彼端：資訊勇者傳說
         </h1>
         <p class="text-[11px] text-stone-400">
-          按住 <kbd class="px-1.5 py-0.5 bg-stone-800 text-amber-300 border border-stone-600 rounded text-[10px]">↑↓←→</kbd> 闖蕩複雜迷宮・擊敗各關守門小 BOSS 解鎖下一章・升級領悟新武學自由配招！
+          按住 <kbd class="px-1.5 py-0.5 bg-stone-800 text-amber-300 border border-stone-600 rounded text-[10px]">↑↓←→</kbd> 探索迷宮・高階神兵需達指定等級方可佩帶・善用破甲與配招克敵制勝！
         </p>
       </div>
     </div>
@@ -68,11 +68,14 @@
       <button onclick="openSkillDeckModal()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-950 hover:bg-indigo-900 text-indigo-200 border border-indigo-400/60 transition shadow">
         🧘 武學配招 (<span id="unlocked-skill-count">3</span>/8)
       </button>
+      <button onclick="openShopModal()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-900/80 hover:bg-amber-800 text-amber-100 border border-amber-400/60 transition shadow">
+        🏪 西域鍛造坊
+      </button>
       <button onclick="openVictoryModalManual()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-950/90 hover:bg-emerald-900 text-emerald-200 border border-emerald-500/60 transition">
         📝 登錄成績
       </button>
       <button onclick="openLeaderboardModal('')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-950/90 hover:bg-amber-900 text-amber-200 border border-amber-500/60 transition">
-        🏆 全班英雄榜
+        🏆 英雄榜
       </button>
       <button onclick="openQuestionManager()" class="rpg-btn px-2.5 py-1.5 rounded-lg text-xs font-bold">
         🔒 題庫 (<span id="q-count">45</span>)
@@ -99,8 +102,9 @@
               <span class="text-sm font-black text-amber-400 serif-title">Lv.<span id="player-lv">1</span></span>
             </div>
             <h2 class="text-base font-black text-stone-100 mt-0.5 serif-title tracking-wide">古月鍵俠</h2>
-            <div class="text-xs text-amber-400 font-bold mt-0.5">
-              🪙 銀兩：<span id="player-gold">60</span> <span class="text-[10px] text-stone-400 font-normal">Bytes</span>
+            <div class="flex items-center justify-between mt-0.5">
+              <span class="text-xs text-amber-400 font-bold">🪙 銀兩：<span id="player-gold">35</span> <span class="text-[10px] text-stone-400 font-normal">Bytes</span></span>
+              <span id="next- battle-buff-tag" class="hidden text-[10px] px-1.5 py-0.5 bg-purple-950 text-purple-300 border border-purple-500/40 rounded">符咒加持中</span>
             </div>
           </div>
         </div>
@@ -110,7 +114,7 @@
           <div>
             <div class="flex justify-between text-xs font-bold mb-0.5">
               <span class="text-rose-400">❤️ 命 (系統穩定度 HP)</span>
-              <span class="font-mono text-stone-200"><span id="player-hp">110</span> / <span id="player-max-hp">110</span></span>
+              <span class="font-mono text-stone-200"><span id="player-hp">105</span> / <span id="player-max-hp">105</span></span>
             </div>
             <div class="w-full h-3 bg-stone-950 rounded-full overflow-hidden p-0.5 border border-stone-700">
               <div id="hp-bar" class="h-full bg-gradient-to-r from-red-700 via-rose-500 to-orange-400 rounded-full bar-fill" style="width: 100%"></div>
@@ -120,7 +124,7 @@
           <div>
             <div class="flex justify-between text-xs font-bold mb-0.5">
               <span class="text-sky-400">💧 靈 (電力真氣 MP)</span>
-              <span class="font-mono text-stone-200"><span id="player-mp">60</span> / <span id="player-max-mp">60</span></span>
+              <span class="font-mono text-stone-200"><span id="player-mp">55</span> / <span id="player-max-mp">55</span></span>
             </div>
             <div class="w-full h-3 bg-stone-950 rounded-full overflow-hidden p-0.5 border border-stone-700">
               <div id="mp-bar" class="h-full bg-gradient-to-r from-blue-700 via-sky-500 to-cyan-300 rounded-full bar-fill" style="width: 100%"></div>
@@ -129,8 +133,8 @@
 
           <div>
             <div class="flex justify-between text-[11px] font-bold mb-0.5">
-              <span class="text-amber-300">✨ 修行歷練 (升級可領悟新招式)</span>
-              <span class="font-mono text-stone-300"><span id="player-exp">0</span> / <span id="player-next-exp">30</span></span>
+              <span class="text-amber-300">✨ 修行歷練 (升級解鎖高階裝備與新招)</span>
+              <span class="font-mono text-stone-300"><span id="player-exp">0</span> / <span id="player-next-exp">35</span></span>
             </div>
             <div class="w-full h-2 bg-stone-950 rounded-full overflow-hidden border border-stone-700">
               <div id="exp-bar" class="h-full bg-gradient-to-r from-amber-600 to-yellow-300 rounded-full bar-fill" style="width: 0%"></div>
@@ -142,11 +146,11 @@
         <div class="grid grid-cols-2 gap-1.5 bg-stone-950/90 p-2 rounded-xl border border-stone-800 text-xs">
           <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-stone-400">⚔️ 武力(ATK)</span>
-            <span id="player-atk" class="font-black text-orange-400">18</span>
+            <span id="player-atk" class="font-black text-orange-400">15</span>
           </div>
           <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-stone-400">🛡️ 防禦(DEF)</span>
-            <span id="player-def" class="font-black text-emerald-400">6</span>
+            <span id="player-def" class="font-black text-emerald-400">4</span>
           </div>
           <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-stone-400">🎯 破敵題數</span>
@@ -169,7 +173,7 @@
                 🧘 配招
               </button>
               <button onclick="openShopModal()" class="rpg-btn text-[11px] px-2 py-0.5 rounded font-bold">
-                🏪 鍛造坊
+                🏪 鍛造坊 (21件)
               </button>
             </div>
           </div>
@@ -178,8 +182,8 @@
               <div class="flex items-center gap-2">
                 <span id="eq-weapon-icon" class="text-lg">🗡️</span>
                 <div>
-                  <div class="text-[10px] text-stone-500">兵刃 (提升攻擊)</div>
-                  <div id="eq-weapon-name" class="font-bold text-stone-200">青銅薄膜短劍</div>
+                  <div class="text-[10px] text-stone-500">兵刃 (主攻)</div>
+                  <div id="eq-weapon-name" class="font-bold text-stone-200">生鏽薄膜短劍</div>
                 </div>
               </div>
               <span id="eq-weapon-stat" class="text-[11px] font-bold px-2 py-0.5 bg-orange-950 text-orange-300 border border-orange-700/40 rounded">+0 ATK</span>
@@ -189,8 +193,8 @@
               <div class="flex items-center gap-2">
                 <span id="eq-armor-icon" class="text-lg">🥋</span>
                 <div>
-                  <div class="text-[10px] text-stone-500">護甲 (提升防禦)</div>
-                  <div id="eq-armor-name" class="font-bold text-stone-200">粗布防火衣</div>
+                  <div class="text-[10px] text-stone-500">護甲 (主防)</div>
+                  <div id="eq-armor-name" class="font-bold text-stone-200">粗布防塵衣</div>
                 </div>
               </div>
               <span id="eq-armor-stat" class="text-[11px] font-bold px-2 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-700/40 rounded">+0 DEF</span>
@@ -200,8 +204,8 @@
               <div class="flex items-center gap-2">
                 <span id="eq-acc-icon" class="text-lg">📿</span>
                 <div>
-                  <div class="text-[10px] text-stone-500">法寶 (提升命/靈)</div>
-                  <div id="eq-acc-name" class="font-bold text-stone-200">4GB 隨身玉佩</div>
+                  <div class="text-[10px] text-stone-500">法寶 (核心)</div>
+                  <div id="eq-acc-name" class="font-bold text-stone-200">老舊軟碟片</div>
                 </div>
               </div>
               <span id="eq-acc-stat" class="text-[11px] font-bold px-2 py-0.5 bg-purple-950 text-purple-300 border border-purple-700/40 rounded">+0 命/靈</span>
@@ -211,30 +215,52 @@
 
         <div class="mt-3 pt-2.5 border-t border-stone-800">
           <div class="flex justify-between items-center mb-1.5">
-            <span class="text-[11px] font-bold text-stone-400">🧪 隨身丹藥與天書</span>
+            <span class="text-[11px] font-bold text-stone-400">🧪 隨身丹藥與戰術符咒</span>
             <button onclick="openCodexModal()" class="text-[11px] text-sky-400 hover:underline font-bold">📖 翻閱《資訊天書》</button>
           </div>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="usePotion('hp')" class="flex items-center justify-between p-2 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/60 rounded-xl transition text-left">
-              <div class="flex items-center gap-1.5">
-                <span class="text-base">🏺</span>
+          <div class="grid grid-cols-2 gap-1.5">
+            <button onclick="usePotion('hp')" class="flex items-center justify-between p-1.5 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/60 rounded-xl transition text-left">
+              <div class="flex items-center gap-1">
+                <span class="text-sm">🏺</span>
                 <div>
-                  <div class="text-xs font-bold text-rose-200">乖乖金創藥</div>
-                  <div class="text-[10px] text-rose-400">+65 命(HP)</div>
+                  <div class="text-[11px] font-bold text-rose-200">乖乖金創藥</div>
+                  <div class="text-[9px] text-rose-400">+65 命</div>
                 </div>
               </div>
-              <span id="item-hp-count" class="text-xs font-black bg-rose-800 px-2 py-0.5 rounded-full text-white">2</span>
+              <span id="item-hp-count" class="text-xs font-black bg-rose-800 px-1.5 py-0.5 rounded-full text-white">2</span>
             </button>
 
-            <button onclick="usePotion('mp')" class="flex items-center justify-between p-2 bg-sky-950/40 hover:bg-sky-900/60 border border-sky-800/60 rounded-xl transition text-left">
-              <div class="flex items-center gap-1.5">
-                <span class="text-base">⚡</span>
+            <button onclick="usePotion('mp')" class="flex items-center justify-between p-1.5 bg-sky-950/40 hover:bg-sky-900/60 border border-sky-800/60 rounded-xl transition text-left">
+              <div class="flex items-center gap-1">
+                <span class="text-sm">⚡</span>
                 <div>
-                  <div class="text-xs font-bold text-sky-200">行動聚靈丹</div>
-                  <div class="text-[10px] text-sky-400">+40 靈(MP)</div>
+                  <div class="text-[11px] font-bold text-sky-200">行動聚靈丹</div>
+                  <div class="text-[9px] text-sky-400">+40 靈</div>
                 </div>
               </div>
-              <span id="item-mp-count" class="text-xs font-black bg-sky-800 px-2 py-0.5 rounded-full text-white">1</span>
+              <span id="item-mp-count" class="text-xs font-black bg-sky-800 px-1.5 py-0.5 rounded-full text-white">1</span>
+            </button>
+
+            <button onclick="usePotion('superHp')" class="flex items-center justify-between p-1.5 bg-amber-950/40 hover:bg-amber-900/60 border border-amber-800/60 rounded-xl transition text-left">
+              <div class="flex items-center gap-1">
+                <span class="text-sm">🍱</span>
+                <div>
+                  <div class="text-[11px] font-bold text-amber-200">伺服器大補丸</div>
+                  <div class="text-[9px] text-amber-400">+160 命/淨化</div>
+                </div>
+              </div>
+              <span id="item-superhp-count" class="text-xs font-black bg-amber-700 px-1.5 py-0.5 rounded-full text-white">0</span>
+            </button>
+
+            <button onclick="usePotion('Scroll')" class="flex items-center justify-between p-1.5 bg-purple-950/40 hover:bg-purple-900/60 border border-purple-800/60 rounded-xl transition text-left">
+              <div class="flex items-center gap-1">
+                <span class="text-sm">📜</span>
+                <div>
+                  <div class="text-[11px] font-bold text-purple-200">超頻狂暴卷軸</div>
+                  <div class="text-[9px] text-purple-400">戰鬥+18ATK</div>
+                </div>
+              </div>
+              <span id="item-scroll-count" class="text-xs font-black bg-purple-800 px-1.5 py-0.5 rounded-full text-white">0</span>
             </button>
           </div>
         </div>
@@ -301,11 +327,11 @@
           <!-- 戰鬥指令浮層 -->
           <div id="battle-ui-overlay" class="hidden absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black via-stone-950/95 to-transparent z-20">
             <div class="flex justify-between items-center mb-2 px-1">
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-amber-300">💡 施展自訂武學並答對符文即可破敵！</span>
-                <span id="battle-buff-badge" class="hidden text-[11px] px-2 py-0.5 bg-sky-900 text-sky-200 border border-sky-400 rounded font-bold">🛡️ 金鐘罩 +12 DEF</span>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs font-bold text-amber-300">⚠️ 注意：答錯題目會露出破綻，遭受妖魔 1.25 倍痛擊！</span>
+                <span id="battle-buff-badge" class="hidden text-[11px] px-2 py-0.5 bg-sky-900 text-sky-200 border border-sky-400 rounded font-bold">🛡️ 金鐘罩生效</span>
               </div>
-              <button id="btn-flee" onclick="fleeBattle()" class="px-2.5 py-1 bg-stone-800 hover:bg-rose-900 text-stone-300 hover:text-white text-xs font-bold rounded border border-stone-600">
+              <button id="btn-flee" onclick="fleeBattle()" class="px-2.5 py-1 bg-stone-800 hover:bg-rose-900 text-stone-300 hover:text-white text-xs font-bold rounded border border-stone-600 shrink-0">
                 🏃 撤退回迷宮
               </button>
             </div>
@@ -318,8 +344,8 @@
           <div class="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-stone-400">
             <span>🔥 火把視野</span>
             <span>👹 金光首領：守門小BOSS</span>
-            <span>📦 寶箱(小心機關/寶箱怪!)</span>
-            <span>⛲ 靈泉(全滿)</span>
+            <span>📦 寶箱(含陷阱/寶箱怪)</span>
+            <span>⛲ 靈泉(每章限飲一次)</span>
           </div>
 
           <div class="flex items-center gap-1 mx-auto sm:mx-0">
@@ -329,8 +355,8 @@
               <button onmousedown="startTouchMove(0,1)" onmouseup="stopTouchMove()" onmouseleave="stopTouchMove()" ontouchstart="event.preventDefault();startTouchMove(0,1)" ontouchend="stopTouchMove()" class="rpg-btn w-8 h-8 rounded-lg font-black">↓</button>
             </div>
             <button onmousedown="startTouchMove(1,0)" onmouseup="stopTouchMove()" onmouseleave="stopTouchMove()" ontouchstart="event.preventDefault();startTouchMove(1,0)" ontouchend="stopTouchMove()" class="rpg-btn w-8 h-8 rounded-lg font-black">→</button>
-            <button onclick="respawnMapEntities()" class="rpg-btn ml-2 px-2.5 py-1.5 rounded-lg text-[11px] font-bold">
-              🔄 重生迷宮妖魔
+            <button onclick="respawnMapEntities()" class="rpg-btn ml-2 px-2.5 py-1.5 rounded-lg text-[11px] font-bold" title="消耗 30 銀兩重新召喚迷宮怪物">
+              🔄 重生妖魔(🪙30)
             </button>
           </div>
         </div>
@@ -340,7 +366,7 @@
       <!-- 江湖傳書紀錄 (Log) -->
       <div class="rpg-panel rounded-2xl p-2.5">
         <div id="battle-log" class="h-14 overflow-y-auto space-y-1 text-xs font-mono pr-1">
-          <div class="text-amber-300">> 【系統】歡迎踏入《雲與鍵的彼端》！每一章節傳送門前皆有「守門小 BOSS」鎮守，開啟寶箱時請小心偽裝寶箱怪與毒針機關！</div>
+          <div class="text-amber-300">> 【系統】難度已全面提升！高階神兵需達指定修行等級方可購買，請善用屬性相剋、破甲武學與戰術符咒破敵！</div>
         </div>
       </div>
 
@@ -354,7 +380,7 @@
         <span id="quiz-category" class="text-xs font-black px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full serif-title">
           📜 資訊符文詠唱
         </span>
-        <span class="text-xs text-amber-400 font-bold">答對即可施展武學奧義！</span>
+        <span class="text-xs text-rose-400 font-bold">⚠️ 答錯將露出破綻承受 1.25 倍反擊！</span>
       </div>
       <h3 id="quiz-question" class="text-base md:text-lg font-black text-white mb-4 leading-snug"></h3>
       <div id="quiz-options" class="space-y-2.5"></div>
@@ -368,7 +394,7 @@
       <div class="flex justify-between items-center border-b border-stone-700 pb-3 mb-3">
         <div>
           <h3 class="text-lg font-black text-indigo-300 serif-title">🧘 古月劍派・武學奧義自由配招</h3>
-          <p class="text-xs text-stone-400">隨著等級提升將自動領悟新招式！請勾選 <b class="text-amber-300">最多 4 招</b> 裝配至戰鬥快捷列：</p>
+          <p class="text-xs text-stone-400">面對高防禦的首領與重甲妖魔，單靠普攻難以破防！請挑選 <b class="text-amber-300">最多 4 招</b> 組合出戰：</p>
         </div>
         <button onclick="document.getElementById('skill-deck-modal').classList.add('hidden')" class="rpg-btn px-3 py-1 rounded-lg text-xs font-bold">✓ 完成配招</button>
       </div>
@@ -382,41 +408,30 @@
     </div>
   </div>
 
-  <!-- 彈出視窗 3：神兵鍛造坊 -->
-  <div id="shop-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div class="rpg-panel rounded-2xl max-w-2xl w-full p-5 max-h-[85vh] flex flex-col">
-      <div class="flex justify-between items-center border-b border-stone-700 pb-3 mb-3">
+  <!-- 彈出視窗 3：西域光華鍛造坊 (大擴充 21 件商品 + 分類頁籤) -->
+  <div id="shop-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="rpg-panel rounded-2xl max-w-3xl w-full p-5 max-h-[88vh] flex flex-col border-2 border-amber-500/80">
+      <div class="flex flex-wrap justify-between items-center border-b border-stone-700 pb-3 mb-3 gap-2">
         <div>
-          <h3 class="text-lg font-black text-amber-300 serif-title">🏪 西域光華鍛造坊</h3>
-          <p class="text-xs text-stone-400">持有銀兩：🪙 <span id="shop-gold-display" class="text-amber-400 font-black">60</span> Bytes</p>
+          <h3 class="text-lg font-black text-amber-300 serif-title">🏪 西域光華神兵鍛造坊（五階軍械庫）</h3>
+          <p class="text-xs text-stone-400">
+            目前修行等級：<b class="text-sky-300">Lv.<span id="shop-lv-display">1</span></b> ｜ 持有銀兩：🪙 <span id="shop-gold-display" class="text-amber-400 font-black">35</span> Bytes
+            <span class="text-rose-400 ml-1">（高階神兵需達指定等級方可鍛造）</span>
+          </p>
         </div>
-        <button onclick="document.getElementById('shop-modal').classList.add('hidden')" class="rpg-btn px-3 py-1 rounded-lg text-xs font-bold">✕ 離開</button>
+        <button onclick="document.getElementById('shop-modal').classList.add('hidden')" class="rpg-btn px-3 py-1.5 rounded-lg text-xs font-bold">✕ 離開鍛造坊</button>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-3">
-        <div class="p-2.5 bg-stone-950 border border-stone-800 rounded-xl flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">🏺</span>
-            <div>
-              <div class="font-bold text-xs text-white">綠色乖乖金創藥</div>
-              <div class="text-[11px] text-stone-400">恢復 65 點 命(HP)</div>
-            </div>
-          </div>
-          <button onclick="buyConsumable('hp', 20)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs rounded-lg">🪙 20 購買</button>
-        </div>
-        <div class="p-2.5 bg-stone-950 border border-stone-800 rounded-xl flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">⚡</span>
-            <div>
-              <div class="font-bold text-xs text-white">行動電源聚靈丹</div>
-              <div class="text-[11px] text-stone-400">恢復 40 點 靈(MP)</div>
-            </div>
-          </div>
-          <button onclick="buyConsumable('mp', 25)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs rounded-lg">🪙 25 購買</button>
-        </div>
+      <!-- 鍛造坊分類篩選按鈕 -->
+      <div class="grid grid-cols-4 gap-1.5 mb-3 bg-stone-950 p-1 rounded-xl border border-stone-800 text-xs">
+        <button id="shop-tab-item" onclick="switchShopTab('item')" class="py-1.5 rounded-lg font-black bg-amber-600 text-stone-950">🧪 丹藥與秘卷(6)</button>
+        <button id="shop-tab-weapon" onclick="switchShopTab('weapon')" class="py-1.5 rounded-lg font-bold text-stone-300 hover:bg-stone-800">🗡️ 歷代名劍(5)</button>
+        <button id="shop-tab-armor" onclick="switchShopTab('armor')" class="py-1.5 rounded-lg font-bold text-stone-300 hover:bg-stone-800">🛡️ 資安寶甲(5)</button>
+        <button id="shop-tab-acc" onclick="switchShopTab('acc')" class="py-1.5 rounded-lg font-bold text-stone-300 hover:bg-stone-800">📿 上古法寶(5)</button>
       </div>
 
-      <div id="shop-equipment-list" class="grid grid-cols-1 md:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1"></div>
+      <!-- 動態商品列表 -->
+      <div id="shop-content-area" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 overflow-y-auto pr-1 flex-1"></div>
     </div>
   </div>
 
@@ -664,7 +679,7 @@
     }
 
     // =========================================================
-    // 2. 擴充版 45 題多元國小資訊題庫 (含不重複洗牌抽題池)
+    // 2. 45 題多元國小資訊題庫
     // =========================================================
     const defaultQuestions = [
       { cat: "鍵盤操作", q: "在編輯文件或畫圖時，不小心做錯了一步，按哪個快捷鍵可以「復原」上一步？", opts: ["Ctrl + Z", "Ctrl + C", "Ctrl + V", "Ctrl + S"], ans: 0, exp: "Ctrl + Z 是後悔藥，可以復原剛剛做錯的動作！" },
@@ -734,74 +749,78 @@
     const skillCatalog = [
       {
         id: 'slash', name: "🗡️ 疾風劍氣", unlockLv: 1, mpCost: 0, type: "attack",
-        shortDesc: "0 靈｜105% 基礎斬擊",
-        fullDesc: "不消耗靈力的基本劍招，穩定造成 105% 物理斬擊傷害。",
+        shortDesc: "0 靈｜100% 基礎斬擊",
+        fullDesc: "不消耗靈力的基本劍招，對付低防禦小怪適用，但難以斬穿高階首領的重甲。",
         borderClass: "border-amber-500/70 from-stone-700 to-stone-900", textClass: "text-amber-200"
       },
       {
-        id: 'heal', name: "🌿 迴風沐雨訣", unlockLv: 1, mpCost: 12, type: "heal",
-        shortDesc: "12 靈｜免答題 +45%命",
-        fullDesc: "不需答題直接運功療傷，恢復 45% 最大命(HP)並清除破甲狀態。",
+        id: 'heal', name: "🌿 迴風沐雨訣", unlockLv: 1, mpCost: 14, type: "heal",
+        shortDesc: "14 靈｜免答題 +42%命",
+        fullDesc: "不需答題直接運功療傷，恢復 42% 最大命(HP)並清除破甲狀態。",
         borderClass: "border-emerald-400 from-emerald-800 to-emerald-950", textClass: "text-emerald-200"
       },
       {
-        id: 'thunder', name: "⚡ 九天雷霆斬", unlockLv: 1, mpCost: 10, type: "attack",
-        shortDesc: "10 靈｜190% 雷電爆擊",
-        fullDesc: "引動九天狂雷灌注劍身，答對符文造成 190% 高額爆擊傷害！",
+        id: 'thunder', name: "⚡ 九天雷霆斬", unlockLv: 1, mpCost: 12, type: "attack",
+        shortDesc: "12 靈｜185% 雷電爆擊",
+        fullDesc: "引動九天狂雷灌注劍身，答對符文造成 185% 高額爆擊傷害！",
         borderClass: "border-yellow-400 from-amber-700 to-amber-950", textClass: "text-yellow-200"
       },
       {
-        id: 'pierce', name: "💠 破魔穿雲箭", unlockLv: 2, mpCost: 8, type: "attack",
-        shortDesc: "8 靈｜無視怪物防禦",
-        fullDesc: "【Lv.2 領悟】凝聚防毒破甲光束，無視敵方 100% 防禦力直接貫穿！",
+        id: 'pierce', name: "💠 破魔穿雲箭", unlockLv: 2, mpCost: 10, type: "attack",
+        shortDesc: "10 靈｜無視怪物防禦",
+        fullDesc: "【Lv.2 領悟】凝聚防毒破甲光束，無視敵方 100% 防禦力！對付重甲怪必備！",
         borderClass: "border-cyan-400 from-sky-800 to-slate-950", textClass: "text-cyan-200"
       },
       {
-        id: 'vamp', name: "✂️ Ctrl+X 奪命剪", unlockLv: 3, mpCost: 12, type: "attack",
-        shortDesc: "12 靈｜140%傷害+吸血",
+        id: 'vamp', name: "✂️ Ctrl+X 奪命剪", unlockLv: 3, mpCost: 14, type: "attack",
+        shortDesc: "14 靈｜140%傷害+吸血",
         fullDesc: "【Lv.3 領悟】施展剪下奧義造成 140% 傷害，並將 50% 傷害轉為自身生命！",
         borderClass: "border-rose-400 from-rose-900 to-stone-950", textClass: "text-rose-200"
       },
       {
-        id: 'twin', name: "👥 Ctrl+C 雙重影斬", unlockLv: 4, mpCost: 14, type: "attack",
-        shortDesc: "14 靈｜連續 2 次 115%斬",
+        id: 'twin', name: "👥 Ctrl+C 雙重影斬", unlockLv: 4, mpCost: 16, type: "attack",
+        shortDesc: "16 靈｜連續 2 次 115%斬",
         fullDesc: "【Lv.4 領悟】複製劍氣分身，一次出招連續斬擊敵人 2 下（共 230% 威力）！",
         borderClass: "border-purple-400 from-purple-900 to-stone-950", textClass: "text-purple-200"
       },
       {
-        id: 'shield', name: "🛡️ F5 重整金鐘罩", unlockLv: 5, mpCost: 10, type: "attack",
-        shortDesc: "10 靈｜130%傷+護盾+12DEF",
-        fullDesc: "【Lv.5 領悟】重整系統防線，造成 130% 傷害並在本場戰鬥提升 12 點防禦！",
+        id: 'shield', name: "🛡️ F5 重整金鐘罩", unlockLv: 5, mpCost: 12, type: "attack",
+        shortDesc: "12 靈｜130%傷+護盾+14DEF",
+        fullDesc: "【Lv.5 領悟】重整系統防線，造成 130% 傷害並在本場戰鬥提升 14 點防禦！",
         borderClass: "border-teal-400 from-teal-900 to-stone-950", textClass: "text-teal-200"
       },
       {
-        id: 'ultimate', name: "🌟 AI 神算萬劍訣", unlockLv: 7, mpCost: 22, type: "attack",
-        shortDesc: "22 靈｜260% 毀天滅地",
+        id: 'ultimate', name: "🌟 AI 神算萬劍訣", unlockLv: 7, mpCost: 26, type: "attack",
+        shortDesc: "26 靈｜260% 無視防禦神招",
         fullDesc: "【Lv.7 終極奧義】召喚萬柄數據光劍齊發，無視防禦造成 260% 毀滅傷害！",
         borderClass: "border-amber-300 from-yellow-600 via-red-800 to-stone-950", textClass: "text-yellow-100"
       }
     ];
 
     // =========================================================
-    // 4. 怪物圖鑑與 18x12 複雜迷宮
+    // 4. 全面強化版怪物圖鑑 (提高血量、防禦與戰術難度，調降小怪金幣防無腦刷錢)
     // =========================================================
     const TILE_SIZE = 44;
     const COLS = 18;
     const ROWS = 12;
 
     const monsterCatalog = {
-      '1': { key: '1', name: "砂岩灰塵魔像", lv: 1, maxHp: 42, atk: 9, def: 2, exp: 18, gold: 24, trait: "特技：風沙迷眼 (吸取 8 點靈力)", skillName: "🌪️ 大漠風沙障", skillType: "drain_mp" },
-      '2': { key: '2', name: "甲殼吞鍵蟲", lv: 2, maxHp: 58, atk: 13, def: 4, exp: 26, gold: 32, trait: "特技：顎牙重咬 (135% 物理重擊)", skillName: "🪲 破鍵裂甲咬", skillType: "heavy_hit" },
-      '3': { key: '3', name: "符文亂碼妖", lv: 3, maxHp: 88, atk: 17, def: 7, exp: 42, gold: 48, trait: "特技：未存檔詛咒 (無視 50% 防禦)", skillName: "🟢 亂碼蝕骨咒", skillType: "ignore_def" },
-      '4': { key: '4', name: "赤焰竊盜魔", lv: 4, maxHp: 120, atk: 22, def: 9, exp: 58, gold: 68, trait: "特技：探囊取物 (竊取銀兩 Bytes)", skillName: "🔥 劫火掠財爪", skillType: "steal_gold" },
-      '5': { key: '5', name: "幻影魔鏡靈", lv: 5, maxHp: 155, atk: 27, def: 12, exp: 82, gold: 95, trait: "特技：幻象三連擊 (連續 3 段傷害)", skillName: "🪞 彈窗幻影連斬", skillType: "multi_hit" },
-      '6': { key: '6', name: "深淵釣魚妖", lv: 6, maxHp: 200, atk: 33, def: 15, exp: 110, gold: 125, trait: "特技：噬魂金鉤 (吸取生命恢復自身)", skillName: "🪝 詭信噬魂鉤", skillType: "vampire" },
-      '7': { key: '7', name: "青銅木馬巨兵", lv: 7, maxHp: 265, atk: 40, def: 20, exp: 155, gold: 175, trait: "特技：破城重踏 (降低勇者防禦)", skillName: "🐴 木馬破甲踐踏", skillType: "break_def" },
-      'M_MIMIC': { key: 'M_MIMIC', name: "📦 噬人偽裝寶箱怪", lv: 4, maxHp: 110, atk: 24, def: 8, exp: 65, gold: 110, trait: "陷阱突襲：狂暴撕咬 (高賞金怪獸)", skillName: "🦷 寶箱巨顎吞噬", skillType: "heavy_hit" },
-      'A': { key: 'A', isSubBoss: true, name: "👹 卷一首領・千年鍵垢巨魔", lv: 3, maxHp: 135, atk: 19, def: 6, exp: 75, gold: 100, trait: "【守門首領】特技：萬年黏滯震擊", skillName: "🪨 萬年鍵垢泰山壓頂", skillType: "heavy_hit" },
-      'D': { key: 'D', isSubBoss: true, name: "💀 卷二首領・格式化鐮刀死神", lv: 5, maxHp: 230, atk: 30, def: 12, exp: 140, gold: 180, trait: "【守門首領】特技：磁區抹除斬 (無視防禦)", skillName: "🌙 強制格式化死神鐮", skillType: "ignore_def" },
-      'G': { key: 'G', isSubBoss: true, name: "🎭 卷三首領・深淵駭客傀儡師", lv: 7, maxHp: 320, atk: 42, def: 18, exp: 220, gold: 260, trait: "【守門首領】特技：殭屍網路連擊+吸血", skillName: "🕸️ 暗網傀儡噬魂陣", skillType: "vampire" },
-      'K': { key: 'K', isSubBoss: true, name: "👑 終極魔神・暗黑勒索魔神", lv: 10, maxHp: 480, atk: 58, def: 25, exp: 400, gold: 500, trait: "【終極魔神】天地加密鎖 (雙倍毀滅黑雷)", skillName: "⚡ 終極勒索滅世雷", skillType: "boss_nuke" }
+      '1': { key: '1', name: "砂岩灰塵魔像", lv: 1, maxHp: 58, atk: 12, def: 4, exp: 16, gold: 16, trait: "特技：風沙迷眼 (吸取 8 點靈力)", skillName: "🌪️ 大漠風沙障", skillType: "drain_mp" },
+      '2': { key: '2', name: "甲殼吞鍵蟲", lv: 2, maxHp: 82, atk: 16, def: 11, exp: 24, gold: 22, trait: "【重甲】普攻難傷・建議用破魔穿雲箭", skillName: "🪲 破鍵裂甲咬", skillType: "heavy_hit" },
+      '3': { key: '3', name: "符文亂碼妖", lv: 3, maxHp: 128, atk: 23, def: 12, exp: 38, gold: 34, trait: "特技：未存檔詛咒 (無視 50% 防禦)", skillName: "🟢 亂碼蝕骨咒", skillType: "ignore_def" },
+      '4': { key: '4', name: "赤焰竊盜魔", lv: 4, maxHp: 168, atk: 30, def: 16, exp: 52, gold: 46, trait: "特技：探囊取物 (竊取銀兩 Bytes)", skillName: "🔥 劫火掠財爪", skillType: "steal_gold" },
+      '5': { key: '5', name: "幻影魔鏡靈", lv: 5, maxHp: 225, atk: 38, def: 22, exp: 75, gold: 65, trait: "特技：幻象三連擊 (連續 3 段傷害)", skillName: "🪞 彈窗幻影連斬", skillType: "multi_hit" },
+      '6': { key: '6', name: "深淵釣魚妖", lv: 6, maxHp: 285, atk: 46, def: 28, exp: 105, gold: 88, trait: "特技：噬魂金鉤 (吸取生命恢復自身)", skillName: "🪝 詭信噬魂鉤", skillType: "vampire" },
+      '7': { key: '7', name: "青銅木馬巨兵", lv: 7, maxHp: 370, atk: 56, def: 38, exp: 145, gold: 120, trait: "【重甲】破城重踏 (降低勇者防禦)", skillName: "🐴 木馬破甲踐踏", skillType: "break_def" },
+      'M_MIMIC': { key: 'M_MIMIC', name: "📦 噬人偽裝寶箱怪", lv: 5, maxHp: 190, atk: 34, def: 16, exp: 65, gold: 95, trait: "陷阱突襲：狂暴撕咬 (高賞金怪獸)", skillName: "🦷 寶箱巨顎吞噬", skillType: "heavy_hit" },
+
+      // 三大章節守門小 BOSS (大幅強化戰術壓迫感)
+      'A': { key: 'A', isSubBoss: true, name: "👹 卷一首領・千年鍵垢巨魔", lv: 3, maxHp: 195, atk: 24, def: 13, exp: 70, gold: 85, trait: "【守門首領】厚重鍵垢甲＋泰山壓頂", skillName: "🪨 萬年鍵垢泰山壓頂", skillType: "heavy_hit" },
+      'D': { key: 'D', isSubBoss: true, name: "💀 卷二首領・格式化鐮刀死神", lv: 5, maxHp: 340, atk: 39, def: 22, exp: 135, gold: 145, trait: "【守門首領】磁區抹除斬 (無視防禦)", skillName: "🌙 強制格式化死神鐮", skillType: "ignore_def" },
+      'G': { key: 'G', isSubBoss: true, name: "🎭 卷三首領・深淵駭客傀儡師", lv: 7, maxHp: 490, atk: 54, def: 32, exp: 210, gold: 210, trait: "【守門首領】殭屍網路吸血陣", skillName: "🕸️ 暗網傀儡噬魂陣", skillType: "vampire" },
+
+      // 最終章大魔王
+      'K': { key: 'K', isSubBoss: true, name: "👑 終極魔神・暗黑勒索魔神", lv: 10, maxHp: 780, atk: 75, def: 45, exp: 450, gold: 500, trait: "【終極魔神】天地加密鎖 (雙倍毀滅黑雷)", skillName: "⚡ 終極勒索滅世雷", skillType: "boss_nuke" }
     };
 
     const mapDataList = [
@@ -890,9 +909,10 @@
     let runtimeMaps = [];
     let exploredMaps = [];
     let currentMapIdx = 0;
-    let highestUnlockedMap = 0; // 紀錄玩家已解鎖的最高章節，防止未打贏小BOSS直接跳關
+    let highestUnlockedMap = 0;
     let fogEnabled = true;
-    let lastSealWarnTime = 0;   // 防止封印傳送門每幀無限洗版 Log
+    let lastSealWarnTime = 0;
+    let currentShopTab = 'item';
 
     let hero = {
       x: 1 * TILE_SIZE + TILE_SIZE / 2,
@@ -915,42 +935,73 @@
       hero.isMoving = false;
     }
 
+    // =========================================================
+    // ★ 擴充版西域光華鍛造坊：15 件五階神兵護具 (含等級限制 reqLv 與副屬性) + 6 種丹藥秘卷
+    // =========================================================
+    const shopConsumables = [
+      { id: "hp", name: "綠色乖乖金創藥", icon: "🏺", price: 22, desc: "恢復 65 點 命(HP)，居家旅行必備良藥。" },
+      { id: "mp", name: "行動電源聚靈丹", icon: "⚡", price: 26, desc: "恢復 40 點 靈(MP)，補充施展奧義所需真氣。" },
+      { id: "superHp", name: "伺服器重組大補丸", icon: "🍱", price: 55, desc: "恢復 160 點 命(HP)，並直接解除戰鬥破甲狀態！" },
+      { id: "scrollAtk", name: "CPU 超頻狂暴卷軸", icon: "📜", price: 48, desc: "點擊使用後，在當前或下一場戰鬥提升 +18 武力(ATK)！" },
+      { id: "scrollDef", name: "硬體防火牆鐵壁符", icon: "🛡️", price: 45, desc: "點擊使用後，在當前或下一場戰鬥提升 +15 防禦(DEF)！" },
+      { id: "tomePerm", name: "上古資安演算法秘卷", icon: "📘", price: 240, desc: "【永久提升】研讀後直接永久增加 +4 武力與 +3 防禦（可重複研讀）！" }
+    ];
+
     const shopEquipments = [
-      { id: "w1", type: "weapon", name: "玄鐵機械青軸劍", icon: "🗡️", bonus: 12, price: 60, desc: "劍身鑲嵌機械軸體，出劍清脆迅捷！(+12 ATK)" },
-      { id: "w2", type: "weapon", name: "流光電競龍泉劍", icon: "⚔️", bonus: 26, price: 160, desc: "閃耀七彩霓虹劍氣的名劍！(+26 ATK)" },
-      { id: "w3", type: "weapon", name: "軒轅 AI 聖皇劍", icon: "🔱", bonus: 48, price: 360, desc: "傳說中蘊含人工智慧神力的無上神兵！(+48 ATK)" },
-      { id: "a1", type: "armor", name: "正版防毒鎖子甲", icon: "🛡️", bonus: 8, price: 55, desc: "即時阻擋木馬暗器與毒霧攻擊。(+8 DEF)" },
-      { id: "a2", type: "armor", name: "玄武硬體防火鎧", icon: "🥋", bonus: 18, price: 150, desc: "過濾一切可疑攻擊的堅固戰甲！(+18 DEF)" },
-      { id: "a3", type: "armor", name: "零信任雙重金剛袍", icon: "👑", bonus: 36, price: 340, desc: "萬邪不侵的最高等級資安寶甲！(+36 DEF)" },
-      { id: "c1", type: "acc", name: "16GB 聚靈玉佩", icon: "📿", bonusHp: 45, bonusMp: 20, price: 70, desc: "擴充丹田容量，多工處理不卡頓！(+45命/+20靈)" },
-      { id: "c2", type: "acc", name: "1TB 固態乾坤袋", icon: "💿", bonusHp: 95, bonusMp: 45, price: 180, desc: "讀寫神速的上古法寶！(+95命/+45靈)" },
-      { id: "c3", type: "acc", name: "異地雲端輪迴鏡", icon: "🪞", bonusHp: 190, bonusMp: 90, price: 380, desc: "完美達成 3-2-1 備份，魔神也無法摧毀！(+190命/+90靈)" }
+      // 【兵刃 Weapons - 5 階】
+      { id: "w1", type: "weapon", reqLv: 2, name: "一階・機械青軸快劍", icon: "🗡️", bonusAtk: 9, bonusDef: 0, bonusHp: 0, bonusMp: 10, price: 65, desc: "【需 Lv.2】敲擊清脆，提升 +9 武力、+10 靈力上限。" },
+      { id: "w2", type: "weapon", reqLv: 3, name: "二階・茶軸靜音刺劍", icon: "⚔️", bonusAtk: 19, bonusDef: 3, bonusHp: 0, bonusMp: 15, price: 155, desc: "【需 Lv.3】攻守兼備，提升 +19 武力、+3 防禦、+15 靈力。" },
+      { id: "w3", type: "weapon", reqLv: 5, name: "三階・RGB 流光龍泉劍", icon: "⚡", bonusAtk: 32, bonusDef: 5, bonusHp: 20, bonusMp: 25, price: 310, desc: "【需 Lv.5】霓虹劍氣縱橫，提升 +32 武力、+5 防禦、+25 靈力。" },
+      { id: "w4", type: "weapon", reqLv: 7, name: "四階・光纖雷射破魔劍", icon: "💠", bonusAtk: 48, bonusDef: 8, bonusHp: 40, bonusMp: 35, price: 520, desc: "【需 Lv.7】光速傳輸斬擊，提升 +48 武力、+8 防禦、+40 命。" },
+      { id: "w5", type: "weapon", reqLv: 9, name: "五階・軒轅 AI 聖皇神劍", icon: "🔱", bonusAtk: 70, bonusDef: 15, bonusHp: 80, bonusMp: 60, price: 820, desc: "【需 Lv.9】蘊含超級電腦神力！+70 武力、+15 防禦、+80 命！" },
+
+      // 【護甲 Armors - 5 階】
+      { id: "a1", type: "armor", reqLv: 2, name: "一階・防毒軟體布衣", icon: "🛡️", bonusAtk: 0, bonusDef: 7, bonusHp: 20, bonusMp: 0, price: 60, desc: "【需 Lv.2】基礎病毒防護，提升 +7 防禦、+20 命上限。" },
+      { id: "a2", type: "armor", reqLv: 3, name: "二階・雙重驗證鎖子甲", icon: "🥋", bonusAtk: 2, bonusDef: 15, bonusHp: 45, bonusMp: 10, price: 145, desc: "【需 Lv.3】兩步驟驗證護體，提升 +15 防禦、+45 命上限。" },
+      { id: "a3", type: "armor", reqLv: 5, name: "三階・玄武硬體防火鎧", icon: "🧱", bonusAtk: 5, bonusDef: 25, bonusHp: 80, bonusMp: 20, price: 290, desc: "【需 Lv.5】阻絕惡意封包，提升 +25 防禦、+80 命、+5 武力。" },
+      { id: "a4", type: "armor", reqLv: 7, name: "四階・SSL 加密金剛戰甲", icon: "🔐", bonusAtk: 8, bonusDef: 38, bonusHp: 130, bonusMp: 35, price: 490, desc: "【需 Lv.7】高強度加密鎧甲，提升 +38 防禦、+130 命上限。" },
+      { id: "a5", type: "armor", reqLv: 9, name: "五階・零信任無瑕聖皇袍", icon: "👑", bonusAtk: 15, bonusDef: 56, bonusHp: 220, bonusMp: 60, price: 780, desc: "【需 Lv.9】萬邪不侵的資安神袍！+56 防禦、+220 命、+15 武力！" },
+
+      // 【法寶 Accessories - 5 階】
+      { id: "c1", type: "acc", reqLv: 2, name: "一階・16GB 雙通道玉佩", icon: "📿", bonusAtk: 2, bonusDef: 2, bonusHp: 35, bonusMp: 25, price: 65, desc: "【需 Lv.2】擴充丹田容量，+35 命、+25 靈、攻防 +2。" },
+      { id: "c2", type: "acc", reqLv: 3, name: "二階・1TB 固態乾坤袋", icon: "💿", bonusAtk: 5, bonusDef: 4, bonusHp: 75, bonusMp: 45, price: 150, desc: "【需 Lv.3】高速讀寫法寶，+75 命、+45 靈、+5 武力。" },
+      { id: "c3", type: "acc", reqLv: 5, name: "三階・Wi-Fi 7 順風耳輪", icon: "📡", bonusAtk: 10, bonusDef: 8, bonusHp: 120, bonusMp: 75, price: 300, desc: "【需 Lv.5】超低延遲感應，+120 命、+75 靈、+10 武力。" },
+      { id: "c4", type: "acc", reqLv: 7, name: "四階・UPS 不斷電聚靈塔", icon: "🔋", bonusAtk: 15, bonusDef: 12, bonusHp: 180, bonusMp: 110, price: 500, desc: "【需 Lv.7】源源不絕供應真氣，+180 命、+110 靈、+15 武力。" },
+      { id: "c5", type: "acc", reqLv: 9, name: "五階・3-2-1 異地雲端輪迴鏡", icon: "🪞", bonusAtk: 25, bonusDef: 20, bonusHp: 280, bonusMp: 160, price: 790, desc: "【需 Lv.9】完美備份不滅神器！+280 命、+160 靈、+25 武力！" }
     ];
 
     const titles = ["初階劍童", "鍵盤遊俠", "除錯劍客", "防毒護法", "御劍宗師", "資安掌門", "軒轅鍵聖"];
 
     let player = {
-      lv: 1, exp: 0, nextExp: 30,
-      hp: 110, baseMaxHp: 110,
-      mp: 60, baseMaxMp: 60,
-      baseAtk: 18, baseDef: 6,
-      gold: 60,
-      potions: { hp: 2, mp: 1 },
+      lv: 1, exp: 0, nextExp: 35,
+      hp: 105, baseMaxHp: 105,
+      mp: 55, baseMaxMp: 55,
+      baseAtk: 15, baseDef: 4,
+      gold: 35,
+      potions: { hp: 2, mp: 1, superHp: 0, scroll: 0 },
+      nextBattleAtkBuff: 0,
+      nextBattleDefBuff: 0,
       stats: { correct: 0, kills: 0 },
       hasUploaded: false,
       equippedSkills: ['slash', 'thunder', 'heal'],
       equipped: {
-        weapon: { id: "w0", name: "青銅薄膜短劍", icon: "🗡️", bonus: 0 },
-        armor: { id: "a0", name: "粗布防火衣", icon: "🥋", bonus: 0 },
-        acc: { id: "c0", name: "4GB 隨身玉佩", icon: "📿", bonusHp: 0, bonusMp: 0 }
+        weapon: { id: "w0", name: "生鏽薄膜短劍", icon: "🗡️", bonusAtk: 0, bonusDef: 0, bonusHp: 0, bonusMp: 0 },
+        armor: { id: "a0", name: "粗布防塵衣", icon: "🥋", bonusAtk: 0, bonusDef: 0, bonusHp: 0, bonusMp: 0 },
+        acc: { id: "c0", name: "老舊軟碟片", icon: "📿", bonusAtk: 0, bonusDef: 0, bonusHp: 0, bonusMp: 0 }
       },
       ownedIds: []
     };
 
-    function getMaxHp() { return player.baseMaxHp + (player.equipped.acc.bonusHp || 0); }
-    function getMaxMp() { return player.baseMaxMp + (player.equipped.acc.bonusMp || 0); }
-    function getTotalAtk() { return player.baseAtk + (player.equipped.weapon.bonus || 0); }
-    function getTotalDef() { return Math.max(0, player.baseDef + (player.equipped.armor.bonus || 0) + battleState.defBuff - battleState.defDebuff); }
+    function getEquipSum(prop) {
+      return (player.equipped.weapon[prop] || 0) +
+             (player.equipped.armor[prop] || 0) +
+             (player.equipped.acc[prop] || 0);
+    }
+
+    function getMaxHp() { return player.baseMaxHp + getEquipSum('bonusHp'); }
+    function getMaxMp() { return player.baseMaxMp + getEquipSum('bonusMp'); }
+    function getTotalAtk() { return player.baseAtk + getEquipSum('bonusAtk') + battleState.atkBuff; }
+    function getTotalDef() { return Math.max(0, player.baseDef + getEquipSum('bonusDef') + battleState.defBuff - battleState.defDebuff); }
 
     let battleState = {
       active: false,
@@ -963,6 +1014,8 @@
       turnCount: 0,
       defDebuff: 0,
       defBuff: 0,
+      atkBuff: 0,
+      wrongAnswerPenalty: false,
       heroOffsetX: 0,
       monsterOffsetX: 0,
       monsterFlash: 0,
@@ -1418,7 +1471,6 @@
         badge.innerText = `✅ 守門首領【${meta.subBossName}】：已討伐`;
       }
 
-      // 更新頂部章節按鈕解鎖狀態
       ['1', '2', '3'].forEach(idxStr => {
         const idx = parseInt(idxStr, 10);
         const btn = document.getElementById(`nav-btn-${idx}`);
@@ -1434,13 +1486,12 @@
       });
     }
 
-    // 修復 BUG 1：防止學生未打贏守門小BOSS就直接點頂部按鈕跳關
     function tryFastTravel(targetIdx) {
       if (targetIdx <= highestUnlockedMap || isTeacherUnlocked) {
         const meta = mapDataList[targetIdx];
         switchMap(targetIdx, meta.startX, meta.startY);
       } else {
-        addLog(`🔒 尚未解鎖該章節！請先擊敗當前迷宮的「守門首領」並穿過傳送門！（老師可輸入密碼解鎖跨關）`, "text-rose-400 font-bold");
+        addLog(`🔒 尚未解鎖該章節！請先擊敗當前迷宮的「守門首領」並穿過傳送門！`, "text-rose-400 font-bold");
       }
     }
 
@@ -1459,10 +1510,18 @@
       updateSubBossBadge();
     }
 
+    // 修改：重生迷宮妖魔需消耗 30 兩銀子，防止零成本無限洗初階寶箱
     function respawnMapEntities() {
+      if (player.gold < 30) {
+        addLog("🪙 銀兩不足 30 Bytes！無法催動法陣重新召喚迷宮妖魔。", "text-rose-400 font-bold");
+        return;
+      }
+      player.gold -= 30;
       runtimeMaps[currentMapIdx] = mapDataList[currentMapIdx].grid.map(r => r.split(''));
       updateSubBossBadge();
-      addLog("🔄 迷宮中的妖魔、守門小 BOSS 與寶箱已重新刷新！", "text-amber-300 font-bold");
+      updateUI();
+      playSFX('coin');
+      addLog("🔄 消耗 30 銀兩催動法陣，迷宮中的妖魔與守門首領已重新現形！", "text-amber-300 font-bold");
     }
 
     function updateFogMemory() {
@@ -1471,7 +1530,7 @@
       const exp = exploredMaps[currentMapIdx];
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
-          if (Math.hypot(c - gx, r - gy) <= 3.3) exp[r][c] = true;
+          if (Math.hypot(c - gx, r - gy) <= 3.2) exp[r][c] = true;
         }
       }
     }
@@ -1553,7 +1612,6 @@
         return;
       }
 
-      // 修復 BUG 2：加上 1.5 秒訊息防抖冷卻，避免按住方向鍵撞封印門時狂刷百條 Log
       if (cell === 'P') {
         if (isSubBossAliveOnCurrentMap()) {
           if (time - lastSealWarnTime > 1500) {
@@ -1572,7 +1630,6 @@
         return;
       }
 
-      // 修復 BUG 4：返回上一關時，精準落在上一關傳送門旁的安全座標 returnX / returnY
       if (cell === 'B') {
         if (currentMapIdx > 0) {
           playSFX('coin');
@@ -1583,48 +1640,47 @@
         return;
       }
 
+      // 靈泉 H：飲用後變為普通地面 '.'，每章節限免費補滿一次，增加丹藥管理策略性
       if (cell === 'H') {
         hero.x = nx; hero.y = ny;
-        if (player.hp < getMaxHp() || player.mp < getMaxMp()) {
-          playSFX('coin');
-          player.hp = getMaxHp();
-          player.mp = getMaxMp();
-          updateUI();
-          addLog("⛲ 飲用綠洲靈泉之水，全身命(HP)與靈(MP)瞬間完全恢復！", "text-emerald-400 font-bold");
-        }
+        grid[gy][gx] = '.';
+        playSFX('coin');
+        player.hp = getMaxHp();
+        player.mp = getMaxMp();
+        updateUI();
+        addLog("⛲ 飲盡綠洲靈泉，命與靈完全恢復！（靈泉已乾涸，後續請善用丹藥與吸血武學）", "text-emerald-400 font-bold");
         return;
       }
 
-      // 修復 BUG 3：當寶箱觸發寶箱怪 (Mimic) 時，將地圖格子直接改為 'M_MIMIC'，防止撤退無限重刷寶箱
+      // 寶箱 C：提高陷阱與寶箱怪刺激度，調降純銀兩數額防止直購神裝
       if (cell === 'C') {
         const roll = Math.random();
-        if (roll < 0.62) {
+        if (roll < 0.52) {
           grid[gy][gx] = '.';
           hero.x = nx; hero.y = ny;
           playSFX('coin');
-          const bonus = 50 + currentMapIdx * 30;
+          const bonus = 28 + currentMapIdx * 18;
           player.gold += bonus;
-          player.potions.hp++;
+          if (Math.random() < 0.45) player.potions.hp++;
           updateUI();
-          addLog(`📦 開啟上古吉箱！獲得 🪙 ${bonus} 銀兩(Bytes) 與 1 瓶【乖乖金創藥】！`, "text-amber-300 font-black");
-        } else if (roll < 0.84) {
+          addLog(`📦 開啟上古吉箱！獲得 🪙 ${bonus} 銀兩(Bytes)！`, "text-amber-300 font-black");
+        } else if (roll < 0.80) {
           grid[gy][gx] = '.';
           hero.x = nx; hero.y = ny;
           playSFX('trap');
-          if (Math.random() < 0.5) {
-            const trapDmg = Math.max(8, Math.floor(getMaxHp() * 0.15));
+          if (Math.random() < 0.55) {
+            const trapDmg = Math.max(12, Math.floor(getMaxHp() * 0.18));
             player.hp = Math.max(1, player.hp - trapDmg);
             addLog(`💥 糟糕！寶箱裡藏著【釣魚木馬毒針機關】，受到 ${trapDmg} 點陷阱傷害！`, "text-rose-400 font-black");
           } else {
-            const trapMp = Math.min(player.mp, 15);
+            const trapMp = Math.min(player.mp, 18);
             player.mp -= trapMp;
-            const bonusGold = 35;
-            player.gold += bonusGold;
-            addLog(`⚡ 觸發【漏電火花陷阱】流失了 ${trapMp} 點靈力，但仍在箱底撿到 🪙 ${bonusGold} 銀兩！`, "text-orange-400 font-bold");
+            player.gold += 20;
+            addLog(`⚡ 觸發【漏電火花陷阱】流失了 ${trapMp} 點靈力，僅在箱底撿到 🪙 20 銀兩！`, "text-orange-400 font-bold");
           }
           updateUI();
         } else {
-          grid[gy][gx] = 'M_MIMIC'; // 永久現形為寶箱怪
+          grid[gy][gx] = 'M_MIMIC';
           playSFX('trap');
           addLog("🦷 驚險萬分！這不是普通寶箱，是【噬人偽裝寶箱怪】張開血盆大口撲了過來！", "text-rose-400 font-black");
           startCanvasBattle('M_MIMIC', gx, gy);
@@ -1657,11 +1713,11 @@
 
       if (npcType === 'N') {
         speakerEl.innerText = "【大漠智者・古月聖】";
-        textEl.innerText = "「少俠留步！每座迷宮深處的傳送門都有『守門首領』鎮守。此外開啟寶箱時務必小心陷阱！升級後別忘了點上方『🧘 武學配招』自由組合你的四招絕學！」";
+        textEl.innerText = "「少俠留步！如今妖魔護甲極為堅硬，光靠普通劍氣難以傷其分毫！務必升至 Lv.2 領悟『💠 破魔穿雲箭』，並在戰鬥中謹慎答題，否則答錯露出破綻會遭受重創！」";
         actionBtn.classList.add('hidden');
       } else {
         speakerEl.innerText = "【西域鍛造師・薇達】";
-        textEl.innerText = "「古月大哥說前方的守門小 BOSS 防禦極高！快來看看我新鍛造的神兵與護甲，準備萬全再上前挑戰吧！」";
+        textEl.innerText = "「我的鍛造坊新進了五階神兵、寶甲與『超頻狂暴卷軸』！不過高階神兵都有修行等級限制，少俠須先多破敵歷練，方能駕馭神兵！」";
         actionBtn.classList.remove('hidden');
       }
       document.getElementById('swd-dialogue-overlay').classList.remove('hidden');
@@ -1722,14 +1778,14 @@
             const cy = r * TILE_SIZE + TILE_SIZE / 2;
             const dist = Math.hypot(cx - hero.x, cy - hero.y);
 
-            if (dist > 145) {
-              ctx.fillStyle = exp[r][c] ? "rgba(8, 7, 12, 0.62)" : "rgba(5, 4, 8, 0.96)";
+            if (dist > 140) {
+              ctx.fillStyle = exp[r][c] ? "rgba(8, 7, 12, 0.65)" : "rgba(5, 4, 8, 0.96)";
               ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             }
           }
         }
 
-        const torchGrad = ctx.createRadialGradient(hero.x, hero.y, 35, hero.x, hero.y, 175);
+        const torchGrad = ctx.createRadialGradient(hero.x, hero.y, 32, hero.x, hero.y, 170);
         torchGrad.addColorStop(0, "rgba(255, 190, 90, 0.12)");
         torchGrad.addColorStop(0.55, "rgba(15, 12, 10, 0.25)");
         torchGrad.addColorStop(1, "rgba(5, 4, 8, 0.88)");
@@ -1807,7 +1863,6 @@
       renderBattleSkillBar();
     }
 
-    // 修復 BUG 5：戰鬥快捷列永遠保持 4 格整齊對稱，空槽位可直接點開配招視窗
     function renderBattleSkillBar() {
       const bar = document.getElementById('battle-skill-bar');
       let html = '';
@@ -1854,16 +1909,29 @@
       battleState.tileY = gy;
       battleState.turnCount = 0;
       battleState.defDebuff = 0;
-      battleState.defBuff = 0;
+      // 載入戰前使用的卷軸加持
+      battleState.atkBuff = player.nextBattleAtkBuff || 0;
+      battleState.defBuff = player.nextBattleDefBuff || 0;
+      player.nextBattleAtkBuff = 0;
+      player.nextBattleDefBuff = 0;
+
+      battleState.wrongAnswerPenalty = false;
       battleState.particles = [];
       battleState.floatingTexts = [];
       battleState.slashEffects = [];
       battleState.bannerTimer = 0;
 
-      document.getElementById('battle-buff-badge').classList.add('hidden');
+      const buffBadge = document.getElementById('battle-buff-badge');
+      if (battleState.atkBuff > 0 || battleState.defBuff > 0) {
+        buffBadge.classList.remove('hidden');
+        buffBadge.innerText = `✨ 符咒加持 (+${battleState.atkBuff}攻/+${battleState.defBuff}防)`;
+      } else {
+        buffBadge.classList.add('hidden');
+      }
+
       document.getElementById('battle-ui-overlay').classList.remove('hidden');
       playSFX(tpl.isSubBoss ? 'heavy' : 'slash');
-      addLog(`⚔️ 遭遇【${tpl.name} (Lv.${tpl.lv})】！${tpl.trait}`, "text-amber-300 font-bold");
+      addLog(`⚔️ 遭遇【${tpl.name} (Lv.${tpl.lv}｜防禦 ${tpl.def})】！${tpl.trait}`, "text-amber-300 font-bold");
       updateUI();
     }
 
@@ -1900,27 +1968,32 @@
       ctx.fillStyle = groundGrad;
       ctx.fillRect(0, 280, mainCanvas.width, mainCanvas.height - 280);
 
-      ctx.fillStyle = "rgba(12, 10, 9, 0.88)";
-      fillRoundRect(ctx, 410, 20, 355, 70, 10);
+      // 怪物血條面板 (顯示怪物 ATK 與 DEF 讓玩家決策配招)
+      ctx.fillStyle = "rgba(12, 10, 9, 0.9)";
+      fillRoundRect(ctx, 395, 18, 375, 76, 10);
       ctx.strokeStyle = m.isSubBoss ? "#f43f5e" : "#b45309";
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
       ctx.fillStyle = "#fef3c7";
       ctx.font = "900 15px 'Noto Serif TC', serif";
-      ctx.fillText(`Lv.${m.lv}  ${m.name}`, 426, 44);
+      ctx.fillText(`Lv.${m.lv} ${m.name} (攻:${m.atk} 防:${m.def})`, 410, 40);
       ctx.fillStyle = "#fbbf24";
       ctx.font = "bold 11px sans-serif";
-      ctx.fillText(m.trait, 426, 61);
+      ctx.fillText(m.trait, 410, 58);
 
       ctx.fillStyle = "#1c1917";
-      ctx.fillRect(426, 70, 320, 10);
+      ctx.fillRect(410, 68, 340, 12);
       const hpRatio = Math.max(0, m.hp / m.maxHp);
-      const hpGrad = ctx.createLinearGradient(426, 0, 746, 0);
+      const hpGrad = ctx.createLinearGradient(410, 0, 750, 0);
       hpGrad.addColorStop(0, "#dc2626");
       hpGrad.addColorStop(1, "#f97316");
       ctx.fillStyle = hpGrad;
-      ctx.fillRect(426, 70, 320 * hpRatio, 10);
+      ctx.fillRect(410, 68, 340 * hpRatio, 12);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 10px monospace";
+      ctx.fillText(`${Math.max(0, m.hp)} / ${m.maxHp}`, 550, 78);
 
       const heroX = 210 + battleState.heroOffsetX;
       const heroY = 315;
@@ -2042,7 +2115,7 @@
     }
 
     // =========================================================
-    // 9. 戰鬥技能判定與 8 大武學特效結算
+    // 9. 戰鬥技能判定與硬核傷害計算 (強調防禦減傷與破甲重要性)
     // =========================================================
     function fleeBattle() {
       if (battleState.turnBusy) return;
@@ -2050,6 +2123,7 @@
       battleState.active = false;
       battleState.defDebuff = 0;
       battleState.defBuff = 0;
+      battleState.atkBuff = 0;
       hero.invulnerableUntil = performance.now() + 1500;
       document.getElementById('battle-ui-overlay').classList.add('hidden');
       addLog("🏃 施展輕功撤出戰圈，獲得 1.5 秒護體時間。", "text-stone-400");
@@ -2070,7 +2144,8 @@
         setBattleButtonsDisabled(true);
         player.mp -= sk.mpCost;
         battleState.defDebuff = 0;
-        const healAmt = Math.floor(getMaxHp() * 0.45);
+        battleState.wrongAnswerPenalty = false;
+        const healAmt = Math.floor(getMaxHp() * 0.42);
         player.hp = Math.min(getMaxHp(), player.hp + healAmt);
         playSFX('coin');
         spawnHitSparks(210, 300, "#34d399", "#a7f3d0", 25);
@@ -2127,11 +2202,13 @@
 
       if (isCorrect) {
         player.stats.correct++;
+        battleState.wrongAnswerPenalty = false;
         feedbackEl.className = "mt-4 p-3 rounded-xl border bg-emerald-950/90 border-emerald-500 text-emerald-200 text-xs";
         feedbackEl.innerHTML = `<div class="font-black text-sm mb-1">✅ 符文詠唱正確！武學奧義發動！</div><div>${qObj.exp}</div>`;
       } else {
+        battleState.wrongAnswerPenalty = true; // 答錯露出破綻，本回合怪物反擊傷害 1.25 倍
         feedbackEl.className = "mt-4 p-3 rounded-xl border bg-rose-950/90 border-rose-500 text-rose-200 text-xs";
-        feedbackEl.innerHTML = `<div class="font-black text-sm mb-1">❌ 符文逆行！真氣潰散無法出招！</div><div>正確心法：${qObj.exp}</div>`;
+        feedbackEl.innerHTML = `<div class="font-black text-sm mb-1">❌ 符文逆行！真氣潰散且露出破綻（將承受 1.25 倍反擊）！</div><div>正確心法：${qObj.exp}</div>`;
       }
 
       setTimeout(() => {
@@ -2145,30 +2222,34 @@
       const sk = skillCatalog.find(s => s.id === battleState.pendingSkillId) || skillCatalog[0];
 
       if (isCorrect) {
-        let finalDmg = 6;
+        let finalDmg = 2;
         let sparkCol1 = "#facc15";
         let sparkCol2 = "#38bdf8";
         let extraMsg = "";
 
+        // 提高怪物護甲影響力 (m.def * 1.15)，讓對付高防禦怪時「破魔穿雲箭」與高階技能不可或缺
+        const effectiveEnemyDef = Math.floor(m.def * 1.15);
+
         switch (sk.id) {
           case 'slash':
-            finalDmg = Math.max(6, Math.floor(getTotalAtk() * 1.05) - m.def + Math.floor(Math.random() * 4));
+            finalDmg = Math.max(2, Math.floor(getTotalAtk() * 1.0) - effectiveEnemyDef + Math.floor(Math.random() * 3));
+            if (finalDmg <= 4 && m.def >= 10) extraMsg = "（敵方護甲極厚！建議改用破魔穿雲箭或雷霆斬）";
             playSFX('slash');
             break;
           case 'thunder':
-            finalDmg = Math.max(12, Math.floor(getTotalAtk() * 1.9) - m.def + Math.floor(Math.random() * 6));
+            finalDmg = Math.max(10, Math.floor(getTotalAtk() * 1.85) - effectiveEnemyDef + Math.floor(Math.random() * 6));
             sparkCol1 = "#fde047"; sparkCol2 = "#f97316";
             playSFX('heavy');
             break;
           case 'pierce':
-            finalDmg = Math.max(10, Math.floor(getTotalAtk() * 1.3) + Math.floor(Math.random() * 5));
+            finalDmg = Math.max(12, Math.floor(getTotalAtk() * 1.32) + Math.floor(Math.random() * 5));
             sparkCol1 = "#22d3ee"; sparkCol2 = "#a855f7";
-            extraMsg = "（無視敵方防禦）";
+            extraMsg = "（完美貫穿敵方重甲！）";
             playSFX('slash');
             break;
           case 'vamp': {
-            finalDmg = Math.max(10, Math.floor(getTotalAtk() * 1.4) - m.def + Math.floor(Math.random() * 5));
-            const vampHeal = Math.max(5, Math.floor(finalDmg * 0.5));
+            finalDmg = Math.max(9, Math.floor(getTotalAtk() * 1.42) - Math.floor(effectiveEnemyDef * 0.7) + Math.floor(Math.random() * 5));
+            const vampHeal = Math.max(6, Math.floor(finalDmg * 0.5));
             player.hp = Math.min(getMaxHp(), player.hp + vampHeal);
             sparkCol1 = "#f43f5e"; sparkCol2 = "#fb7185";
             extraMsg = `（吸取 ${vampHeal} 點生命！）`;
@@ -2177,8 +2258,8 @@
             break;
           }
           case 'twin': {
-            const hit1 = Math.max(6, Math.floor(getTotalAtk() * 1.15) - m.def + Math.floor(Math.random() * 4));
-            const hit2 = Math.max(6, Math.floor(getTotalAtk() * 1.15) - m.def + Math.floor(Math.random() * 4));
+            const hit1 = Math.max(5, Math.floor(getTotalAtk() * 1.15) - Math.floor(effectiveEnemyDef * 0.8) + Math.floor(Math.random() * 4));
+            const hit2 = Math.max(5, Math.floor(getTotalAtk() * 1.15) - Math.floor(effectiveEnemyDef * 0.8) + Math.floor(Math.random() * 4));
             finalDmg = hit1 + hit2;
             sparkCol1 = "#c084fc"; sparkCol2 = "#38bdf8";
             extraMsg = `（雙重影分身 ${hit1} + ${hit2} 連擊！）`;
@@ -2190,15 +2271,17 @@
             break;
           }
           case 'shield':
-            finalDmg = Math.max(8, Math.floor(getTotalAtk() * 1.3) - m.def + Math.floor(Math.random() * 4));
-            battleState.defBuff = 12;
-            document.getElementById('battle-buff-badge').classList.remove('hidden');
+            finalDmg = Math.max(8, Math.floor(getTotalAtk() * 1.3) - effectiveEnemyDef + Math.floor(Math.random() * 4));
+            battleState.defBuff += 14;
+            const buffBadge = document.getElementById('battle-buff-badge');
+            buffBadge.classList.remove('hidden');
+            buffBadge.innerText = `🛡️ 護體加持 (+${battleState.atkBuff}攻/+${battleState.defBuff}防)`;
             sparkCol1 = "#2dd4bf"; sparkCol2 = "#fde047";
-            extraMsg = "（啟動金鐘罩 +12 防禦！）";
+            extraMsg = "（啟動金鐘罩 +14 防禦！）";
             playSFX('slash');
             break;
           case 'ultimate':
-            finalDmg = Math.max(25, Math.floor(getTotalAtk() * 2.6) + Math.floor(Math.random() * 10));
+            finalDmg = Math.max(28, Math.floor(getTotalAtk() * 2.6) + Math.floor(Math.random() * 10));
             sparkCol1 = "#fde047"; sparkCol2 = "#f43f5e";
             extraMsg = "（萬劍齊發・無視防禦毀天滅地！）";
             playSFX('heavy');
@@ -2227,7 +2310,7 @@
           return;
         }
       } else {
-        addLog(`❌ 答題失誤，劍招落空未能傷及 ${m.name}！`, "text-rose-400");
+        addLog(`❌ 答題失誤露出破綻，劍招落空並引來妖魔狂暴反撲！`, "text-rose-400 font-bold");
       }
 
       setTimeout(() => monsterCounterAttack(), 650);
@@ -2238,8 +2321,8 @@
       const m = battleState.monster;
       battleState.turnCount++;
 
-      const useSpecial = m.isSubBoss ? (battleState.turnCount % 2 === 0) : (Math.random() < 0.5);
-      let dmg = Math.max(2, m.atk - getTotalDef() + Math.floor(Math.random() * 4) - 1);
+      const useSpecial = m.isSubBoss ? (battleState.turnCount % 2 === 0) : (Math.random() < 0.55);
+      let dmg = Math.max(4, m.atk - getTotalDef() + Math.floor(Math.random() * 4));
       let logText = `👹 【${m.name}】猛撲反擊，造成 ${dmg} 點傷害！`;
 
       if (useSpecial) {
@@ -2248,50 +2331,57 @@
 
         switch (m.skillType) {
           case 'drain_mp': {
-            const drained = Math.min(player.mp, 8);
+            const drained = Math.min(player.mp, 10);
             player.mp -= drained;
             logText = `🌪️ 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並捲走你 ${drained} 點靈力！`;
             break;
           }
           case 'heavy_hit': {
-            dmg = Math.max(5, Math.floor(m.atk * 1.35) - getTotalDef());
+            dmg = Math.max(7, Math.floor(m.atk * 1.38) - getTotalDef());
             logText = `🪲 【${m.name}】施展「${m.skillName}」！重創造成 ${dmg} 點傷害！`;
             break;
           }
           case 'ignore_def': {
-            dmg = Math.max(6, m.atk - Math.floor(getTotalDef() * 0.35));
+            dmg = Math.max(9, m.atk - Math.floor(getTotalDef() * 0.3));
             logText = `🟢 【${m.name}】施展「${m.skillName}」！穿透護甲造成 ${dmg} 點傷害！`;
             break;
           }
           case 'steal_gold': {
-            const stolen = Math.min(player.gold, 12);
+            const stolen = Math.min(player.gold, 15);
             player.gold -= stolen;
             logText = `🔥 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並劫走 ${stolen} 兩銀子！`;
             break;
           }
           case 'multi_hit': {
-            const perHit = Math.max(2, Math.floor((m.atk - getTotalDef()) * 0.45));
+            const perHit = Math.max(3, Math.floor((m.atk - getTotalDef()) * 0.48));
             dmg = perHit * 3;
             logText = `🪞 【${m.name}】施展「${m.skillName}」！幻影三連擊造成 ${perHit}x3 = ${dmg} 點傷害！`;
             break;
           }
           case 'vampire': {
-            const healM = Math.max(8, Math.floor(dmg * 0.65));
+            const healM = Math.max(12, Math.floor(dmg * 0.75));
             m.hp = Math.min(m.maxHp, m.hp + healM);
             logText = `🪝 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並吸取精氣恢復 ${healM} HP！`;
             break;
           }
           case 'break_def': {
-            battleState.defDebuff += 4;
-            logText = `🐴 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並震裂你的護甲(-4 DEF)！`;
+            battleState.defDebuff += 5;
+            logText = `🐴 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並震裂你的護甲(-5 DEF)！`;
             break;
           }
           case 'boss_nuke': {
-            dmg = Math.max(15, Math.floor(m.atk * 1.6) - getTotalDef());
+            dmg = Math.max(22, Math.floor(m.atk * 1.65) - getTotalDef());
             logText = `👑 【${m.name}】狂嘯釋放「${m.skillName}」！滅世黑雷造成 ${dmg} 點毀滅傷害！`;
             break;
           }
         }
+      }
+
+      // 若玩家剛才答錯題目，承受 1.25 倍破綻懲罰傷害
+      if (battleState.wrongAnswerPenalty) {
+        dmg = Math.floor(dmg * 1.25);
+        logText += `（答錯破綻加成！）`;
+        battleState.wrongAnswerPenalty = false;
       }
 
       playSFX('hit');
@@ -2309,11 +2399,14 @@
       updateUI();
 
       if (player.hp <= 0) {
-        addLog("💫 命數歸零！長老古月聖施法將你救回本關起點療傷。", "text-rose-500 font-black");
+        const lostGold = Math.floor(player.gold * 0.15);
+        player.gold = Math.max(0, player.gold - lostGold);
+        addLog(`💫 命數歸零！長老施法將你救回本關起點療傷（遺落了 ${lostGold} 兩銀子）。`, "text-rose-500 font-black");
         setTimeout(() => {
           battleState.active = false;
           battleState.defDebuff = 0;
           battleState.defBuff = 0;
+          battleState.atkBuff = 0;
           setBattleButtonsDisabled(false);
           document.getElementById('battle-ui-overlay').classList.add('hidden');
           player.hp = getMaxHp();
@@ -2352,14 +2445,14 @@
       while (player.exp >= player.nextExp) {
         player.exp -= player.nextExp;
         player.lv++;
-        player.nextExp = Math.floor(player.nextExp * 1.42);
-        player.baseMaxHp += 25;
-        player.baseMaxMp += 12;
-        player.baseAtk += 5;
-        player.baseDef += 3;
+        player.nextExp = Math.floor(player.nextExp * 1.45);
+        player.baseMaxHp += 22;
+        player.baseMaxMp += 10;
+        player.baseAtk += 4;
+        player.baseDef += 2;
         player.hp = getMaxHp();
         player.mp = getMaxMp();
-        addLog(`🎊 境界突破至 Lv.${player.lv}！命與靈完全恢復！`, "text-yellow-300 font-black");
+        addLog(`🎊 境界突破至 Lv.${player.lv}！已解鎖鍛造坊更高階神兵權限，命與靈完全恢復！`, "text-yellow-300 font-black");
 
         skillCatalog.forEach(sk => {
           if (sk.unlockLv === player.lv) {
@@ -2385,6 +2478,7 @@
         battleState.active = false;
         battleState.defDebuff = 0;
         battleState.defBuff = 0;
+        battleState.atkBuff = 0;
         setBattleButtonsDisabled(false);
         document.getElementById('battle-ui-overlay').classList.add('hidden');
 
@@ -2398,7 +2492,7 @@
     }
 
     // =========================================================
-    // 10. UI 更新、鍛造商城、教師密碼鎖 (`naes888`) 與 GAS 串接
+    // 10. UI 更新、五階鍛造坊商城、教師密碼鎖 (`naes888`) 與 GAS 串接
     // =========================================================
     function updateUI() {
       const maxHp = getMaxHp();
@@ -2407,6 +2501,9 @@
       if (player.mp > maxMp) player.mp = maxMp;
 
       document.getElementById('player-lv').innerText = player.lv;
+      const shopLv = document.getElementById('shop-lv-display');
+      if (shopLv) shopLv.innerText = player.lv;
+
       document.getElementById('player-title').innerText = titles[Math.min(player.lv - 1, titles.length - 1)];
       document.getElementById('player-gold').innerText = player.gold;
       const shopGold = document.getElementById('shop-gold-display');
@@ -2431,11 +2528,11 @@
 
       document.getElementById('eq-weapon-icon').innerText = player.equipped.weapon.icon;
       document.getElementById('eq-weapon-name').innerText = player.equipped.weapon.name;
-      document.getElementById('eq-weapon-stat').innerText = `+${player.equipped.weapon.bonus} ATK`;
+      document.getElementById('eq-weapon-stat').innerText = `+${player.equipped.weapon.bonusAtk} ATK`;
 
       document.getElementById('eq-armor-icon').innerText = player.equipped.armor.icon;
       document.getElementById('eq-armor-name').innerText = player.equipped.armor.name;
-      document.getElementById('eq-armor-stat').innerText = `+${player.equipped.armor.bonus} DEF`;
+      document.getElementById('eq-armor-stat').innerText = `+${player.equipped.armor.bonusDef} DEF`;
 
       document.getElementById('eq-acc-icon').innerText = player.equipped.acc.icon;
       document.getElementById('eq-acc-name').innerText = player.equipped.acc.name;
@@ -2443,6 +2540,8 @@
 
       document.getElementById('item-hp-count').innerText = player.potions.hp;
       document.getElementById('item-mp-count').innerText = player.potions.mp;
+      document.getElementById('item-superhp-count').innerText = player.potions.superHp;
+      document.getElementById('item-scroll-count').innerText = player.potions.scroll;
     }
 
     function addLog(msg, colorClass = "text-stone-300") {
@@ -2451,7 +2550,6 @@
       entry.className = colorClass;
       entry.innerHTML = `> ${msg}`;
       logBox.prepend(entry);
-      // 限制最多保留 40 筆紀錄，防止長時間遊玩記憶體膨脹
       while (logBox.children.length > 40) {
         logBox.removeChild(logBox.lastChild);
       }
@@ -2463,37 +2561,69 @@
       document.getElementById('shop-modal').classList.remove('hidden');
     }
 
-    function openCodexModal() {
-      clearInputState();
-      document.getElementById('codex-modal').classList.remove('hidden');
+    function switchShopTab(tab) {
+      currentShopTab = tab;
+      ['item', 'weapon', 'armor', 'acc'].forEach(t => {
+        const btn = document.getElementById(`shop-tab-${t}`);
+        if (t === tab) {
+          btn.className = "py-1.5 rounded-lg font-black bg-amber-600 text-stone-950 shadow";
+        } else {
+          btn.className = "py-1.5 rounded-lg font-bold text-stone-300 hover:bg-stone-800";
+        }
+      });
+      renderShop();
     }
 
     function renderShop() {
-      const listEl = document.getElementById('shop-equipment-list');
-      listEl.innerHTML = shopEquipments.map(item => {
+      const area = document.getElementById('shop-content-area');
+      if (!area) return;
+
+      if (currentShopTab === 'item') {
+        area.innerHTML = shopConsumables.map(c => `
+          <div class="p-3 bg-stone-950 border border-stone-800 rounded-xl flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">${c.icon}</span>
+              <div>
+                <div class="font-bold text-xs text-amber-200">${c.name}</div>
+                <div class="text-[11px] text-stone-400 mt-0.5">${c.desc}</div>
+              </div>
+            </div>
+            <button onclick="buyConsumable('${c.id}', ${c.price})" class="shrink-0 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs rounded-lg shadow">
+              🪙 ${c.price} 購買
+            </button>
+          </div>
+        `).join('');
+        return;
+      }
+
+      const items = shopEquipments.filter(e => e.type === currentShopTab);
+      area.innerHTML = items.map(item => {
         const isOwned = player.ownedIds.includes(item.id);
         const isEquipped = (
           player.equipped.weapon.id === item.id ||
           player.equipped.armor.id === item.id ||
           player.equipped.acc.id === item.id
         );
+        const lvMet = player.lv >= item.reqLv;
 
         let btnHtml = '';
         if (isEquipped) {
-          btnHtml = `<span class="px-2.5 py-1 bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold text-xs rounded-lg">已佩帶</span>`;
+          btnHtml = `<span class="px-2.5 py-1 bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold text-xs rounded-lg">✓ 已佩帶</span>`;
         } else if (isOwned) {
           btnHtml = `<button onclick="equipItem('${item.id}')" class="px-2.5 py-1 bg-sky-700 hover:bg-sky-600 text-white font-bold text-xs rounded-lg">佩帶</button>`;
+        } else if (!lvMet) {
+          btnHtml = `<span class="px-2.5 py-1 bg-stone-900 text-rose-400 border border-rose-800/50 font-bold text-[11px] rounded-lg">🔒 需 Lv.${item.reqLv}</span>`;
         } else {
-          btnHtml = `<button onclick="buyEquipment('${item.id}')" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs rounded-lg">🪙 ${item.price}</button>`;
+          btnHtml = `<button onclick="buyEquipment('${item.id}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs rounded-lg shadow">🪙 ${item.price} 鍛造</button>`;
         }
 
         return `
-          <div class="p-2.5 bg-stone-950 border border-stone-800 rounded-xl flex items-center justify-between gap-2">
+          <div class="p-3 bg-stone-950 border ${isEquipped ? 'border-amber-400' : 'border-stone-800'} rounded-xl flex items-center justify-between gap-2 ${!lvMet && !isOwned ? 'opacity-65' : ''}">
             <div class="flex items-center gap-2.5">
               <span class="text-2xl">${item.icon}</span>
               <div>
                 <div class="font-bold text-xs text-amber-100">${item.name}</div>
-                <div class="text-[11px] text-stone-400">${item.desc}</div>
+                <div class="text-[11px] text-stone-400 mt-0.5">${item.desc}</div>
               </div>
             </div>
             <div class="shrink-0">${btnHtml}</div>
@@ -2505,71 +2635,122 @@
     function buyEquipment(itemId) {
       const item = shopEquipments.find(e => e.id === itemId);
       if (!item) return;
+      if (player.lv < item.reqLv) {
+        alert(`修行境界不足！需要達到 Lv.${item.reqLv} 才能駕馭【${item.name}】！`);
+        return;
+      }
       if (player.gold < item.price) {
-        addLog(`🪙 銀兩不足！鍛造【${item.name}】需要 ${item.price} Bytes。`, "text-rose-400");
+        addLog(`🪙 銀兩不足！鍛造【${item.name}】需要 ${item.price} Bytes。`, "text-rose-400 font-bold");
         return;
       }
       playSFX('coin');
       player.gold -= item.price;
       player.ownedIds.push(item.id);
-      addLog(`🏪 成功鍛造神兵裝備【${item.name}】！`, "text-amber-300 font-bold");
+      addLog(`🏪 成功鍛造神兵護具【${item.name}】！已自動為你佩帶上身。`, "text-amber-300 font-bold");
       equipItem(itemId);
     }
 
     function equipItem(itemId) {
       const item = shopEquipments.find(e => e.id === itemId);
       if (!item) return;
-      if (item.type === 'weapon') {
-        player.equipped.weapon = { id: item.id, name: item.name, icon: item.icon, bonus: item.bonus };
-      } else if (item.type === 'armor') {
-        player.equipped.armor = { id: item.id, name: item.name, icon: item.icon, bonus: item.bonus };
-      } else if (item.type === 'acc') {
-        const oldHp = player.equipped.acc.bonusHp || 0;
-        const oldMp = player.equipped.acc.bonusMp || 0;
-        player.equipped.acc = { id: item.id, name: item.name, icon: item.icon, bonusHp: item.bonusHp, bonusMp: item.bonusMp };
-        player.hp = Math.max(1, player.hp + (item.bonusHp - oldHp));
-        player.mp = Math.max(0, player.mp + (item.bonusMp - oldMp));
+      if (player.lv < item.reqLv) {
+        alert(`需要達到 Lv.${item.reqLv} 才能佩帶此裝備！`);
+        return;
       }
+      const prevMaxHp = getMaxHp();
+      const prevMaxMp = getMaxMp();
+
+      if (item.type === 'weapon') player.equipped.weapon = { ...item };
+      else if (item.type === 'armor') player.equipped.armor = { ...item };
+      else if (item.type === 'acc') player.equipped.acc = { ...item };
+
+      const newMaxHp = getMaxHp();
+      const newMaxMp = getMaxMp();
+      if (newMaxHp > prevMaxHp) player.hp += (newMaxHp - prevMaxHp);
+      if (newMaxMp > prevMaxMp) player.mp += (newMaxMp - prevMaxMp);
+
       updateUI();
       renderShop();
     }
 
     function buyConsumable(type, cost) {
       if (player.gold < cost) {
-        addLog("🪙 銀兩不足，無法購買丹藥！", "text-rose-400");
+        addLog("🪙 銀兩不足，無法購買該物品！", "text-rose-400 font-bold");
         return;
       }
       playSFX('coin');
       player.gold -= cost;
-      player.potions[type]++;
+
+      if (type === 'hp') {
+        player.potions.hp++;
+        addLog("🏪 購買了 1 瓶【綠色乖乖金創藥】！", "text-emerald-300");
+      } else if (type === 'mp') {
+        player.potions.mp++;
+        addLog("🏪 購買了 1 顆【行動電源聚靈丹】！", "text-sky-300");
+      } else if (type === 'superHp') {
+        player.potions.superHp++;
+        addLog("🏪 購買了 1 顆【伺服器重組大補丸】！", "text-amber-300");
+      } else if (type === 'scrollAtk') {
+        player.potions.scroll++;
+        addLog("🏪 購買了 1 卷【CPU 超頻狂暴卷軸】！", "text-purple-300");
+      } else if (type === 'scrollDef') {
+        if (battleState.active) {
+          battleState.defBuff += 15;
+          document.getElementById('battle-buff-badge').classList.remove('hidden');
+        } else {
+          player.nextBattleDefBuff += 15;
+        }
+        addLog("🛡️ 啟動【硬體防火牆鐵壁符】！防禦力提升 +15 點！", "text-teal-300 font-bold");
+      } else if (type === 'tomePerm') {
+        player.baseAtk += 4;
+        player.baseDef += 3;
+        addLog("📘 研讀【上古資安演算法秘卷】！永久提升 +4 武力與 +3 防禦！", "text-yellow-300 font-black");
+      }
       updateUI();
     }
 
     function usePotion(type) {
-      if (player.potions[type] <= 0) {
-        addLog("🎒 行囊中該丹藥已用盡！請造訪鍛造坊購買。", "text-rose-400");
-        return;
-      }
       if (type === 'hp') {
-        if (player.hp >= getMaxHp()) {
-          addLog("❤️ 目前命(HP)已滿，無須服用金創藥！", "text-stone-400");
-          return;
-        }
+        if (player.potions.hp <= 0) { addLog("🎒 金創藥已用盡！請造訪鍛造坊購買。", "text-rose-400"); return; }
+        if (player.hp >= getMaxHp()) { addLog("❤️ 目前命(HP)已滿！", "text-stone-400"); return; }
         player.potions.hp--;
         player.hp = Math.min(getMaxHp(), player.hp + 65);
         playSFX('coin');
         addLog("🏺 服用【綠色乖乖金創藥】，恢復 65 點命(HP)！", "text-emerald-400 font-bold");
-      } else {
-        if (player.mp >= getMaxMp()) {
-          addLog("💧 目前靈(MP)已滿，無須服用聚靈丹！", "text-stone-400");
-          return;
-        }
+      } else if (type === 'mp') {
+        if (player.potions.mp <= 0) { addLog("🎒 聚靈丹已用盡！請造訪鍛造坊購買。", "text-rose-400"); return; }
+        if (player.mp >= getMaxMp()) { addLog("💧 目前靈(MP)已滿！", "text-stone-400"); return; }
         player.potions.mp--;
         player.mp = Math.min(getMaxMp(), player.mp + 40);
         playSFX('coin');
         addLog("⚡ 服用【行動電源聚靈丹】，恢復 40 點靈(MP)！", "text-sky-400 font-bold");
+      } else if (type === 'superHp') {
+        if (player.potions.superHp <= 0) { addLog("🎒 伺服器大補丸已用盡！請至鍛造坊購買。", "text-rose-400"); return; }
+        player.potions.superHp--;
+        battleState.defDebuff = 0;
+        player.hp = Math.min(getMaxHp(), player.hp + 160);
+        playSFX('coin');
+        addLog("🍱 服用【伺服器重組大補丸】，大幅恢復 160 點命(HP)並清除破甲狀態！", "text-amber-300 font-black");
+      } else if (type === 'Scroll') {
+        if (player.potions.scroll <= 0) { addLog("🎒 超頻狂暴卷軸已用盡！請至鍛造坊購買。", "text-rose-400"); return; }
+        player.potions.scroll--;
+        if (battleState.active) {
+          battleState.atkBuff += 18;
+          const buffBadge = document.getElementById('battle-buff-badge');
+          buffBadge.classList.remove('hidden');
+          buffBadge.innerText = `✨ 符咒加持 (+${battleState.atkBuff}攻/+${battleState.defBuff}防)`;
+        } else {
+          player.nextBattleAtkBuff += 18;
+        }
+        playSFX('heavy');
+        addLog("📜 撕開【CPU 超頻狂暴卷軸】！武力(ATK)大幅提升 +18 點！", "text-purple-300 font-black");
       }
       updateUI();
+    }
+
+    function openCodexModal() {
+      clearInputState();
+      document.getElementById('codex-modal').classList.remove('hidden');
     }
 
     function requireTeacherAuth(actionCallback) {
