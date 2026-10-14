@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>數位迷宮大冒險：資訊勇者 RPG</title>
+  <title>數位迷宮大冒險：2D 自由探索資訊 RPG</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
@@ -12,6 +12,7 @@
       user-select: none;
       background-color: #0f172a;
       color: #f8fafc;
+      overflow-x: hidden;
     }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
@@ -20,93 +21,119 @@
     }
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.8)); }
+      50% { filter: drop-shadow(0 0 12px rgba(56, 189, 248, 1)); }
     }
     .animate-shake { animation: shake 0.3s ease-in-out; }
-    .animate-float { animation: float 2.5s ease-in-out infinite; }
-    .bar-transition { transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .animate-float { animation: float 2.2s ease-in-out infinite; }
+    .player-glow { animation: pulse-glow 1.5s infinite; }
+    .bar-transition { transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+    
+    /* 2D 地圖網格設定 (14欄 x 10列) */
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(14, minmax(0, 1fr));
+      grid-template-rows: repeat(10, minmax(0, 1fr));
+      aspect-ratio: 14 / 10;
+      width: 100%;
+    }
+    .tile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1rem, 2.2vw, 1.65rem);
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: background-color 0.15s;
+    }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #1e293b; }
     ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-2 md:p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
+<body class="min-h-screen flex flex-col items-center justify-center p-2 md:p-4 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900">
 
   <!-- 頂部標題與快速控制 -->
-  <header class="w-full max-w-6xl flex flex-wrap justify-between items-center mb-4 px-4 py-3 bg-slate-800/80 backdrop-blur border border-slate-700 rounded-2xl shadow-lg">
+  <header class="w-full max-w-6xl flex flex-wrap justify-between items-center mb-3 px-4 py-2.5 bg-slate-800/85 backdrop-blur border border-slate-700 rounded-2xl shadow-lg">
     <div class="flex items-center gap-3">
-      <span class="text-3xl">🛡️</span>
+      <span class="text-3xl">🕹️</span>
       <div>
-        <h1 class="text-xl md:text-2xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-          數位迷宮大冒險：資訊勇者 RPG
+        <h1 class="text-lg md:text-xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+          數位迷宮大冒險：2D 鍵盤探索 RPG
         </h1>
-        <p class="text-xs text-slate-400">運用電腦基本知識與快捷鍵魔法，擊退病毒登上全班英雄榜！</p>
+        <p class="text-xs text-slate-400">請使用鍵盤 <kbd class="px-1.5 py-0.5 bg-slate-700 text-cyan-300 rounded text-[11px] font-bold">↑</kbd> <kbd class="px-1.5 py-0.5 bg-slate-700 text-cyan-300 rounded text-[11px] font-bold">↓</kbd> <kbd class="px-1.5 py-0.5 bg-slate-700 text-cyan-300 rounded text-[11px] font-bold">←</kbd> <kbd class="px-1.5 py-0.5 bg-slate-700 text-cyan-300 rounded text-[11px] font-bold">→</kbd> 或 <kbd class="px-1.5 py-0.5 bg-slate-700 text-cyan-300 rounded text-[11px] font-bold">WASD</kbd> 操控勇者走動探索！</p>
       </div>
     </div>
-    <div class="flex flex-wrap gap-2 mt-2 sm:mt-0">
-      <button onclick="openLeaderboardModal('')" class="px-3 py-1.5 text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg border border-amber-500/40 transition flex items-center gap-1">
+    <div class="flex flex-wrap gap-1.5 mt-2 sm:mt-0">
+      <button onclick="openVictoryModalManual()" class="px-3 py-1.5 text-xs font-bold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 rounded-lg border border-emerald-500/40 transition">
+        📝 登錄目前成績
+      </button>
+      <button onclick="openLeaderboardModal('')" class="px-3 py-1.5 text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg border border-amber-500/40 transition">
         🏆 全班英雄榜
       </button>
       <button onclick="openQuestionManager()" class="px-3 py-1.5 text-xs font-bold bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg border border-slate-600 transition">
-        📚 題庫檢視 (<span id="q-count">0</span>題)
+        📚 題庫 (<span id="q-count">0</span>)
       </button>
-      <button onclick="resetGame()" class="px-3 py-1.5 text-xs font-bold bg-rose-900/60 hover:bg-rose-800 text-rose-200 rounded-lg border border-rose-700/50 transition">
-        🔄 重新開始
+      <button onclick="resetGame()" class="px-2.5 py-1.5 text-xs font-bold bg-rose-900/60 hover:bg-rose-800 text-rose-200 rounded-lg border border-rose-700/50 transition">
+        🔄 重來
       </button>
     </div>
   </header>
 
   <!-- 主遊戲容器 -->
-  <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-4">
+  <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-3">
 
     <!-- 左側：勇者狀態與裝備欄 (佔 4 欄) -->
-    <section class="lg:col-span-4 flex flex-col gap-4">
+    <section class="lg:col-span-4 flex flex-col gap-3">
       
       <!-- 勇者素質卡片 -->
-      <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 shadow-xl">
-        <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-3">
-          <div class="flex items-center gap-3">
-            <div class="w-14 h-14 rounded-2xl bg-indigo-600/30 border-2 border-indigo-400 flex items-center justify-center text-3xl shadow-inner">
+      <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-3.5 shadow-xl">
+        <div class="flex items-center justify-between border-b border-slate-700 pb-2.5 mb-2.5">
+          <div class="flex items-center gap-2.5">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-600/30 border-2 border-indigo-400 flex items-center justify-center text-2xl shadow-inner">
               🧑‍💻
             </div>
             <div>
-              <div class="flex items-center gap-2">
-                <span id="player-title" class="text-xs px-2 py-0.5 bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-full font-bold">實習小網管</span>
-                <span class="text-sm font-bold text-amber-400">Lv.<span id="player-lv">1</span></span>
+              <div class="flex items-center gap-1.5">
+                <span id="player-title" class="text-[11px] px-2 py-0.5 bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-full font-bold">實習小網管</span>
+                <span class="text-xs font-bold text-amber-400">Lv.<span id="player-lv">1</span></span>
               </div>
-              <h2 class="text-lg font-black text-white mt-0.5">資訊小勇者</h2>
+              <h2 class="text-base font-black text-white mt-0.5">資訊小勇者</h2>
             </div>
           </div>
           <div class="text-right">
-            <div class="text-xs text-slate-400">持有資金</div>
-            <div class="text-lg font-black text-amber-400">🪙 <span id="player-gold">50</span> <span class="text-xs font-normal">Bytes</span></div>
+            <div class="text-[11px] text-slate-400">持有資金</div>
+            <div class="text-base font-black text-amber-400">🪙 <span id="player-gold">50</span> <span class="text-[10px] font-normal">Bytes</span></div>
           </div>
         </div>
 
         <!-- HP / MP / EXP 狀態條 -->
-        <div class="space-y-3 mb-4">
+        <div class="space-y-2 mb-3">
           <div>
-            <div class="flex justify-between text-xs font-bold mb-1">
-              <span class="text-rose-400">❤️ HP (系統穩定度)</span>
+            <div class="flex justify-between text-xs font-bold mb-0.5">
+              <span class="text-rose-400">❤️ HP (穩定度)</span>
               <span><span id="player-hp">100</span> / <span id="player-max-hp">100</span></span>
             </div>
-            <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-700">
+            <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-700">
               <div id="hp-bar" class="h-full bg-gradient-to-r from-rose-600 to-rose-400 rounded-full bar-transition" style="width: 100%"></div>
             </div>
           </div>
 
           <div>
-            <div class="flex justify-between text-xs font-bold mb-1">
+            <div class="flex justify-between text-xs font-bold mb-0.5">
               <span class="text-cyan-400">⚡ MP (電力能量)</span>
               <span><span id="player-mp">50</span> / <span id="player-max-mp">50</span></span>
             </div>
-            <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-700">
+            <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-700">
               <div id="mp-bar" class="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 rounded-full bar-transition" style="width: 100%"></div>
             </div>
           </div>
 
           <div>
-            <div class="flex justify-between text-xs font-bold mb-1">
+            <div class="flex justify-between text-[11px] font-bold mb-0.5">
               <span class="text-purple-400">✨ EXP (升級經驗)</span>
               <span><span id="player-exp">0</span> / <span id="player-next-exp">30</span></span>
             </div>
@@ -117,75 +144,76 @@
         </div>
 
         <!-- 攻防屬性與答題統計 -->
-        <div class="grid grid-cols-2 gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-700/60 text-sm">
-          <div class="flex items-center justify-between px-2 py-1">
+        <div class="grid grid-cols-2 gap-1.5 bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/60 text-xs">
+          <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-slate-400">⚔️ 運算攻擊</span>
             <span id="player-atk" class="font-black text-orange-400">15</span>
           </div>
-          <div class="flex items-center justify-between px-2 py-1">
+          <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-slate-400">🛡️ 防火防禦</span>
             <span id="player-def" class="font-black text-emerald-400">5</span>
           </div>
-          <div class="flex items-center justify-between px-2 py-1">
+          <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-slate-400">🎯 答題正確</span>
             <span id="stat-correct" class="font-bold text-cyan-300">0 題</span>
           </div>
-          <div class="flex items-center justify-between px-2 py-1">
+          <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-slate-400">👾 擊敗怪物</span>
             <span id="stat-kills" class="font-bold text-amber-300">0 隻</span>
           </div>
         </div>
       </div>
 
-      <!-- 當前裝備欄 -->
-      <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 shadow-xl flex-1 flex flex-col justify-between">
+      <!-- 當前裝備欄與補給品 -->
+      <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-3.5 shadow-xl flex-1 flex flex-col justify-between">
         <div>
-          <h3 class="text-sm font-black text-slate-300 mb-3 flex items-center gap-2">
-            <span>🎒 當前硬體與資安裝備</span>
-          </h3>
-          <div class="space-y-2.5 text-sm">
-            <div class="flex items-center justify-between p-2.5 bg-slate-900/90 rounded-xl border border-slate-700/70">
-              <div class="flex items-center gap-2.5">
-                <span id="eq-weapon-icon" class="text-2xl">⌨️</span>
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xs font-black text-slate-300">🎒 硬體與資安裝備</h3>
+            <button onclick="switchTab('shop')" class="text-[11px] text-amber-400 hover:underline font-bold">🛒 前往商城升級</button>
+          </div>
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between p-2 bg-slate-900/90 rounded-xl border border-slate-700/70">
+              <div class="flex items-center gap-2">
+                <span id="eq-weapon-icon" class="text-xl">⌨️</span>
                 <div>
-                  <div class="text-[11px] text-slate-400">輸入武器 (提升攻擊)</div>
+                  <div class="text-[10px] text-slate-400">輸入武器</div>
                   <div id="eq-weapon-name" class="font-bold text-slate-100">老舊薄膜鍵盤</div>
                 </div>
               </div>
-              <span id="eq-weapon-stat" class="text-xs font-bold px-2 py-1 bg-orange-500/20 text-orange-300 rounded-lg">+0 ATK</span>
+              <span id="eq-weapon-stat" class="text-[11px] font-bold px-2 py-0.5 bg-orange-500/20 text-orange-300 rounded">+0 ATK</span>
             </div>
 
-            <div class="flex items-center justify-between p-2.5 bg-slate-900/90 rounded-xl border border-slate-700/70">
-              <div class="flex items-center gap-2.5">
-                <span id="eq-armor-icon" class="text-2xl">🛡️</span>
+            <div class="flex items-center justify-between p-2 bg-slate-900/90 rounded-xl border border-slate-700/70">
+              <div class="flex items-center gap-2">
+                <span id="eq-armor-icon" class="text-xl">🛡️</span>
                 <div>
-                  <div class="text-[11px] text-slate-400">資安防具 (提升防禦)</div>
+                  <div class="text-[10px] text-slate-400">資安防具</div>
                   <div id="eq-armor-name" class="font-bold text-slate-100">基礎系統防火牆</div>
                 </div>
               </div>
-              <span id="eq-armor-stat" class="text-xs font-bold px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded-lg">+0 DEF</span>
+              <span id="eq-armor-stat" class="text-[11px] font-bold px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded">+0 DEF</span>
             </div>
 
-            <div class="flex items-center justify-between p-2.5 bg-slate-900/90 rounded-xl border border-slate-700/70">
-              <div class="flex items-center gap-2.5">
-                <span id="eq-acc-icon" class="text-2xl">💾</span>
+            <div class="flex items-center justify-between p-2 bg-slate-900/90 rounded-xl border border-slate-700/70">
+              <div class="flex items-center gap-2">
+                <span id="eq-acc-icon" class="text-xl">💾</span>
                 <div>
-                  <div class="text-[11px] text-slate-400">擴充核心 (提升HP/MP)</div>
+                  <div class="text-[10px] text-slate-400">擴充核心</div>
                   <div id="eq-acc-name" class="font-bold text-slate-100">4GB 小隨身碟</div>
                 </div>
               </div>
-              <span id="eq-acc-stat" class="text-xs font-bold px-2 py-1 bg-purple-500/20 text-purple-300 rounded-lg">+0 HP/MP</span>
+              <span id="eq-acc-stat" class="text-[11px] font-bold px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded">+0 HP/MP</span>
             </div>
           </div>
         </div>
 
-        <!-- 背包道具快捷列 -->
-        <div class="mt-4 pt-3 border-t border-slate-700">
-          <div class="text-xs font-bold text-slate-400 mb-2">🧪 隨身補給品 (戰鬥中也可使用)</div>
+        <!-- 背包道具與螢幕方向鍵 (方便平板或滑鼠點擊) -->
+        <div class="mt-3 pt-2.5 border-t border-slate-700">
+          <div class="text-[11px] font-bold text-slate-400 mb-1.5">🧪 隨身補給品 (點擊直接使用)</div>
           <div class="grid grid-cols-2 gap-2">
             <button onclick="usePotion('hp')" class="flex items-center justify-between p-2 bg-rose-950/60 hover:bg-rose-900/80 border border-rose-700/50 rounded-xl transition text-left">
               <div class="flex items-center gap-1.5">
-                <span class="text-lg">🧃</span>
+                <span class="text-base">🧃</span>
                 <div>
                   <div class="text-xs font-bold text-rose-200">乖乖還原水</div>
                   <div class="text-[10px] text-rose-400">+50 HP</div>
@@ -196,7 +224,7 @@
 
             <button onclick="usePotion('mp')" class="flex items-center justify-between p-2 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-700/50 rounded-xl transition text-left">
               <div class="flex items-center gap-1.5">
-                <span class="text-lg">🔋</span>
+                <span class="text-base">🔋</span>
                 <div>
                   <div class="text-xs font-bold text-cyan-200">行動電源包</div>
                   <div class="text-[10px] text-cyan-400">+30 MP</div>
@@ -210,57 +238,93 @@
 
     </section>
 
-    <!-- 右側：主舞台與操作區 (佔 8 欄) -->
-    <section class="lg:col-span-8 flex flex-col gap-4">
+    <!-- 右側：2D 地圖探索舞台與分頁 (佔 8 欄) -->
+    <section class="lg:col-span-8 flex flex-col gap-3">
 
       <!-- 導航分頁按鈕 -->
       <div class="grid grid-cols-3 gap-2 bg-slate-800/90 p-1.5 rounded-2xl border border-slate-700">
-        <button id="tab-explore" onclick="switchTab('explore')" class="py-2.5 rounded-xl font-black text-sm transition bg-indigo-600 text-white shadow">
-          🗺️ 區域探索與戰鬥
+        <button id="tab-explore" onclick="switchTab('explore')" class="py-2 rounded-xl font-black text-xs md:text-sm transition bg-indigo-600 text-white shadow">
+          🗺️ 2D 迷宮探索 (方向鍵移動)
         </button>
-        <button id="tab-shop" onclick="switchTab('shop')" class="py-2.5 rounded-xl font-black text-sm transition text-slate-300 hover:bg-slate-700/50">
+        <button id="tab-shop" onclick="switchTab('shop')" class="py-2 rounded-xl font-black text-xs md:text-sm transition text-slate-300 hover:bg-slate-700/50">
           🛒 光華數位商城
         </button>
-        <button id="tab-codex" onclick="switchTab('codex')" class="py-2.5 rounded-xl font-black text-sm transition text-slate-300 hover:bg-slate-700/50">
+        <button id="tab-codex" onclick="switchTab('codex')" class="py-2 rounded-xl font-black text-xs md:text-sm transition text-slate-300 hover:bg-slate-700/50">
           📖 資訊小百科
         </button>
       </div>
 
-      <!-- 視窗 1：探索與戰鬥舞台 -->
-      <div id="view-explore" class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex-1 flex flex-col justify-between min-h-[420px]">
+      <!-- 視窗 1：2D 迷宮地圖與戰鬥舞台 -->
+      <div id="view-explore" class="bg-slate-800/90 border border-slate-700 rounded-2xl p-3 md:p-4 shadow-xl flex-1 flex flex-col justify-between">
         
-        <!-- 關卡選擇畫面 -->
-        <div id="stage-select-panel" class="space-y-4">
-          <div class="flex flex-wrap justify-between items-center gap-2">
-            <h2 class="text-lg font-black text-white flex items-center gap-2">
-              <span>🌐 選擇要巡邏的數位區域</span>
-            </h2>
-            <div class="flex gap-2">
-              <button onclick="openVictoryModalManual()" class="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 rounded-xl text-xs font-bold transition">
-                📝 登錄目前成績
-              </button>
-              <button onclick="restAtLab()" class="px-3 py-1.5 bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 rounded-xl text-xs font-bold transition">
-                💤 回電腦教室休息 (免費回滿 HP/MP)
-              </button>
+        <!-- 2D 地圖探索面板 -->
+        <div id="map-explore-panel" class="flex flex-col h-full justify-between">
+          <!-- 地圖頂部資訊列與快速切換 -->
+          <div class="flex flex-wrap justify-between items-center gap-2 mb-2 pb-2 border-b border-slate-700">
+            <div class="flex items-center gap-2">
+              <span id="map-badge" class="px-2.5 py-1 bg-indigo-600 text-white text-xs font-black rounded-lg shadow">
+                地圖 1/4
+              </span>
+              <div>
+                <h2 id="map-title" class="text-base font-black text-white leading-tight">1. 新手電腦教室</h2>
+                <p id="map-subtitle" class="text-[11px] text-slate-400">撞擊怪物觸發戰鬥，走進 🌀 傳送門前往下一關！</p>
+              </div>
+            </div>
+
+            <!-- 快速傳送按鈕 (方便卡關或選關) -->
+            <div class="flex items-center gap-1">
+              <span class="text-[11px] text-slate-400 mr-1">快速跳轉：</span>
+              <button onclick="loadMap(0, 1, 5)" class="px-2 py-1 text-xs font-bold bg-slate-700 hover:bg-indigo-600 rounded transition" title="新手電腦教室">1</button>
+              <button onclick="loadMap(1, 1, 5)" class="px-2 py-1 text-xs font-bold bg-slate-700 hover:bg-indigo-600 rounded transition" title="檔案迷霧森林">2</button>
+              <button onclick="loadMap(2, 1, 5)" class="px-2 py-1 text-xs font-bold bg-slate-700 hover:bg-indigo-600 rounded transition" title="網路釣魚峽谷">3</button>
+              <button onclick="loadMap(3, 1, 5)" class="px-2 py-1 text-xs font-bold bg-rose-900/80 hover:bg-rose-600 text-rose-200 rounded transition" title="暗網核心魔王城">4王關</button>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="zone-list"></div>
+          <!-- 14x10 2D 網格畫布 -->
+          <div class="relative w-full rounded-xl overflow-hidden border-2 border-slate-600 shadow-2xl bg-slate-900">
+            <div id="game-map" class="map-grid"></div>
+          </div>
+
+          <!-- 底部：地圖圖例說明 + 螢幕方向鍵控制 -->
+          <div class="mt-2.5 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-700/80 text-xs">
+            <div class="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-300">
+              <span>🧑‍💻 勇者(你)</span>
+              <span>🌀 傳送門</span>
+              <span>🏥 維修站(回滿HP/MP)</span>
+              <span>🏪 裝備商城</span>
+              <span>📦 寶箱</span>
+              <span>👾 病毒怪獸</span>
+            </div>
+
+            <!-- 滑鼠/觸控虛擬方向鍵 -->
+            <div class="flex items-center gap-1 mx-auto sm:mx-0">
+              <button onclick="movePlayer(-1, 0)" class="w-8 h-8 bg-slate-700 hover:bg-indigo-600 active:scale-90 rounded-lg font-black text-white shadow">←</button>
+              <div class="flex flex-col gap-1">
+                <button onclick="movePlayer(0, -1)" class="w-8 h-8 bg-slate-700 hover:bg-indigo-600 active:scale-90 rounded-lg font-black text-white shadow">↑</button>
+                <button onclick="movePlayer(0, 1)" class="w-8 h-8 bg-slate-700 hover:bg-indigo-600 active:scale-90 rounded-lg font-black text-white shadow">↓</button>
+              </div>
+              <button onclick="movePlayer(1, 0)" class="w-8 h-8 bg-slate-700 hover:bg-indigo-600 active:scale-90 rounded-lg font-black text-white shadow">→</button>
+              <button onclick="respawnMonsters()" class="ml-2 px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-[11px] text-cyan-300 font-bold rounded-lg border border-slate-600" title="如果地圖怪打光了，點此重新召喚">
+                🔄 重生本區怪物
+              </button>
+            </div>
+          </div>
         </div>
 
-        <!-- 戰鬥畫面 -->
-        <div id="battle-panel" class="hidden flex-1 flex flex-col justify-between">
+        <!-- 戰鬥畫面 (撞到怪物時切換顯示) -->
+        <div id="battle-panel" class="hidden flex-1 flex flex-col justify-between min-h-[380px]">
           <div class="flex justify-between items-center border-b border-slate-700 pb-2 mb-3">
-            <span id="battle-zone-title" class="text-xs font-bold px-2.5 py-1 bg-indigo-500/20 text-indigo-300 rounded-lg border border-indigo-500/30">
-              區域：新手電腦教室
+            <span id="battle-zone-title" class="text-xs font-bold px-2.5 py-1 bg-rose-500/20 text-rose-300 rounded-lg border border-rose-500/30">
+              ⚔️ 遭遇病毒戰鬥中！
             </span>
             <button onclick="fleeBattle()" class="text-xs text-slate-400 hover:text-rose-400 font-bold px-2 py-1 rounded transition">
-              🏃 強制登出撤退
+              🏃 撤退回地圖
             </button>
           </div>
 
-          <div id="monster-container" class="my-auto py-4 flex flex-col items-center justify-center bg-slate-900/70 rounded-2xl border border-slate-700/80 relative overflow-hidden">
-            <div id="damage-popup" class="hidden absolute top-4 font-black text-2xl drop-shadow-md z-10"></div>
+          <div id="monster-container" class="my-auto py-5 flex flex-col items-center justify-center bg-slate-900/80 rounded-2xl border border-slate-700 relative overflow-hidden">
+            <div id="damage-popup" class="hidden absolute top-4 font-black text-3xl drop-shadow-md z-10"></div>
             
             <div id="monster-emoji" class="text-7xl mb-2 animate-float select-none">👾</div>
             <div class="flex items-center gap-2">
@@ -281,8 +345,8 @@
           </div>
 
           <div class="mt-4">
-            <div class="text-xs text-amber-300 font-bold mb-2 flex items-center gap-1">
-              <span>💡 提示：點擊攻擊技能後，需答對電腦知識問題才能成功施放！</span>
+            <div class="text-xs text-amber-300 font-bold mb-2">
+              💡 點擊技能後，答對「國小電腦知識題」即可發動攻擊！
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <button onclick="prepareAction('normal')" class="p-3 bg-indigo-600 hover:bg-indigo-500 active:scale-95 rounded-xl font-black text-white shadow-lg transition flex flex-col items-center">
@@ -306,21 +370,24 @@
       </div>
 
       <!-- 視窗 2：光華數位商城 -->
-      <div id="view-shop" class="hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex-1 min-h-[420px]">
-        <div class="flex justify-between items-center mb-4">
+      <div id="view-shop" class="hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-4 md:p-5 shadow-xl flex-1 min-h-[420px]">
+        <div class="flex justify-between items-center mb-3">
           <div>
             <h2 class="text-lg font-black text-white">🛒 光華數位升級中心</h2>
-            <p class="text-xs text-slate-400">使用打怪獲得的 Bytes 金幣，升級你的鍵盤、防火牆與硬體配備！</p>
+            <p class="text-xs text-slate-400">使用打怪與開寶箱獲得的 Bytes 金幣，升級你的鍵盤、防火牆與硬體配備！</p>
           </div>
+          <button onclick="switchTab('explore')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl">
+            ↩ 返回地圖探索
+          </button>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-          <div class="p-3 bg-slate-900/90 border border-slate-700 rounded-xl flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <span class="text-3xl">🧃</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-4">
+          <div class="p-2.5 bg-slate-900/90 border border-slate-700 rounded-xl flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">🧃</span>
               <div>
-                <div class="font-bold text-sm text-white">綠色乖乖還原水</div>
-                <div class="text-xs text-slate-400">恢復 50 點 HP 系統穩定度</div>
+                <div class="font-bold text-xs text-white">綠色乖乖還原水</div>
+                <div class="text-[11px] text-slate-400">恢復 50 點 HP 系統穩定度</div>
               </div>
             </div>
             <button onclick="buyConsumable('hp', 20)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg transition">
@@ -328,12 +395,12 @@
             </button>
           </div>
 
-          <div class="p-3 bg-slate-900/90 border border-slate-700 rounded-xl flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <span class="text-3xl">🔋</span>
+          <div class="p-2.5 bg-slate-900/90 border border-slate-700 rounded-xl flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">🔋</span>
               <div>
-                <div class="font-bold text-sm text-white">大容量行動電源</div>
-                <div class="text-xs text-slate-400">恢復 30 點 MP 電力能量</div>
+                <div class="font-bold text-xs text-white">大容量行動電源</div>
+                <div class="text-[11px] text-slate-400">恢復 30 點 MP 電力能量</div>
               </div>
             </div>
             <button onclick="buyConsumable('mp', 25)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg transition">
@@ -343,13 +410,20 @@
         </div>
 
         <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">⚙️ 硬體與資安裝備升級</h3>
-        <div id="shop-equipment-list" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-[260px] overflow-y-auto pr-1"></div>
+        <div id="shop-equipment-list" class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[260px] overflow-y-auto pr-1"></div>
       </div>
 
       <!-- 視窗 3：資訊小百科 -->
-      <div id="view-codex" class="hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex-1 min-h-[420px]">
-        <h2 class="text-lg font-black text-white mb-1">📖 資訊勇者作戰手冊（重點秘笈）</h2>
-        <p class="text-xs text-slate-400 mb-4">遇到打不過的怪物嗎？先來這裡複習電腦快捷鍵與資安常識吧！</p>
+      <div id="view-codex" class="hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-4 md:p-5 shadow-xl flex-1 min-h-[420px]">
+        <div class="flex justify-between items-center mb-3">
+          <div>
+            <h2 class="text-lg font-black text-white">📖 資訊勇者作戰手冊（重點秘笈）</h2>
+            <p class="text-xs text-slate-400">遇到打不過的怪物嗎？先來這裡複習電腦快捷鍵與資安常識吧！</p>
+          </div>
+          <button onclick="switchTab('explore')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl">
+            ↩ 返回地圖探索
+          </button>
+        </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs leading-relaxed max-h-[330px] overflow-y-auto pr-1">
           <div class="p-3.5 bg-slate-900/90 rounded-xl border border-slate-700 space-y-1.5">
@@ -389,13 +463,13 @@
       </div>
 
       <!-- 戰鬥與系統紀錄器 -->
-      <div class="bg-slate-950/90 border border-slate-800 rounded-2xl p-3 shadow-inner">
+      <div class="bg-slate-950/90 border border-slate-800 rounded-2xl p-2.5 shadow-inner">
         <div class="text-[11px] font-bold text-slate-500 mb-1 flex justify-between">
           <span>📟 系統終端機紀錄 (System Log)</span>
-          <span>最新訊息在最上方</span>
+          <span>按方向鍵 ↑↓←→ 或 WASD 移動角色</span>
         </div>
-        <div id="battle-log" class="h-24 overflow-y-auto space-y-1 text-xs font-mono pr-1">
-          <div class="text-cyan-400">> 歡迎來到《數位迷宮大冒險》！擊敗第 4 關的「勒索病毒大魔王」即可登錄全班英雄榜！</div>
+        <div id="battle-log" class="h-16 overflow-y-auto space-y-1 text-xs font-mono pr-1">
+          <div class="text-cyan-400">> 歡迎來到 2D 數位迷宮！請使用鍵盤方向鍵（↑↓←→）操控「🧑‍💻 資訊小勇者」走動探索！</div>
         </div>
       </div>
 
@@ -429,10 +503,6 @@
         <button onclick="closeQuestionManager()" class="text-slate-400 hover:text-white text-sm font-bold">✕ 關閉</button>
       </div>
       
-      <p class="text-xs text-slate-400 mb-3">
-        老師可在此即時新增本堂課剛教完的題目，新增後會立刻加入學生的戰鬥抽題池中！
-      </p>
-
       <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 mb-3 space-y-2 text-xs">
         <div class="font-bold text-cyan-400">➕ 新增自訂題目</div>
         <input id="new-q-text" type="text" placeholder="輸入題目內容（例：在 Scratch 中，哪個積木代表開始執行？）" class="w-full p-2 rounded bg-slate-800 border border-slate-600 text-white">
@@ -496,7 +566,7 @@
 
       <div class="flex gap-2">
         <button onclick="document.getElementById('victory-modal').classList.add('hidden')" class="w-1/3 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold rounded-xl text-xs transition">
-          繼續練功
+          繼續探索
         </button>
         <button id="btn-submit-score" onclick="submitScoreToGAS()" class="w-2/3 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black rounded-xl text-sm shadow-lg transition">
           🚀 上傳成績至英雄榜
@@ -560,54 +630,111 @@
     let questionPool = [...defaultQuestions];
 
     // ==========================================
-    // 2. 遊戲資料設定：關卡、怪物、商店裝備
+    // 2. 怪物圖鑑與 4 張 2D 探索地圖定義 (14x10)
     // ==========================================
-    const zones = [
+    const monsterCatalog = {
+      'm1': { name: "灰塵小精靈", emoji: "💨", lv: 1, maxHp: 35, atk: 8, def: 2, exp: 15, gold: 20, desc: "躲在主機散熱孔裡的灰塵怪，會讓電腦變熱變慢。" },
+      'm2': { name: "卡鍵毛毛蟲", emoji: "🐛", lv: 2, maxHp: 50, atk: 11, def: 3, exp: 24, gold: 28, desc: "因為在電腦前吃零食掉餅乾屑而誕生的害蟲！" },
+      'm3': { name: "亂碼史萊姆", emoji: "🟢", lv: 3, maxHp: 80, atk: 16, def: 6, exp: 38, gold: 45, desc: "沒按 Ctrl+S 就直接拔插頭所產生的悲傷怪物。" },
+      'm4': { name: "誤刪小惡魔", emoji: "😈", lv: 4, maxHp: 110, atk: 21, def: 8, exp: 52, gold: 60, desc: "最喜歡趁你不注意把桌面檔案丟進資源回收筒。" },
+      'm5': { name: "彈跳廣告幽靈", emoji: "👻", lv: 5, maxHp: 150, atk: 27, def: 12, exp: 75, gold: 85, desc: "偽裝成假關閉按鈕的討厭鬼，亂點就會跳出十個視窗！" },
+      'm6': { name: "釣魚信件怪客", emoji: "🎣", lv: 6, maxHp: 195, atk: 33, def: 15, exp: 100, gold: 115, desc: "專門寄送「恭喜抽中最新手機」假網址來騙取密碼的怪客。" },
+      'm7': { name: "特洛伊木馬巨獸", emoji: "🐴", lv: 7, maxHp: 260, atk: 42, def: 20, exp: 150, gold: 170, desc: "偽裝成免費遊戲外掛的危險程式，會在背景偷走你的資料。" },
+      'boss': { name: "👑 勒索病毒大魔王", emoji: "👾", lv: 9, maxHp: 380, atk: 55, def: 25, exp: 300, gold: 350, desc: "會把電腦所有檔案加密鎖起來的終極魔王！用最強的資安知識擊敗牠吧！" }
+    };
+
+    // 地圖符號說明：
+    // '#' 外牆 | 'S' 伺服器機櫃 | 'T' 資料樹 | 'W' 數據河流 | '.' 地板
+    // 'H' 維修站(補血) | 'M' 光華商城NPC | 'N' 老師NPC | 'C' 寶箱
+    // 'P' 往下一關傳送門 | 'B' 返回上一關傳送門
+    // '1'~'7' 怪物 | 'K' 最終大魔王
+    const mapTemplates = [
       {
         id: 0,
-        name: "1. 新手電腦教室",
-        recLv: "建議 Lv.1~2",
-        desc: "充滿灰塵與卡鍵問題的初級訓練場，適合剛入學的資訊勇者。",
-        bgClass: "from-slate-800 to-indigo-950",
-        monsters: [
-          { name: "灰塵小精靈", emoji: "💨", lv: 1, maxHp: 35, atk: 8, def: 2, exp: 15, gold: 18, desc: "躲在主機散熱孔裡的灰塵怪，會讓電腦變熱變慢。" },
-          { name: "卡鍵毛毛蟲", emoji: "🐛", lv: 2, maxHp: 50, atk: 11, def: 3, exp: 22, gold: 25, desc: "因為在電腦前吃零食掉餅乾屑而誕生的害蟲！" }
+        name: "1. 新手電腦教室 (建議 Lv.1~2)",
+        subtitle: "先找 🏥 維修站或打開 📦 寶箱，擊敗灰塵與毛毛蟲後走進右側 🌀 傳送門！",
+        floorBg: "bg-slate-800/90",
+        wallEmoji: "🧱",
+        obsEmoji: "🖥️",
+        grid: [
+          "##############",
+          "#H..1....S..C#",
+          "#..SS....S...#",
+          "#..SS..2...1.#",
+          "#............#",
+          "#...N....SS..P",
+          "#........SS..#",
+          "#..1...2.....#",
+          "#M........C..#",
+          "##############"
         ]
       },
       {
         id: 1,
-        name: "2. 檔案迷霧森林",
-        recLv: "建議 Lv.3~4",
-        desc: "到處都是沒存檔與亂取名字的迷路檔案，小心別按錯快捷鍵！",
-        bgClass: "from-emerald-950 to-slate-900",
-        monsters: [
-          { name: "亂碼史萊姆", emoji: "🟢", lv: 3, maxHp: 80, atk: 16, def: 6, exp: 35, gold: 40, desc: "沒按 Ctrl+S 就直接拔插頭所產生的悲傷怪物。" },
-          { name: "誤刪小惡魔", emoji: "😈", lv: 4, maxHp: 110, atk: 21, def: 8, exp: 48, gold: 55, desc: "最喜歡趁你不注意把桌面檔案丟進資源回收筒。" }
+        name: "2. 檔案迷霧森林 (建議 Lv.3~4)",
+        subtitle: "穿越資料夾叢林，小心亂碼史萊姆與誤刪小惡魔！",
+        floorBg: "bg-emerald-950/80",
+        wallEmoji: "🌲",
+        obsEmoji: "📁",
+        grid: [
+          "##############",
+          "#C..T....3..C#",
+          "#...T..TTTT..#",
+          "#..3......T.4#",
+          "#....TTT..T..#",
+          "B....T.H.....P",
+          "#..TTT....4..#",
+          "#...3........#",
+          "#.......4..M.#",
+          "##############"
         ]
       },
       {
         id: 2,
-        name: "3. 網路釣魚峽谷",
-        recLv: "建議 Lv.5~6",
-        desc: "充斥著假中獎訊息與弱密碼陷阱的危險網路地帶！",
-        bgClass: "from-amber-950 to-slate-900",
-        monsters: [
-          { name: "彈跳廣告幽靈", emoji: "👻", lv: 5, maxHp: 150, atk: 27, def: 12, exp: 70, gold: 80, desc: "偽裝成假關閉按鈕的討厭鬼，亂點就會跳出十個視窗！" },
-          { name: "釣魚信件怪客", emoji: "🎣", lv: 6, maxHp: 195, atk: 33, def: 15, exp: 95, gold: 110, desc: "專門寄送「恭喜抽中最新手機」假網址來騙取密碼的怪客。" }
+        name: "3. 網路釣魚峽谷 (建議 Lv.5~6)",
+        subtitle: "跨越數據湍流，識破彈跳廣告幽靈與釣魚信件怪客的陷阱！",
+        floorBg: "bg-amber-950/75",
+        wallEmoji: "🪨",
+        obsEmoji: "🌊",
+        grid: [
+          "##############",
+          "#C..W....5..C#",
+          "#...W..WWWW..#",
+          "#..5......W.6#",
+          "#....WWW..W..#",
+          "B......H.....P",
+          "#..WWW....6..#",
+          "#...5..W.....#",
+          "#M.....W...6.#",
+          "##############"
         ]
       },
       {
         id: 3,
-        name: "4. 暗網核心魔王城",
-        recLv: "建議 Lv.7+",
-        desc: "終極電腦病毒盤踞的禁地，擊敗勒索病毒大魔王即可登錄英雄榜！",
-        bgClass: "from-rose-950 to-slate-950",
-        monsters: [
-          { name: "特洛伊木馬巨獸", emoji: "🐴", lv: 7, maxHp: 260, atk: 42, def: 20, exp: 140, gold: 160, desc: "偽裝成免費遊戲外掛的危險程式，會在背景偷走你的資料。" },
-          { name: "👑 勒索病毒大魔王", emoji: "👾", lv: 9, maxHp: 380, atk: 55, def: 25, exp: 300, gold: 350, desc: "會把電腦所有檔案加密鎖起來的終極魔王！用最強的資安知識擊敗牠吧！" }
+        name: "4. 暗網核心魔王城 (建議 Lv.7+)",
+        subtitle: "突破特洛伊木馬防線，擊敗最深處的「👑 勒索病毒大魔王」登上英雄榜！",
+        floorBg: "bg-rose-950/85",
+        wallEmoji: "🔥",
+        obsEmoji: "⛓️",
+        grid: [
+          "##############",
+          "#C...S..7...C#",
+          "#..S.S....S..#",
+          "#..S...7..S..#",
+          "#......H..S..#",
+          "B..7......S.K#",
+          "#.........S..#",
+          "#..S...7..S..#",
+          "#M.S......S.C#",
+          "##############"
         ]
       }
     ];
+
+    // 儲存執行期間各張地圖的動態網格 (讓打死的怪或開過的寶箱保持消失)
+    let runtimeMaps = [];
+    let currentMapIndex = 0;
+    let playerPos = { x: 1, y: 5 };
 
     const shopEquipments = [
       { id: "w1", type: "weapon", name: "機械式青軸鍵盤", icon: "⌨️", bonus: 10, price: 60, desc: "清脆的敲擊感，打字輸入指令速度大幅提升！(+10 ATK)" },
@@ -650,8 +777,8 @@
 
     let currentBattle = {
       active: false,
-      zone: null,
       monster: null,
+      targetTile: null, // 紀錄正在打的地圖格子座標 {x, y}
       pendingSkill: null,
       currentQuiz: null
     };
@@ -662,148 +789,237 @@
     function getTotalDef() { return player.baseDef + (player.equipped.armor.bonus || 0); }
 
     // ==========================================
-    // 4. 介面更新與初始化
+    // 4. 初始化與 2D 地圖渲染、鍵盤移動邏輯
     // ==========================================
     function initGame() {
-      renderZones();
+      // 深拷貝地圖模板到 runtimeMaps
+      runtimeMaps = mapTemplates.map(m => m.grid.map(row => row.split('')));
+      loadMap(0, 1, 5);
       renderShop();
       updateUI();
       document.getElementById('q-count').innerText = questionPool.length;
+
+      // 綁定鍵盤方向鍵與 WASD
+      window.addEventListener('keydown', handleKeyDown);
     }
 
-    function updateUI() {
-      const maxHp = getMaxHp();
-      const maxMp = getMaxMp();
-      if (player.hp > maxHp) player.hp = maxHp;
-      if (player.mp > maxMp) player.mp = maxMp;
+    function handleKeyDown(e) {
+      // 若正在戰鬥或彈出視窗開啟中，不觸發地圖移動
+      if (currentBattle.active) return;
+      if (!document.getElementById('quiz-modal').classList.contains('hidden')) return;
+      if (!document.getElementById('victory-modal').classList.contains('hidden')) return;
+      if (!document.getElementById('q-manager-modal').classList.contains('hidden')) return;
+      if (!document.getElementById('leaderboard-modal').classList.contains('hidden')) return;
+      if (document.getElementById('view-explore').classList.contains('hidden')) return;
 
-      document.getElementById('player-lv').innerText = player.lv;
-      document.getElementById('player-title').innerText = titles[Math.min(player.lv - 1, titles.length - 1)];
-      document.getElementById('player-gold').innerText = player.gold;
+      // 避免按方向鍵時捲動整個網頁
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+      }
 
-      document.getElementById('player-hp').innerText = player.hp;
-      document.getElementById('player-max-hp').innerText = maxHp;
-      document.getElementById('hp-bar').style.width = `${Math.max(0, (player.hp / maxHp) * 100)}%`;
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') movePlayer(0, -1);
+      else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') movePlayer(0, 1);
+      else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') movePlayer(-1, 0);
+      else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') movePlayer(1, 0);
+    }
 
-      document.getElementById('player-mp').innerText = player.mp;
-      document.getElementById('player-max-mp').innerText = maxMp;
-      document.getElementById('mp-bar').style.width = `${Math.max(0, (player.mp / maxMp) * 100)}%`;
+    function loadMap(mapIdx, startX, startY) {
+      currentMapIndex = mapIdx;
+      playerPos = { x: startX, y: startY };
+      const mapMeta = mapTemplates[mapIdx];
+      document.getElementById('map-badge').innerText = `地圖 ${mapIdx + 1}/4`;
+      document.getElementById('map-title').innerText = mapMeta.name;
+      document.getElementById('map-subtitle').innerText = mapMeta.subtitle;
+      renderMap();
+    }
 
-      document.getElementById('player-exp').innerText = player.exp;
-      document.getElementById('player-next-exp').innerText = player.nextExp;
-      document.getElementById('exp-bar').style.width = `${Math.min(100, (player.exp / player.nextExp) * 100)}%`;
+    function respawnMonsters() {
+      runtimeMaps[currentMapIndex] = mapTemplates[currentMapIndex].grid.map(row => row.split(''));
+      renderMap();
+      addLog("🔄 本區域的病毒怪獸與寶箱已重新刷新！", "text-cyan-400 font-bold");
+    }
 
-      document.getElementById('player-atk').innerText = getTotalAtk();
-      document.getElementById('player-def').innerText = getTotalDef();
-      document.getElementById('stat-correct').innerText = `${player.stats.correct} 題`;
-      document.getElementById('stat-kills').innerText = `${player.stats.kills} 隻`;
+    function renderMap() {
+      const mapEl = document.getElementById('game-map');
+      const mapMeta = mapTemplates[currentMapIndex];
+      const grid = runtimeMaps[currentMapIndex];
 
-      document.getElementById('eq-weapon-icon').innerText = player.equipped.weapon.icon;
-      document.getElementById('eq-weapon-name').innerText = player.equipped.weapon.name;
-      document.getElementById('eq-weapon-stat').innerText = `+${player.equipped.weapon.bonus} ATK`;
+      let html = '';
+      for (let y = 0; y < 10; y++) {
+        for (let x = 0; x < 14; x++) {
+          const cell = grid[y][x];
+          const isPlayer = (playerPos.x === x && playerPos.y === y);
+          let content = '';
+          let bgClass = mapMeta.floorBg;
 
-      document.getElementById('eq-armor-icon').innerText = player.equipped.armor.icon;
-      document.getElementById('eq-armor-name').innerText = player.equipped.armor.name;
-      document.getElementById('eq-armor-stat').innerText = `+${player.equipped.armor.bonus} DEF`;
+          if (cell === '#') {
+            content = mapMeta.wallEmoji;
+            bgClass = "bg-slate-950/90";
+          } else if (cell === 'S' || cell === 'T' || cell === 'W') {
+            content = mapMeta.obsEmoji;
+            bgClass = "bg-slate-900/80";
+          } else if (cell === 'H') {
+            content = '🏥';
+            bgClass = "bg-emerald-900/40";
+          } else if (cell === 'M') {
+            content = '🏪';
+            bgClass = "bg-amber-900/40";
+          } else if (cell === 'N') {
+            content = '🧙‍♂️';
+          } else if (cell === 'C') {
+            content = '📦';
+          } else if (cell === 'P' || cell === 'B') {
+            content = '🌀';
+            bgClass = "bg-indigo-900/60 animate-pulse";
+          } else if (cell >= '1' && cell <= '7') {
+            const mKey = 'm' + cell;
+            content = `<span class="animate-float">${monsterCatalog[mKey].emoji}</span>`;
+          } else if (cell === 'K') {
+            content = `<span class="animate-bounce text-2xl">👾</span>`;
+            bgClass = "bg-rose-900/60";
+          }
 
-      document.getElementById('eq-acc-icon').innerText = player.equipped.acc.icon;
-      document.getElementById('eq-acc-name').innerText = player.equipped.acc.name;
-      document.getElementById('eq-acc-stat').innerText = `+${player.equipped.acc.bonusHp}HP/+${player.equipped.acc.bonusMp}MP`;
+          // 若玩家在此格，覆蓋顯示勇者圖示
+          if (isPlayer) {
+            content = `<span class="player-glow z-10 scale-110">🧑‍💻</span>`;
+            bgClass = "bg-cyan-500/30 border-cyan-400";
+          }
 
-      document.getElementById('item-hp-count').innerText = player.potions.hp;
-      document.getElementById('item-mp-count').innerText = player.potions.mp;
+          html += `<div class="tile ${bgClass}" onclick="handleTileClick(${x}, ${y})">${content}</div>`;
+        }
+      }
+      mapEl.innerHTML = html;
+    }
 
-      if (currentBattle.active && currentBattle.monster) {
-        const m = currentBattle.monster;
-        document.getElementById('monster-hp').innerText = Math.max(0, m.hp);
-        document.getElementById('monster-max-hp').innerText = m.maxHp;
-        document.getElementById('monster-hp-bar').style.width = `${Math.max(0, (m.hp / m.maxHp) * 100)}%`;
+    // 支援滑鼠直接點擊相鄰格子移動
+    function handleTileClick(tx, ty) {
+      const dx = tx - playerPos.x;
+      const dy = ty - playerPos.y;
+      if (Math.abs(dx) + Math.abs(dy) === 1) {
+        movePlayer(dx, dy);
       }
     }
 
-    function addLog(msg, colorClass = "text-slate-300") {
-      const logBox = document.getElementById('battle-log');
-      const entry = document.createElement('div');
-      entry.className = colorClass;
-      entry.innerHTML = `> ${msg}`;
-      logBox.prepend(entry);
-    }
+    // 玩家移動與碰撞事件判定
+    function movePlayer(dx, dy) {
+      if (currentBattle.active) return;
 
-    function switchTab(tab) {
-      ['explore', 'shop', 'codex'].forEach(t => {
-        document.getElementById(`view-${t}`).classList.add('hidden');
-        const btn = document.getElementById(`tab-${t}`);
-        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow');
-        btn.classList.add('text-slate-300');
-      });
-      document.getElementById(`view-${tab}`).classList.remove('hidden');
-      const activeBtn = document.getElementById(`tab-${tab}`);
-      activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow');
-      activeBtn.classList.remove('text-slate-300');
-    }
+      const nx = playerPos.x + dx;
+      const ny = playerPos.y + dy;
+      if (nx < 0 || nx >= 14 || ny < 0 || ny >= 10) return;
 
-    // ==========================================
-    // 5. 區域渲染與戰鬥流程
-    // ==========================================
-    function renderZones() {
-      const container = document.getElementById('zone-list');
-      container.innerHTML = zones.map(z => `
-        <div class="p-4 rounded-2xl bg-gradient-to-br ${z.bgClass} border border-slate-700 hover:border-indigo-400 transition flex flex-col justify-between shadow-lg">
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <h3 class="font-black text-base text-white">${z.name}</h3>
-              <span class="text-[11px] font-bold px-2 py-0.5 bg-slate-900/80 text-amber-300 rounded-full border border-amber-500/30">${z.recLv}</span>
-            </div>
-            <p class="text-xs text-slate-300 mb-3">${z.desc}</p>
-          </div>
-          <div class="flex items-center justify-between pt-2 border-t border-slate-700/60">
-            <div class="text-xs text-slate-400">
-              出沒怪物：${z.monsters.map(m => `${m.emoji}${m.name}`).join('、')}
-            </div>
-            <button onclick="startBattle(${z.id})" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs rounded-xl shadow transition shrink-0">
-              ⚔️ 進入巡邏
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
+      const grid = runtimeMaps[currentMapIndex];
+      const targetCell = grid[ny][nx];
 
-    function startBattle(zoneId) {
-      if (player.hp <= 0) {
-        addLog("系統穩定度 (HP) 不足！已自動幫你在電腦教室重開機恢復體力。", "text-emerald-400");
+      // 1. 牆壁與障礙物阻擋
+      if (['#', 'S', 'T', 'W'].includes(targetCell)) {
+        return;
+      }
+
+      // 2. 撞到傳送門 P (下一關) 或 B (上一關)
+      if (targetCell === 'P') {
+        if (currentMapIndex < mapTemplates.length - 1) {
+          addLog(`🌀 進入傳送門！前往【${mapTemplates[currentMapIndex + 1].name}】！`, "text-indigo-300 font-bold");
+          loadMap(currentMapIndex + 1, 1, 5);
+        }
+        return;
+      }
+      if (targetCell === 'B') {
+        if (currentMapIndex > 0) {
+          addLog(`🌀 返回【${mapTemplates[currentMapIndex - 1].name}】！`, "text-indigo-300 font-bold");
+          loadMap(currentMapIndex - 1, 12, 5);
+        }
+        return;
+      }
+
+      // 3. 撞到維修站 H
+      if (targetCell === 'H') {
+        playerPos = { x: nx, y: ny };
+        renderMap();
         restAtLab();
+        return;
       }
-      const zone = zones[zoneId];
-      const template = zone.monsters[Math.floor(Math.random() * zone.monsters.length)];
-      currentBattle.active = true;
-      currentBattle.zone = zone;
-      currentBattle.monster = { ...template, hp: template.maxHp };
 
-      document.getElementById('stage-select-panel').classList.add('hidden');
+      // 4. 撞到光華商城 M
+      if (targetCell === 'M') {
+        playerPos = { x: nx, y: ny };
+        renderMap();
+        addLog("🏪 歡迎光臨光華數位升級中心！挑選喜歡的鍵盤與防毒裝備吧！", "text-amber-300 font-bold");
+        switchTab('shop');
+        return;
+      }
+
+      // 5. 撞到資訊老師 NPC
+      if (targetCell === 'N') {
+        playerPos = { x: nx, y: ny };
+        renderMap();
+        addLog("🧙‍♂️ 資訊老師：「遇到不會的題目時，記得點上方『📖 資訊小百科』偷看秘笈喔！送你 15 Bytes 加油金！」", "text-cyan-300 font-bold");
+        player.gold += 15;
+        grid[ny][nx] = '.'; // 領完獎勵後變回地板
+        updateUI();
+        return;
+      }
+
+      // 6. 撞到寶箱 C
+      if (targetCell === 'C') {
+        playerPos = { x: nx, y: ny };
+        grid[ny][nx] = '.';
+        const bonusGold = 35 + currentMapIndex * 20;
+        player.gold += bonusGold;
+        player.potions.hp++;
+        addLog(`📦 打開了數位寶箱！獲得 🪙 ${bonusGold} Bytes 與 1 瓶【乖乖還原水】！`, "text-amber-300 font-black");
+        renderMap();
+        updateUI();
+        return;
+      }
+
+      // 7. 撞到怪物 ('1'~'7' 或 'K' 大魔王)
+      if ((targetCell >= '1' && targetCell <= '7') || targetCell === 'K') {
+        const mKey = targetCell === 'K' ? 'boss' : 'm' + targetCell;
+        triggerMonsterBattle(mKey, nx, ny);
+        return;
+      }
+
+      // 一般空地移動
+      playerPos = { x: nx, y: ny };
+      renderMap();
+    }
+
+    // ==========================================
+    // 5. 戰鬥系統與電腦題庫問答
+    // ==========================================
+    function triggerMonsterBattle(monsterKey, tileX, tileY) {
+      const template = monsterCatalog[monsterKey];
+      currentBattle.active = true;
+      currentBattle.monster = { ...template, hp: template.maxHp };
+      currentBattle.targetTile = { x: tileX, y: tileY };
+
+      document.getElementById('map-explore-panel').classList.add('hidden');
       document.getElementById('battle-panel').classList.remove('hidden');
 
-      document.getElementById('battle-zone-title').innerText = `📍 ${zone.name}`;
+      document.getElementById('battle-zone-title').innerText = `📍 ${mapTemplates[currentMapIndex].name}`;
       document.getElementById('monster-emoji').innerText = currentBattle.monster.emoji;
       document.getElementById('monster-lv').innerText = `Lv.${currentBattle.monster.lv}`;
       document.getElementById('monster-name').innerText = currentBattle.monster.name;
       document.getElementById('monster-desc').innerText = currentBattle.monster.desc;
 
-      addLog(`遭遇了野生的【${currentBattle.monster.emoji} ${currentBattle.monster.name} (Lv.${currentBattle.monster.lv})】！`, "text-amber-300 font-bold");
+      addLog(`⚔️ 在地圖上遭遇了【${currentBattle.monster.emoji} ${currentBattle.monster.name} (Lv.${currentBattle.monster.lv})】！`, "text-amber-300 font-bold");
       updateUI();
     }
 
     function fleeBattle() {
       currentBattle.active = false;
       document.getElementById('battle-panel').classList.add('hidden');
-      document.getElementById('stage-select-panel').classList.remove('hidden');
-      addLog("你選擇安全登出，撤退回到了電腦教室選單。", "text-slate-400");
+      document.getElementById('map-explore-panel').classList.remove('hidden');
+      addLog("🏃 你退後了一步，暫時離開戰鬥回到迷宮地圖。", "text-slate-400");
+      renderMap();
     }
 
     function restAtLab() {
       player.hp = getMaxHp();
       player.mp = getMaxMp();
       updateUI();
-      addLog("💤 在電腦教室進行了系統維護與充電，HP 與 MP 完全恢復了！", "text-emerald-400 font-bold");
+      addLog("🏥 在電腦維修站進行了系統重組與充電，HP 與 MP 完全恢復了！", "text-emerald-400 font-bold");
     }
 
     function prepareAction(skillType) {
@@ -884,7 +1100,7 @@
       setTimeout(() => {
         document.getElementById('quiz-modal').classList.add('hidden');
         resolvePlayerAttack(isCorrect);
-      }, 1500);
+      }, 1400);
     }
 
     function resolvePlayerAttack(isCorrect) {
@@ -926,12 +1142,13 @@
       updateUI();
 
       if (player.hp <= 0) {
-        addLog("💥 系統穩定度歸零（藍白畫面當機）！已自動將你送回電腦教室重啟修復。", "text-rose-500 font-black");
+        addLog("💥 系統穩定度歸零（藍白畫面當機）！已將你送回第一關維修站重啟修復。", "text-rose-500 font-black");
         currentBattle.active = false;
         setTimeout(() => {
           restAtLab();
           document.getElementById('battle-panel').classList.add('hidden');
-          document.getElementById('stage-select-panel').classList.remove('hidden');
+          document.getElementById('map-explore-panel').classList.remove('hidden');
+          loadMap(0, 1, 2);
         }, 1000);
       }
     }
@@ -941,6 +1158,13 @@
       player.stats.kills++;
       player.gold += m.gold;
       player.exp += m.exp;
+
+      // 將地圖上該格子的怪物清除，並讓玩家踏上該格
+      if (currentBattle.targetTile) {
+        const { x, y } = currentBattle.targetTile;
+        runtimeMaps[currentMapIndex][y][x] = '.';
+        playerPos = { x, y };
+      }
 
       addLog(`🎉 成功清除【${m.name}】！獲得 ${m.exp} EXP 與 🪙 ${m.gold} Bytes！`, "text-amber-300 font-black");
 
@@ -963,7 +1187,8 @@
       setTimeout(() => {
         currentBattle.active = false;
         document.getElementById('battle-panel').classList.add('hidden');
-        document.getElementById('stage-select-panel').classList.remove('hidden');
+        document.getElementById('map-explore-panel').classList.remove('hidden');
+        renderMap();
 
         if (m.name.includes("勒索病毒大魔王")) {
           document.getElementById('vic-modal-title').innerText = "恭喜擊敗勒索病毒大魔王！";
@@ -971,7 +1196,78 @@
           document.getElementById('vic-correct').innerText = player.stats.correct;
           document.getElementById('victory-modal').classList.remove('hidden');
         }
-      }, 900);
+      }, 800);
+    }
+
+    function updateUI() {
+      const maxHp = getMaxHp();
+      const maxMp = getMaxMp();
+      if (player.hp > maxHp) player.hp = maxHp;
+      if (player.mp > maxMp) player.mp = maxMp;
+
+      document.getElementById('player-lv').innerText = player.lv;
+      document.getElementById('player-title').innerText = titles[Math.min(player.lv - 1, titles.length - 1)];
+      document.getElementById('player-gold').innerText = player.gold;
+
+      document.getElementById('player-hp').innerText = player.hp;
+      document.getElementById('player-max-hp').innerText = maxHp;
+      document.getElementById('hp-bar').style.width = `${Math.max(0, (player.hp / maxHp) * 100)}%`;
+
+      document.getElementById('player-mp').innerText = player.mp;
+      document.getElementById('player-max-mp').innerText = maxMp;
+      document.getElementById('mp-bar').style.width = `${Math.max(0, (player.mp / maxMp) * 100)}%`;
+
+      document.getElementById('player-exp').innerText = player.exp;
+      document.getElementById('player-next-exp').innerText = player.nextExp;
+      document.getElementById('exp-bar').style.width = `${Math.min(100, (player.exp / player.nextExp) * 100)}%`;
+
+      document.getElementById('player-atk').innerText = getTotalAtk();
+      document.getElementById('player-def').innerText = getTotalDef();
+      document.getElementById('stat-correct').innerText = `${player.stats.correct} 題`;
+      document.getElementById('stat-kills').innerText = `${player.stats.kills} 隻`;
+
+      document.getElementById('eq-weapon-icon').innerText = player.equipped.weapon.icon;
+      document.getElementById('eq-weapon-name').innerText = player.equipped.weapon.name;
+      document.getElementById('eq-weapon-stat').innerText = `+${player.equipped.weapon.bonus} ATK`;
+
+      document.getElementById('eq-armor-icon').innerText = player.equipped.armor.icon;
+      document.getElementById('eq-armor-name').innerText = player.equipped.armor.name;
+      document.getElementById('eq-armor-stat').innerText = `+${player.equipped.armor.bonus} DEF`;
+
+      document.getElementById('eq-acc-icon').innerText = player.equipped.acc.icon;
+      document.getElementById('eq-acc-name').innerText = player.equipped.acc.name;
+      document.getElementById('eq-acc-stat').innerText = `+${player.equipped.acc.bonusHp}HP/+${player.equipped.acc.bonusMp}MP`;
+
+      document.getElementById('item-hp-count').innerText = player.potions.hp;
+      document.getElementById('item-mp-count').innerText = player.potions.mp;
+
+      if (currentBattle.active && currentBattle.monster) {
+        const m = currentBattle.monster;
+        document.getElementById('monster-hp').innerText = Math.max(0, m.hp);
+        document.getElementById('monster-max-hp').innerText = m.maxHp;
+        document.getElementById('monster-hp-bar').style.width = `${Math.max(0, (m.hp / m.maxHp) * 100)}%`;
+      }
+    }
+
+    function addLog(msg, colorClass = "text-slate-300") {
+      const logBox = document.getElementById('battle-log');
+      const entry = document.createElement('div');
+      entry.className = colorClass;
+      entry.innerHTML = `> ${msg}`;
+      logBox.prepend(entry);
+    }
+
+    function switchTab(tab) {
+      ['explore', 'shop', 'codex'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tab-${t}`);
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+        btn.classList.add('text-slate-300');
+      });
+      document.getElementById(`view-${tab}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-${tab}`);
+      activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow');
+      activeBtn.classList.remove('text-slate-300');
     }
 
     function openVictoryModalManual() {
@@ -1012,11 +1308,11 @@
         }
 
         return `
-          <div class="p-3 bg-slate-900/90 border border-slate-700 rounded-xl flex items-center justify-between gap-2">
-            <div class="flex items-center gap-3">
+          <div class="p-2.5 bg-slate-900/90 border border-slate-700 rounded-xl flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
               <span class="text-2xl">${item.icon}</span>
               <div>
-                <div class="font-bold text-sm text-white">${item.name}</div>
+                <div class="font-bold text-xs text-white">${item.name}</div>
                 <div class="text-[11px] text-slate-400">${item.desc}</div>
               </div>
             </div>
