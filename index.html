@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>雲與鍵的彼端：資訊勇者傳說 RPG (硬核戰術與鍛造擴充版)</title>
+  <title>雲與鍵的彼端：資訊勇者傳說 RPG (劇情與策略平衡版)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;700;900&display=swap');
@@ -56,7 +56,7 @@
           雲與鍵的彼端：資訊勇者傳說
         </h1>
         <p class="text-[11px] text-stone-400">
-          按住 <kbd class="px-1.5 py-0.5 bg-stone-800 text-amber-300 border border-stone-600 rounded text-[10px]">↑↓←→</kbd> 探索迷宮・高階神兵需達指定等級方可佩帶・善用破甲與配招克敵制勝！
+          按住 <kbd class="px-1.5 py-0.5 bg-stone-800 text-amber-300 border border-stone-600 rounded text-[10px]">↑↓←→</kbd> 探索迷宮・開啟寶箱可獲神兵與秘卷・挑戰各章首領體驗劇情對決！
         </p>
       </div>
     </div>
@@ -103,8 +103,8 @@
             </div>
             <h2 class="text-base font-black text-stone-100 mt-0.5 serif-title tracking-wide">古月鍵俠</h2>
             <div class="flex items-center justify-between mt-0.5">
-              <span class="text-xs text-amber-400 font-bold">🪙 銀兩：<span id="player-gold">35</span> <span class="text-[10px] text-stone-400 font-normal">Bytes</span></span>
-              <span id="next- battle-buff-tag" class="hidden text-[10px] px-1.5 py-0.5 bg-purple-950 text-purple-300 border border-purple-500/40 rounded">符咒加持中</span>
+              <span class="text-xs text-amber-400 font-bold">🪙 銀兩：<span id="player-gold">40</span> <span class="text-[10px] text-stone-400 font-normal">Bytes</span></span>
+              <span id="next-battle-buff-tag" class="hidden text-[10px] px-1.5 py-0.5 bg-purple-950 text-purple-300 border border-purple-500/40 rounded font-bold">✨ 戰前符咒加持</span>
             </div>
           </div>
         </div>
@@ -173,38 +173,38 @@
                 🧘 配招
               </button>
               <button onclick="openShopModal()" class="rpg-btn text-[11px] px-2 py-0.5 rounded font-bold">
-                🏪 鍛造坊 (21件)
+                🏪 鍛造坊 (<span id="owned-eq-count">0</span>/15)
               </button>
             </div>
           </div>
           <div class="space-y-1.5 text-xs">
-            <div class="flex items-center justify-between p-2 bg-stone-950/80 rounded-xl border border-stone-800">
+            <div onclick="openShopModal('weapon')" class="cursor-pointer flex items-center justify-between p-2 bg-stone-950/80 hover:bg-stone-900 rounded-xl border border-stone-800 transition" title="點擊切換或升級兵刃">
               <div class="flex items-center gap-2">
                 <span id="eq-weapon-icon" class="text-lg">🗡️</span>
                 <div>
-                  <div class="text-[10px] text-stone-500">兵刃 (主攻)</div>
+                  <div class="text-[10px] text-stone-500">兵刃 (點擊更換)</div>
                   <div id="eq-weapon-name" class="font-bold text-stone-200">生鏽薄膜短劍</div>
                 </div>
               </div>
               <span id="eq-weapon-stat" class="text-[11px] font-bold px-2 py-0.5 bg-orange-950 text-orange-300 border border-orange-700/40 rounded">+0 ATK</span>
             </div>
 
-            <div class="flex items-center justify-between p-2 bg-stone-950/80 rounded-xl border border-stone-800">
+            <div onclick="openShopModal('armor')" class="cursor-pointer flex items-center justify-between p-2 bg-stone-950/80 hover:bg-stone-900 rounded-xl border border-stone-800 transition" title="點擊切換或升級護甲">
               <div class="flex items-center gap-2">
                 <span id="eq-armor-icon" class="text-lg">🥋</span>
                 <div>
-                  <div class="text-[10px] text-stone-500">護甲 (主防)</div>
+                  <div class="text-[10px] text-stone-500">護甲 (點擊更換)</div>
                   <div id="eq-armor-name" class="font-bold text-stone-200">粗布防塵衣</div>
                 </div>
               </div>
               <span id="eq-armor-stat" class="text-[11px] font-bold px-2 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-700/40 rounded">+0 DEF</span>
             </div>
 
-            <div class="flex items-center justify-between p-2 bg-stone-950/80 rounded-xl border border-stone-800">
+            <div onclick="openShopModal('acc')" class="cursor-pointer flex items-center justify-between p-2 bg-stone-950/80 hover:bg-stone-900 rounded-xl border border-stone-800 transition" title="點擊切換或升級法寶">
               <div class="flex items-center gap-2">
                 <span id="eq-acc-icon" class="text-lg">📿</span>
                 <div>
-                  <div class="text-[10px] text-stone-500">法寶 (核心)</div>
+                  <div class="text-[10px] text-stone-500">法寶 (點擊更換)</div>
                   <div id="eq-acc-name" class="font-bold text-stone-200">老舊軟碟片</div>
                 </div>
               </div>
@@ -283,7 +283,7 @@
               <h2 id="map-title" class="text-base font-black text-amber-100 serif-title">大漠古鎮・千迴書院迷宮</h2>
             </div>
             <span id="subboss-status-badge" class="text-[11px] px-2 py-0.5 bg-rose-950 text-rose-300 border border-rose-600/50 rounded font-bold">
-              👹 守門首領：未擊敗
+              👹 守門首領：鎮守中
             </span>
           </div>
 
@@ -305,19 +305,19 @@
         <div class="relative w-full rounded-xl overflow-hidden border-2 border-[#9a7b4f] shadow-[0_0_35px_rgba(0,0,0,0.95)] bg-black">
           <canvas id="main-canvas" width="792" height="528" class="w-full h-auto"></canvas>
 
-          <!-- 《軒轅劍》風格：底部半透明對話框 + 右下角大型人物立繪 -->
-          <div id="swd-dialogue-overlay" class="hidden absolute inset-x-0 bottom-0 h-36 pointer-events-auto z-20 flex items-end">
-            <div class="w-full h-28 bg-stone-900/90 backdrop-blur-sm border-t-2 border-amber-500/80 px-5 py-3 pr-36 sm:pr-44 flex flex-col justify-between shadow-2xl">
+          <!-- 《軒轅劍》風格：底部半透明對話框 + 右下角大型人物/BOSS立繪 -->
+          <div id="swd-dialogue-overlay" class="hidden absolute inset-x-0 bottom-0 h-40 pointer-events-auto z-20 flex items-end">
+            <div class="w-full h-32 bg-stone-900/92 backdrop-blur-md border-t-2 border-amber-500/80 px-5 py-3 pr-36 sm:pr-44 flex flex-col justify-between shadow-2xl">
               <div>
                 <div id="dlg-speaker" class="text-amber-300 font-black text-sm serif-title tracking-wider mb-1">【大漠長老・古月聖】</div>
                 <p id="dlg-text" class="text-stone-100 text-xs md:text-sm leading-relaxed font-medium drop-shadow"></p>
               </div>
-              <div class="flex gap-2">
-                <button id="dlg-action-btn" onclick="triggerDialogueAction()" class="hidden px-3 py-1 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs rounded shadow">
+              <div class="flex flex-wrap gap-2 mt-1">
+                <button id="dlg-action-btn" onclick="triggerDialogueAction()" class="hidden px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs rounded-lg shadow-md transition">
                   🏪 開啟鍛造商城
                 </button>
-                <button onclick="closeDialogue()" class="px-3 py-1 bg-stone-700 hover:bg-stone-600 text-stone-200 font-bold text-xs rounded border border-stone-500">
-                  知曉了 (空白鍵關閉)
+                <button id="dlg-cancel-btn" onclick="closeDialogue()" class="px-3.5 py-1.5 bg-stone-700 hover:bg-stone-600 text-stone-200 font-bold text-xs rounded-lg border border-stone-500 transition">
+                  知曉了 (空白鍵)
                 </button>
               </div>
             </div>
@@ -343,9 +343,9 @@
         <div class="mt-2.5 flex flex-wrap items-center justify-between gap-2 px-1 text-xs">
           <div class="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-stone-400">
             <span>🔥 火把視野</span>
-            <span>👹 金光首領：守門小BOSS</span>
-            <span>📦 寶箱(含陷阱/寶箱怪)</span>
-            <span>⛲ 靈泉(每章限飲一次)</span>
+            <span>👹 首領(觸發劇情戰)</span>
+            <span>📦 寶箱(出神裝/道具/陷阱)</span>
+            <span>⛲ 靈泉(可選擇是否飲用)</span>
           </div>
 
           <div class="flex items-center gap-1 mx-auto sm:mx-0">
@@ -366,14 +366,14 @@
       <!-- 江湖傳書紀錄 (Log) -->
       <div class="rpg-panel rounded-2xl p-2.5">
         <div id="battle-log" class="h-14 overflow-y-auto space-y-1 text-xs font-mono pr-1">
-          <div class="text-amber-300">> 【系統】難度已全面提升！高階神兵需達指定修行等級方可購買，請善用屬性相剋、破甲武學與戰術符咒破敵！</div>
+          <div class="text-amber-300">> 【系統】歡迎踏入《雲與鍵的彼端》！寶箱有機率直接開出神兵與戰術卷軸，路過靈泉可自由選擇是否飲用！</div>
         </div>
       </div>
 
     </section>
   </main>
 
-  <!-- 彈出視窗 1：電腦知識符文詠唱 -->
+  <!-- 彈出視窗 1：電腦知識符文詠唱 (選項長度平衡 + 隨機順序) -->
   <div id="quiz-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
     <div class="rpg-panel rounded-2xl max-w-lg w-full p-5 border-2 border-amber-400">
       <div class="flex justify-between items-center border-b border-stone-700 pb-3 mb-4">
@@ -408,21 +408,20 @@
     </div>
   </div>
 
-  <!-- 彈出視窗 3：西域光華鍛造坊 (大擴充 21 件商品 + 分類頁籤) -->
+  <!-- 彈出視窗 3：西域光華鍛造坊 -->
   <div id="shop-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 z-50">
     <div class="rpg-panel rounded-2xl max-w-3xl w-full p-5 max-h-[88vh] flex flex-col border-2 border-amber-500/80">
       <div class="flex flex-wrap justify-between items-center border-b border-stone-700 pb-3 mb-3 gap-2">
         <div>
           <h3 class="text-lg font-black text-amber-300 serif-title">🏪 西域光華神兵鍛造坊（五階軍械庫）</h3>
           <p class="text-xs text-stone-400">
-            目前修行等級：<b class="text-sky-300">Lv.<span id="shop-lv-display">1</span></b> ｜ 持有銀兩：🪙 <span id="shop-gold-display" class="text-amber-400 font-black">35</span> Bytes
-            <span class="text-rose-400 ml-1">（高階神兵需達指定等級方可鍛造）</span>
+            目前修行等級：<b class="text-sky-300">Lv.<span id="shop-lv-display">1</span></b> ｜ 持有銀兩：🪙 <span id="shop-gold-display" class="text-amber-400 font-black">40</span> Bytes
+            <span class="text-emerald-400 ml-1">（迷宮寶箱亦有機會直接開出裝備！）</span>
           </p>
         </div>
         <button onclick="document.getElementById('shop-modal').classList.add('hidden')" class="rpg-btn px-3 py-1.5 rounded-lg text-xs font-bold">✕ 離開鍛造坊</button>
       </div>
 
-      <!-- 鍛造坊分類篩選按鈕 -->
       <div class="grid grid-cols-4 gap-1.5 mb-3 bg-stone-950 p-1 rounded-xl border border-stone-800 text-xs">
         <button id="shop-tab-item" onclick="switchShopTab('item')" class="py-1.5 rounded-lg font-black bg-amber-600 text-stone-950">🧪 丹藥與秘卷(6)</button>
         <button id="shop-tab-weapon" onclick="switchShopTab('weapon')" class="py-1.5 rounded-lg font-bold text-stone-300 hover:bg-stone-800">🗡️ 歷代名劍(5)</button>
@@ -430,7 +429,6 @@
         <button id="shop-tab-acc" onclick="switchShopTab('acc')" class="py-1.5 rounded-lg font-bold text-stone-300 hover:bg-stone-800">📿 上古法寶(5)</button>
       </div>
 
-      <!-- 動態商品列表 -->
       <div id="shop-content-area" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 overflow-y-auto pr-1 flex-1"></div>
     </div>
   </div>
@@ -503,7 +501,7 @@
         </div>
       </div>
       <div class="bg-stone-950 p-3 rounded-xl border border-stone-800 mb-3 space-y-2 text-xs">
-        <div class="font-bold text-amber-400">➕ 新增自訂題目</div>
+        <div class="font-bold text-amber-400">➕ 新增自訂題目（戰鬥中會自動打亂選項順序）</div>
         <input id="new-q-text" type="text" placeholder="輸入題目內容" class="w-full p-2 rounded bg-stone-900 border border-stone-700 text-white">
         <div class="grid grid-cols-2 gap-2">
           <input id="new-q-opt0" type="text" placeholder="選項 A" class="p-1.5 rounded bg-stone-900 border border-stone-700 text-white">
@@ -679,54 +677,67 @@
     }
 
     // =========================================================
-    // 2. 45 題多元國小資訊題庫
+    // 2. 45 題「選項長度完全平衡」題庫 (杜絕學生靠最長選項猜答案)
     // =========================================================
     const defaultQuestions = [
+      // 【1. 鍵盤與快捷鍵操作】
       { cat: "鍵盤操作", q: "在編輯文件或畫圖時，不小心做錯了一步，按哪個快捷鍵可以「復原」上一步？", opts: ["Ctrl + Z", "Ctrl + C", "Ctrl + V", "Ctrl + S"], ans: 0, exp: "Ctrl + Z 是後悔藥，可以復原剛剛做錯的動作！" },
-      { cat: "鍵盤操作", q: "想要把選取起來的文字「複製」起來，應該按哪一個快捷鍵？", opts: ["Ctrl + X", "Ctrl + C", "Ctrl + A", "Ctrl + P"], ans: 1, exp: "Copy（複製）的第一個字母是 C，所以是 Ctrl + C。" },
+      { cat: "鍵盤操作", q: "想要把選取起來的文字「複製」到剪貼簿，應該按哪一個快捷鍵？", opts: ["Ctrl + X", "Ctrl + C", "Ctrl + A", "Ctrl + P"], ans: 1, exp: "Copy（複製）的第一個字母是 C，所以是 Ctrl + C。" },
       { cat: "鍵盤操作", q: "複製完文字後，想要在別的地方「貼上」，應該按哪一個快捷鍵？", opts: ["Ctrl + C", "Ctrl + V", "Ctrl + Z", "Ctrl + F"], ans: 1, exp: "V 的形狀很像把東西倒進去的漏斗，Ctrl + V 就是貼上！" },
-      { cat: "鍵盤操作", q: "想要把選取的文字「剪下」（移走並複製到剪貼簿），應該按哪一個快捷鍵？", opts: ["Ctrl + X", "Ctrl + C", "Ctrl + D", "Ctrl + B"], ans: 0, exp: "X 的形狀就像一把剪刀，所以 Ctrl + X 代表剪下！" },
-      { cat: "鍵盤操作", q: "在一篇很長的文章或網頁裡，想要快速「尋找某個關鍵字」，可以按哪個快捷鍵？", opts: ["Ctrl + F", "Ctrl + Z", "Ctrl + N", "Ctrl + P"], ans: 0, exp: "Find（尋找）的第一個字母是 F，按 Ctrl + F 就能輸入關鍵字搜尋！" },
+      { cat: "鍵盤操作", q: "想要把選取的文字「剪下」（移走並複製），應該按哪一個快捷鍵？", opts: ["Ctrl + X", "Ctrl + C", "Ctrl + D", "Ctrl + B"], ans: 0, exp: "X 的形狀就像一把剪刀，所以 Ctrl + X 代表剪下！" },
+      { cat: "鍵盤操作", q: "在很長的文章或網頁裡，想要快速「尋找某個關鍵字」，可以按哪個快捷鍵？", opts: ["Ctrl + F", "Ctrl + Z", "Ctrl + N", "Ctrl + P"], ans: 0, exp: "Find（尋找）的第一個字母是 F，按 Ctrl + F 就能搜尋關鍵字！" },
       { cat: "鍵盤操作", q: "想要一次把整篇文章或資料夾裡的所有檔案「全選」，應該按哪個快捷鍵？", opts: ["Ctrl + S", "Ctrl + A", "Ctrl + E", "Ctrl + W"], ans: 1, exp: "All（全部）的第一個字母是 A，Ctrl + A 就是全選！" },
-      { cat: "鍵盤操作", q: "打字時想要換到下一行，應該按下鍵盤上的哪一個按鍵？", opts: ["Space (空白鍵)", "Enter (輸入/換行鍵)", "Shift (上檔鍵)", "Esc (取消鍵)"], ans: 1, exp: "Enter 鍵在文書處理中用來換到下一行，或代表確認執行。" },
-      { cat: "鍵盤操作", q: "英文打字時，如果發現打出來的全部都是大寫，是因為不小心按到了哪個燈號鍵？", opts: ["Num Lock", "Caps Lock (大寫鎖定)", "Tab 鍵", "Alt 鍵"], ans: 1, exp: "Caps Lock 亮起時會鎖定英文大寫，再按一下即可切換回小寫。" },
-      { cat: "鍵盤操作", q: "標準中文注音打字時，雙手食指放在鍵盤中間時，會摸到哪兩個有「小凸起」的定位鍵？", opts: ["A 和 S", "F 和 J", "G 和 H", "D 和 K"], ans: 1, exp: "英文字母 F（注音ㄑ）與 J（注音ㄨ）上面有小凸線，幫助手指盲打對準位置！" },
-      { cat: "鍵盤操作", q: "想要打出鍵盤按鍵「上半部」的符號（例如：！、＠、？），必須同時按住哪個鍵不放？", opts: ["Ctrl 鍵", "Shift 鍵", "Alt 鍵", "空白鍵"], ans: 1, exp: "按住 Shift（上檔鍵）再按符號鍵，就能打出上方的符號。" },
-      { cat: "鍵盤操作", q: "打字時想要刪除游標「左邊（前面）」剛剛打錯的字，應該按哪個鍵？", opts: ["Backspace (倒退鍵)", "Insert 鍵", "Home 鍵", "Page Up 鍵"], ans: 0, exp: "Backspace（← 倒退鍵）用來刪除游標左邊的字；Delete 則是刪除游標右邊的字。" },
-      { cat: "鍵盤操作", q: "鍵盤最右邊的「九宮格數字區」如果突然按不出數字，應該先檢查哪一顆燈號鍵有沒有亮？", opts: ["Num Lock (數字鎖定鍵)", "Esc 鍵", "F1 鍵", "空白鍵"], ans: 0, exp: "Num Lock 燈號熄滅時九宮格數字會變成方向鍵，按一下點亮就能打數字了。" },
-      { cat: "視窗操作", q: "在電腦桌面上，想要針對某個檔案叫出「功能選單」（例如重新命名或看內容），要按滑鼠哪裡？", opts: ["左鍵一下", "右鍵一下", "滾輪往下滑", "拔掉滑鼠"], ans: 1, exp: "滑鼠左鍵是選取與執行，右鍵則是呼叫出輔助功能選單。" },
-      { cat: "視窗操作", q: "瀏覽網頁時，如果畫面卡住或想看最新內容，按鍵盤上哪一個功能鍵可以「重新整理」網頁？", opts: ["F1", "F5", "F12", "Esc"], ans: 1, exp: "F5 是網頁瀏覽器最常用的「重新整理 (Refresh)」快捷鍵！" },
-      { cat: "視窗操作", q: "在 Windows 視窗右上角的三個按鈕「－、□、✕」中，點擊「－」代表什麼功能？", opts: ["把程式永久刪除", "將視窗最小化（暫時縮小到下方工作列）", "把螢幕關掉", "將電腦關機"], ans: 1, exp: "「－」是最小化，「□」是最大化/還原，「✕」則是關閉視窗。" },
-      { cat: "視窗操作", q: "想要把桌面上的某個檔案「放進」資料夾裡面，最常用的滑鼠動作是什麼？", opts: ["按住滑鼠左鍵不放，將檔案「拖曳 (Drag)」到資料夾上再放開", "對著螢幕吹氣", "按滑鼠右鍵十下", "按住空白鍵搖晃滑鼠"], ans: 0, exp: "按住左鍵移動再放開稱為「拖曳 (Drag and Drop)」，常用於移動檔案或拉積木。" },
-      { cat: "硬體知識", q: "下列哪一個電腦零件被稱為「電腦的大腦」，負責所有的運算與指揮？", opts: ["CPU (中央處理器)", "滑鼠墊", "螢幕保護貼", "機殼風扇"], ans: 0, exp: "CPU（中央處理器）就像人類的大腦，負責計算與控制電腦運作。" },
-      { cat: "硬體知識", q: "電腦零件中，負責「暫存正在執行的程式」，但只要關機斷電資料就會清空的是哪一個？", opts: ["RAM (隨機存取記憶體)", "SSD (固態硬碟)", "隨身碟", "光碟片"], ans: 0, exp: "RAM（記憶體）像書桌，速度快但斷電會清空；SSD（硬碟）像書櫃，關機仍會保存檔案。" },
-      { cat: "硬體知識", q: "我們要把聲音「錄進電腦裡」，需要用到下列哪一種「輸入設備」？", opts: ["喇叭 (耳機)", "印表機", "麥克風", "螢幕"], ans: 2, exp: "麥克風負責把外面的聲音傳進電腦，屬於輸入設備；喇叭則是輸出設備。" },
-      { cat: "硬體知識", q: "下列哪一個設備屬於「輸出設備」，可以把電腦裡的畫面或文件呈現出來給我們看？", opts: ["鍵盤", "螢幕與印表機", "滑鼠", "掃描器"], ans: 1, exp: "螢幕顯示畫面、印表機印出紙張，都是把電腦處理好的結果輸出給我們看。" },
-      { cat: "硬體知識", q: "電腦突然完全沒聲音了，第一步應該先檢查什麼最合理？", opts: ["拍打螢幕三下", "檢查右下角音量是否被調成靜音，或耳機線有沒有插好", "把鍵盤反過來敲", "馬上重灌電腦"], ans: 1, exp: "遇到沒聲音時，先檢查系統音量圖示是否靜音，以及音源線/耳機是否鬆脫。" },
+      { cat: "鍵盤操作", q: "在文書軟體中打字想要「換到下一行」，應該按下鍵盤上的哪一個按鍵？", opts: ["Space 空白鍵", "Enter 輸入鍵", "Shift 上檔鍵", "Esc 取消鍵"], ans: 1, exp: "Enter 鍵在文書處理中用來換到下一行，或代表確認執行。" },
+      { cat: "鍵盤操作", q: "英文打字時，如果發現打出來的全部都是大寫，是因為按到了哪個燈號鍵？", opts: ["Num Lock 數字鎖", "Caps Lock 大寫鎖", "Scroll Lock 捲動鎖", "Insert 插入鎖定鍵"], ans: 1, exp: "Caps Lock 亮起時會鎖定英文大寫，再按一下即可切換回小寫。" },
+      { cat: "鍵盤操作", q: "標準中文打字時，雙手食指放在鍵盤中央定位，會摸到哪兩個有「小凸起」的按鍵？", opts: ["A 鍵與 S 鍵", "F 鍵與 J 鍵", "G 鍵與 H 鍵", "D 鍵與 K 鍵"], ans: 1, exp: "英文字母 F（注音ㄑ）與 J（注音ㄨ）上面有小凸線，幫助食指盲打定位！" },
+      { cat: "鍵盤操作", q: "想要打出鍵盤按鍵「上半部」的符號（如：！、＠、？），必須按住哪個鍵不放？", opts: ["Ctrl 控制鍵", "Shift 上檔鍵", "Alt 轉換鍵", "Tab 定位鍵"], ans: 1, exp: "按住 Shift（上檔鍵）再按符號鍵，就能打出上方的符號。" },
+      { cat: "鍵盤操作", q: "打字時想要刪除游標「左邊（前面）」剛剛打錯的字，應該按哪一個按鍵？", opts: ["Backspace 倒退鍵", "Delete 刪除鍵", "Insert 插入鍵", "Home 首頁鍵"], ans: 0, exp: "Backspace（← 倒退鍵）刪除游標左邊的字；Delete 則刪除游標右邊的字。" },
+      { cat: "鍵盤操作", q: "鍵盤最右側的「九宮格數字區」若按不出數字，應該先檢查哪顆燈號鍵有沒有亮？", opts: ["Num Lock 數字鎖", "Caps Lock 大寫鎖", "Shift 上檔切換鍵", "Ctrl 系統控制鍵"], ans: 0, exp: "Num Lock 燈號熄滅時九宮格會變成方向鍵，按一下點亮就能打數字了。" },
+
+      // 【2. 滑鼠與視窗操作（選項長度平衡化）】
+      { cat: "視窗操作", q: "在電腦桌面上，想要針對某個檔案叫出「功能選單」（如重新命名），要怎麼操作滑鼠？", opts: ["按一下滑鼠左鍵", "按一下滑鼠右鍵", "向下轉動滑鼠滾輪", "同時按住左右雙鍵"], ans: 1, exp: "滑鼠左鍵是選取與執行，右鍵則是呼叫出輔助功能選單。" },
+      { cat: "視窗操作", q: "瀏覽網頁時，如果畫面卡住或想更新最新內容，按哪一個功能鍵可以「重新整理」？", opts: ["F1 說明鍵", "F5 重整鍵", "F11 全螢幕鍵", "F12 開發者鍵"], ans: 1, exp: "F5 是網頁瀏覽器最常用的「重新整理 (Refresh)」快捷鍵！" },
+      { cat: "視窗操作", q: "在視窗右上角的三個按鈕「－、□、✕」中，點擊「－」代表什麼視窗功能？", opts: ["將程式檔案永久刪除", "將視窗縮到下方工作列", "將視窗放大至全螢幕", "直接關閉並退出程式"], ans: 1, exp: "「－」是最小化（縮到工作列），「□」是最大化，「✕」則是關閉視窗。" },
+      { cat: "視窗操作", q: "想要把桌面上的檔案「移動放進」資料夾裡面，最標準的滑鼠操作方式為何？", opts: ["按住左鍵拖曳至資料夾放開", "對著檔案連續快速點兩下右鍵", "按住滾輪將檔案推向螢幕上方", "點選檔案後按下鍵盤 Esc 鍵"], ans: 0, exp: "按住左鍵移動再放開稱為「拖曳 (Drag and Drop)」，常用於移動檔案或拉積木。" },
+
+      // 【3. 電腦硬體與網路設備（選項長度平衡化）】
+      { cat: "硬體知識", q: "下列哪一個電腦零件被稱為「電腦的大腦」，負責所有的邏輯運算與指揮？", opts: ["CPU 中央處理器", "RAM 隨機記憶體", "SSD 固態硬碟機", "PSU 電源供應器"], ans: 0, exp: "CPU（中央處理器）就像人類的大腦，負責計算與控制電腦運作。" },
+      { cat: "硬體知識", q: "哪一個電腦零件負責「暫存執行中的程式」，而且只要關機斷電資料就會清空？", opts: ["RAM 隨機存取記憶體", "SSD 高速固態硬碟", "HDD 傳統磁錄硬碟", "USB 外接隨身硬碟"], ans: 0, exp: "RAM（記憶體）像書桌，速度快但斷電會清空；SSD/HDD 像書櫃，關機仍會保存檔案。" },
+      { cat: "硬體知識", q: "我們要把自己的聲音「錄進電腦裡」，需要用到下列哪一種「輸入設備」？", opts: ["立體聲喇叭", "彩色印表機", "收音麥克風", "液晶顯示器"], ans: 2, exp: "麥克風負責把外部聲音傳進電腦，屬於輸入設備；喇叭則是輸出設備。" },
+      { cat: "硬體知識", q: "下列哪一組設備全部屬於「輸出設備」，能把電腦處理好的結果呈現出來？", opts: ["鍵盤與光學滑鼠", "螢幕與彩色印表機", "麥克風與掃描器", "網路攝影機與手寫板"], ans: 1, exp: "螢幕顯示畫面、印表機印出紙張，都是把電腦訊號輸出給我們看的設備。" },
+      { cat: "硬體知識", q: "電腦播放影片時突然完全沒聲音，第一步先做哪一項檢查最合理？", opts: ["用力拍打螢幕邊框三次", "檢查系統音量與耳機插孔", "立刻將硬碟格式化重灌", "把鍵盤與滑鼠插頭拔掉"], ans: 1, exp: "遇到沒聲音時，應先檢查右下角音量是否靜音，以及耳機/喇叭線是否鬆脫。" },
       { cat: "硬體知識", q: "比較電腦儲存容量的大小單位時，下列哪一個排列順序是「由小到大」正確的？", opts: ["KB < MB < GB < TB", "TB < GB < MB < KB", "GB < KB < TB < MB", "MB < KB < GB < TB"], ans: 0, exp: "容量由小到大依序為 KB、MB、GB、TB（1 TB 約等於 1024 GB）。" },
-      { cat: "檔案管理", q: "辛苦做好了一份簡報或小畫家作品，按哪個快捷鍵可以快速「儲存檔案」？", opts: ["Ctrl + S", "Ctrl + D", "Ctrl + W", "Ctrl + Q"], ans: 0, exp: "Save（儲存）的第一個字母是 S，常按 Ctrl + S 才不會因為當機心血白費！" },
-      { cat: "檔案管理", q: "看到一個檔案名稱叫做「校慶運動會照片.jpg」，請問 `.jpg` 代表這是什麼類型的檔案？", opts: ["音樂檔", "圖片檔", "影片檔", "資料夾"], ans: 1, exp: ".jpg 與 .png 都是最常見的圖片檔案格式喔！" },
-      { cat: "檔案管理", q: "下列哪一個副檔名代表的是「聲音或音樂檔案」？", opts: [".mp3 或 .wav", ".jpg", ".txt", ".docx"], ans: 0, exp: ".mp3 與 .wav 是常見的聲音檔；.mp4 則是影片檔。" },
-      { cat: "檔案管理", q: "如果不小心把桌面的檔案刪掉了，只要還沒清空，可以去桌面的哪裡把它救回來？", opts: ["資源回收筒", "小算盤", "瀏覽器", "控制台"], ans: 0, exp: "一般刪除的檔案會先暫存在「資源回收筒」，點右鍵選「還原」就能救回原位。" },
-      { cat: "檔案管理", q: "整理電腦檔案時，怎樣的「檔案命名習慣」最好，以後才找得到？", opts: ["全部取名叫 111、222、333", "亂敲鍵盤取名 asdfg", "標註清楚主題與日期（例如：五年甲班自然報告_1014）", "全部不要取名字"], ans: 2, exp: "清楚標示主題、姓名或日期，未來搜尋檔案時才能一目了然！" },
-      { cat: "檔案管理", q: "想要把整個資料夾好幾個檔案打包成一個檔案傳給別人，通常會壓縮成什麼格式？", opts: [".zip 壓縮檔", ".mp3 音樂檔", ".jpg 圖片檔", ".bmp 圖檔"], ans: 0, exp: ".zip 與 .7z 是常見的壓縮檔格式，能將多個檔案打包並減少檔案大小。" },
-      { cat: "檔案管理", q: "把作業存放在「Google 雲端硬碟 (Google Drive)」最大的好處是什麼？", opts: ["就算沒有網路也能下載別人的電腦", "換到別台電腦只要登入帳號並連上網路，就能繼續編輯同一個檔案", "電腦永遠不會壞掉", "螢幕會變大"], ans: 1, exp: "雲端硬碟將檔案保存在網路伺服器上，跨裝置存取與異地備份非常方便！" },
-      { cat: "資安防護", q: "設定個人帳號的「密碼」時，下列哪一種密碼最安全、最不容易被駭客猜中？", opts: ["12345678", "自己的生日 8 碼", "包含英文大小寫與數字的組合（如 Tw#9527Go）", "aaaa1111"], ans: 2, exp: "混合大小寫字母、數字與符號的密碼強度最高，千萬別用 123456！" },
-      { cat: "資安防護", q: "在學校電腦教室上完課，離開座位前最重要的資安動作是什麼？", opts: ["把滑鼠藏起來", "登出自己的個人帳號並關閉瀏覽器，依老師指示關機", "直接拔掉電線插頭", "把螢幕亮度調成最暗"], ans: 1, exp: "公用電腦一定要登出帳號，否則下一位使用者就能直接看到你的信箱與雲端硬碟！" },
-      { cat: "資安防護", q: "上網時突然跳出視窗說：「恭喜你抽中最新手機！請立刻輸入爸媽的信用卡號與密碼領獎」，你應該怎麼做？", opts: ["趕快去偷拿爸媽錢包來填寫", "這是「網路釣魚詐騙」，立刻關閉視窗千萬不能填！", "轉發給全班同學一起填", "把家裡地址也寫上去"], ans: 1, exp: "要求輸入密碼或信用卡的陌生中獎訊息都是釣魚詐騙（Phishing），千萬別上當！" },
-      { cat: "資安防護", q: "收到一封陌生人寄來的電子郵件，裡面附帶一個叫做「免費寶石外掛.exe」的檔案，可以點開嗎？", opts: ["馬上點開來用", "不可以！來路不明的 .exe 執行檔很可能藏有木馬或勒索病毒", "先複製十份再點開", "把防毒軟體關掉再點開"], ans: 1, exp: ".exe 是程式執行檔，來路不明的外掛或郵件附件極容易夾帶電腦病毒。" },
-      { cat: "資安防護", q: "為了防止「勒索病毒」把電腦重要照片鎖起來，專家推薦的「3-2-1 備份原則」中，最重要的是什麼觀念？", opts: ["把照片印出來貼在額頭上", "重要檔案除了存在電腦裡，還要另外備份在行動硬碟或雲端硬碟", "把檔案名稱改成病毒看不懂的字", "每天重灌電腦三次"], ans: 1, exp: "平時做好異地與雲端備份，就算電腦硬碟故障或中勒索病毒，也能隨時還原資料！" },
-      { cat: "資安防護", q: "登入重要網站時，除了輸入密碼，系統還會傳一組驗證碼到手機簡訊確認身分，這稱為什麼安全機制？", opts: ["雙重驗證 (兩步驟驗證 2FA)", "自動關機", "螢幕保護程式", "磁碟重組"], ans: 0, exp: "雙重驗證 (2FA) 就像幫帳號加上第二把鎖，就算密碼外洩駭客也進不去！" },
-      { cat: "程式邏輯", q: "在 Scratch 程式設計中，點擊舞台上方的哪一個圖示代表「開始執行程式」？", opts: ["紅色八角形", "綠色旗子 (綠旗)", "藍色小貓", "黃色星星"], ans: 1, exp: "「當綠旗被點擊時」是 Scratch 最常用的程式啟動事件積木！" },
-      { cat: "程式邏輯", q: "在 Scratch 的舞台座標系統中，正中央中心點的座標 (X, Y) 是多少？", opts: ["(X: 100, Y: 100)", "(X: 0, Y: 0)", "(X: 999, Y: 999)", "(X: -100, Y: -100)"], ans: 1, exp: "Scratch 舞台正中央的座標是 (X: 0, Y: 0)，X 控制左右移動，Y 控制上下移動。" },
-      { cat: "程式邏輯", q: "如果希望 Scratch 的小貓角色「一直不斷地來回走動，直到程式停止」，應該把移動積木放進哪個控制積木裡？", opts: ["重複無限次 (迴圈)", "等待 1 秒", "說出 Hello", "隱藏角色"], ans: 0, exp: "「重複無限次」屬於迴圈 (Loop) 結構，會讓裡面的積木周而復始地不斷執行。" },
-      { cat: "程式邏輯", q: "在寫遊戲程式時，「如果碰到邊緣，就反彈；否則就繼續前進」，這種積木屬於哪一種運算思維結構？", opts: ["條件判斷 (選擇結構)", "複製貼上結構", "關機結構", "音量放大結構"], ans: 0, exp: "「如果...那麼...否則... (If...Then...Else)」是程式中用來做決策的條件判斷結構！" },
-      { cat: "程式邏輯", q: "在 Scratch 遊戲中，我們想設計一個「計分板」來記錄玩家目前得到了幾分，應該建立什麼功能？", opts: ["建立一個「變數 (Variable)」叫做得分", "把背景塗黑", "把電腦螢幕貼上貼紙", "新增一百隻小貓角色"], ans: 0, exp: "「變數」就像一個可以存放並隨時改變數值的盒子，非常適合用來記錄分數、血量或時間。" },
-      { cat: "AI與素養", q: "使用生成式 AI（例如聊天機器人）幫忙找資料時，我們應該抱持什麼正確態度？", opts: ["AI 說的話 100% 絕對正確，完全不用檢查", "AI 有時會「一本正經地胡說八道（產生幻覺）」，重要事實一定要再查證！", "直接把自己的家裡地址跟銀行密碼告訴 AI", "叫 AI 幫我寫作業，自己連看都不看就直接交出去"], ans: 1, exp: "AI 是很棒的助手，但可能會捏造不存在的資訊（AI 幻覺），我們必須具備查證與思考的能力！" },
-      { cat: "AI與素養", q: "使用 Google Teachable Machine 訓練 AI 辨識「剪刀、石頭、布」時，怎麼做才能讓 AI 辨識得更準確？", opts: ["只拍 1 張照片就好", "提供多張不同角度、不同光線的清晰手勢照片讓機器學習", "把鏡頭蓋住拍全黑的照片", "故意把石頭標記成布來騙電腦"], ans: 1, exp: "機器學習需要充足且多元的高品質訓練資料（樣本），辨識率才會提升！" },
-      { cat: "AI與素養", q: "做專題報告時，在網路上找到別人拍得很漂亮的照片，正確的做法是什麼？", opts: ["直接拿來參賽說成是自己拍的", "優先使用「創用CC（CC授權）」免費素材，並依規定標註原作者出處", "把別人的名字塗掉就變自己的", "網路上的東西都沒有著作權"], ans: 1, exp: "尊重智慧財產權與著作權，使用網路素材應選擇合法授權並標明出處。" },
-      { cat: "AI與素養", q: "在班級群組或網路留言板看到同學的搞笑照片，下列哪種行為符合「網路禮儀」？", opts: ["未經同意到處轉傳並取笑他", "在下面狂刷好幾十則罵人的話", "尊重他人隱私，不隨意散播他人照片，留言保持友善禮貌", "冒用別人的名字去留言"], ans: 2, exp: "網路世界跟真實世界一樣，要保護個人隱私並維持友善禮貌，不做網路霸凌。" },
-      { cat: "AI與素養", q: "在瀏覽網頁時，網址開頭如果是「https://」並且有一個「小鎖頭」圖示，代表什麼意思？", opts: ["這個網站壞掉打不開了", "網站傳輸資料有經過加密保護，相對較安全", "這需要付錢才能看", "電腦中毒了"], ans: 1, exp: "HTTPS 的 S 代表 Secure（安全），代表網頁傳輸過程有加密保護。" }
+
+      // 【4. 檔案管理與雲端概念（選項長度平衡化）】
+      { cat: "檔案管理", q: "辛苦做好了一份簡報或小畫家作品，按哪個快捷鍵可以快速「儲存檔案」？", opts: ["Ctrl + S", "Ctrl + D", "Ctrl + W", "Ctrl + Q"], ans: 0, exp: "Save（儲存）的第一個字母是 S，常按 Ctrl + S 才不會因當機心血白費！" },
+      { cat: "檔案管理", q: "看到一個檔案名稱叫做「校慶運動會.jpg」，請問 `.jpg` 代表什麼類型的檔案？", opts: ["錄音音樂檔", "靜態圖片檔", "高畫質影片檔", "系統執行檔"], ans: 1, exp: ".jpg 與 .png 都是最常見的圖片檔案格式喔！" },
+      { cat: "檔案管理", q: "下列哪一組副檔名代表的全部都是「聲音或音樂檔案」？", opts: [".mp3 與 .wav", ".jpg 與 .png", ".txt 與 .pdf", ".exe 與 .msi"], ans: 0, exp: ".mp3 與 .wav 是常見的聲音檔；.jpg 是圖片檔，.exe 是程式執行檔。" },
+      { cat: "檔案管理", q: "如果不小心把桌面的檔案按 Delete 刪掉了，只要還沒永久清空，可以去哪裡救回來？", opts: ["桌面上的資源回收筒", "附屬應用程式小算盤", "系統網路連線設定處", "螢幕保護裝置設定區"], ans: 0, exp: "一般刪除的檔案會先暫存在「資源回收筒」，點右鍵選「還原」就能救回原位。" },
+      { cat: "檔案管理", q: "整理電腦裡的報告檔案時，下列哪一種「檔案命名習慣」最方便未來搜尋？", opts: ["全部依序取名為 1、2、3", "隨意敲擊鍵盤取名 asdfg", "標註清楚主題與日期姓名", "保留未命名的新增資料夾"], ans: 2, exp: "清楚標示主題、姓名或日期（如：自然報告_王小明），未來找檔案才一目了然！" },
+      { cat: "檔案管理", q: "想要把整個資料夾好幾個檔案「打包壓縮」成單一檔案傳送，常會轉成什麼格式？", opts: [".zip 壓縮檔", ".mp3 音訊檔", ".jpg 影像檔", ".txt 文字檔"], ans: 0, exp: ".zip 與 .7z 是常見的壓縮檔格式，能將多個檔案打包並減少體積。" },
+      { cat: "檔案管理", q: "把作業存放在「雲端硬碟 (如 Google Drive)」最主要的核心優點是什麼？", opts: ["沒連網路也能下載別人的電腦", "跨裝置連網登入即可存取檔案", "可以讓家裡的電腦螢幕變更大", "能夠自動幫電腦清理機殼灰塵"], ans: 1, exp: "雲端硬碟將檔案保存在遠端伺服器，換電腦只要連網登入帳號就能繼續編輯！" },
+
+      // 【5. 網路安全與防毒資安（選項長度平衡化）】
+      { cat: "資安防護", q: "設定個人帳號的「密碼」時，下列哪一種密碼組合最安全、最不容易被猜中？", opts: ["連續數字 12345678", "自己的西元出生年月日", "大小寫英文混合數字與符號", "全部使用相同的英文字母"], ans: 2, exp: "混合大小寫字母、數字與符號（如 Tw#9527Go）的密碼強度最高！" },
+      { cat: "資安防護", q: "在學校電腦教室上完課，離開座位前最重要的「資訊安全動作」是什麼？", opts: ["把滑鼠塞進抽屜深處藏好", "登出個人帳號並關閉瀏覽器", "直接拔除主機後方的電源線", "將電腦螢幕的亮度調到最暗"], ans: 1, exp: "公用電腦務必登出帳號，否則下一位使用者能直接存取你的信箱與雲端硬碟！" },
+      { cat: "資安防護", q: "網頁突然跳出視窗：「恭喜抽中最新手機！請輸入父母信用卡號領獎」，應如何處理？", opts: ["立刻去拿父母的信用卡輸入", "屬於網路釣魚詐騙應直接關閉", "趕緊轉發連結給全班同學填寫", "先輸入家裡地址與電話再觀望"], ans: 1, exp: "要求輸入密碼或信用卡的陌生中獎訊息都是釣魚詐騙（Phishing），應立即關閉！" },
+      { cat: "資安防護", q: "收到陌生人寄來的電子郵件，裡面附帶一個「免費寶石外掛.exe」檔案，該怎麼做？", opts: ["立刻雙擊下載並安裝使用", "切勿開啟以免感染木馬病毒", "先關閉防毒軟體再點開執行", "複製十份到隨身碟分送同學"], ans: 1, exp: ".exe 是程式執行檔，來路不明的外掛或郵件附件極容易夾帶木馬或勒索病毒！" },
+      { cat: "資安防護", q: "為了防範「勒索病毒」鎖死檔案，專家提倡的「3-2-1 備份原則」核心觀念為何？", opts: ["每天固定把電腦重灌三次以上", "重要資料需在異地或雲端多備份", "把所有檔案名稱都改成英文數字", "同時在電腦安裝三套免費防毒"], ans: 1, exp: "準備 3 份資料、2 種不同媒介、1 份異地/雲端保存，中毒也能隨時還原！" },
+      { cat: "資安防護", q: "登入網站時除了輸入密碼，還需輸入手機收到的動態驗證碼，這稱為什麼機制？", opts: ["雙重驗證 (2FA 兩步驟驗證)", "磁碟重組與系統最佳化機制", "無痕瀏覽與快取清除機制", "螢幕保護與自動休眠機制"], ans: 0, exp: "雙重驗證 (2FA) 就像幫帳號加上第二把鎖，就算密碼外洩駭客也無法登入！" },
+
+      // 【6. Scratch 程式設計與運算思維（選項長度平衡化）】
+      { cat: "程式邏輯", q: "在 Scratch 程式設計中，點擊舞台上方的哪一個圖示代表「開始執行程式」？", opts: ["紅色八角形圖示", "綠色旗子圖示", "藍色小貓圖示", "黃色閃電圖示"], ans: 1, exp: "「當綠旗被點擊時」是 Scratch 最常用的程式啟動事件積木！" },
+      { cat: "程式邏輯", q: "在 Scratch 的舞台座標系統中，正中央中心點的座標 (X, Y) 數值是多少？", opts: ["(X: 100, Y: 100)", "(X: 0, Y: 0)", "(X: 240, Y: 180)", "(X: -100, Y: -100)"], ans: 1, exp: "Scratch 舞台正中央的座標是 (X: 0, Y: 0)，X 控制左右，Y 控制上下。" },
+      { cat: "程式邏輯", q: "希望 Scratch 角色「一直重複來回走動直到停止」，應把移動積木放進哪個積木裡？", opts: ["重複無限次積木", "等待一秒鐘積木", "廣播訊息積木", "分身刪除積木"], ans: 0, exp: "「重複無限次」屬於迴圈 (Loop) 結構，會讓內部的積木周而復始地不斷執行。" },
+      { cat: "程式邏輯", q: "程式中寫道：「如果碰到邊緣就反彈，否則繼續前進」，這屬於哪種運算思維結構？", opts: ["條件判斷（選擇結構）", "變數宣告（儲存結構）", "畫筆圖章（繪圖結構）", "清單排序（陣列結構）"], ans: 0, exp: "「如果...那麼...否則... (If...Then...Else)」是用來做決策的條件判斷結構！" },
+      { cat: "程式邏輯", q: "在 Scratch 遊戲中，想設計一個「計分板」記錄目前得分，應該建立什麼功能？", opts: ["建立一個「變數」存放分數", "更換十張不同的舞台背景圖", "將角色造型切換為向量模式", "把音效的音量調整到最大值"], ans: 0, exp: "「變數 (Variable)」就像存放數值的盒子，最適合用來記錄得分、血量或倒數時間。" },
+
+      // 【7. AI 人工智慧與數位公民素養（選項長度平衡化）】
+      { cat: "AI與素養", q: "使用生成式 AI 聊天機器人查詢報告資料時，我們應該抱持哪一種正確態度？", opts: ["AI 產生的內容絕對正確無須檢查", "AI 可能產生錯誤幻覺需查證事實", "可將個人身分證與密碼交給 AI", "直接複製 AI 的回答當作自己作業"], ans: 1, exp: "生成式 AI 有時會捏造不存在的資訊（AI 幻覺），重要事實一定要多方查證！" },
+      { cat: "AI與素養", q: "用 Teachable Machine 訓練 AI 辨識「剪刀石頭布」時，怎麼做能提高辨識準確度？", opts: ["每種手勢只拍一張模糊照片即可", "提供多角度且光線充足的手勢照片", "把鏡頭完全遮住拍攝全黑的畫面", "故意將石頭的照片貼上布的標籤"], ans: 1, exp: "機器學習需要充足且多元的高品質訓練樣本，AI 模型的辨識率才會高！" },
+      { cat: "AI與素養", q: "做專題簡報時想使用網路上別人拍攝的風景照，下列哪一種做法最尊重著作權？", opts: ["直接下載並宣稱是自己拍的作品", "選用創用 CC 授權素材並標註出處", "用修圖軟體把原作者浮水印塗掉", "只要不印出來就完全沒有版權問題"], ans: 1, exp: "尊重智慧財產權，應優先選用合法「創用 CC」授權素材並依規定標明作者出處。" },
+      { cat: "AI與素養", q: "在班級群組看到同學出糗的搞笑照片，下列哪一種行為符合良好的「網路禮儀」？", opts: ["未經同意轉傳到各大公開社團", "在留言區瘋狂洗版嘲笑該同學", "尊重同學隱私不散布並友善留言", "把照片改圖做成迷因貼圖到處傳"], ans: 2, exp: "網路世界與真實世界相同，應保護他人隱私、維持友善禮貌，拒絕網路霸凌。" },
+      { cat: "AI與素養", q: "瀏覽網站時看到網址開頭為「https://」且有「小鎖頭」圖示，代表什麼意義？", opts: ["代表該網站伺服器已經故障關閉", "代表網站傳輸資料有經過加密保護", "代表進入該網站每分鐘都要付費", "代表這台電腦已經感染勒索病毒"], ans: 1, exp: "HTTPS 的 S 代表 Secure（安全），表示瀏覽器與網站間的資料傳輸有加密保護。" }
     ];
 
     let questionPool = [...defaultQuestions];
@@ -798,7 +809,7 @@
     ];
 
     // =========================================================
-    // 4. 全面強化版怪物圖鑑 (提高血量、防禦與戰術難度，調降小怪金幣防無腦刷錢)
+    // 4. 怪物圖鑑与四大章節 BOSS 專屬戰前／戰後劇情台詞
     // =========================================================
     const TILE_SIZE = 44;
     const COLS = 18;
@@ -814,13 +825,33 @@
       '7': { key: '7', name: "青銅木馬巨兵", lv: 7, maxHp: 370, atk: 56, def: 38, exp: 145, gold: 120, trait: "【重甲】破城重踏 (降低勇者防禦)", skillName: "🐴 木馬破甲踐踏", skillType: "break_def" },
       'M_MIMIC': { key: 'M_MIMIC', name: "📦 噬人偽裝寶箱怪", lv: 5, maxHp: 190, atk: 34, def: 16, exp: 65, gold: 95, trait: "陷阱突襲：狂暴撕咬 (高賞金怪獸)", skillName: "🦷 寶箱巨顎吞噬", skillType: "heavy_hit" },
 
-      // 三大章節守門小 BOSS (大幅強化戰術壓迫感)
-      'A': { key: 'A', isSubBoss: true, name: "👹 卷一首領・千年鍵垢巨魔", lv: 3, maxHp: 195, atk: 24, def: 13, exp: 70, gold: 85, trait: "【守門首領】厚重鍵垢甲＋泰山壓頂", skillName: "🪨 萬年鍵垢泰山壓頂", skillType: "heavy_hit" },
-      'D': { key: 'D', isSubBoss: true, name: "💀 卷二首領・格式化鐮刀死神", lv: 5, maxHp: 340, atk: 39, def: 22, exp: 135, gold: 145, trait: "【守門首領】磁區抹除斬 (無視防禦)", skillName: "🌙 強制格式化死神鐮", skillType: "ignore_def" },
-      'G': { key: 'G', isSubBoss: true, name: "🎭 卷三首領・深淵駭客傀儡師", lv: 7, maxHp: 490, atk: 54, def: 32, exp: 210, gold: 210, trait: "【守門首領】殭屍網路吸血陣", skillName: "🕸️ 暗網傀儡噬魂陣", skillType: "vampire" },
+      // 三大章節守門小 BOSS + 專屬劇情
+      'A': {
+        key: 'A', isSubBoss: true, name: "👹 卷一首領・千年鍵垢巨魔", lv: 3, maxHp: 195, atk: 24, def: 13, exp: 75, gold: 90,
+        trait: "【守門首領】厚重鍵垢甲＋泰山壓頂", skillName: "🪨 萬年鍵垢泰山壓頂", skillType: "heavy_hit",
+        introQuote: "「吼哈哈哈！本座乃歷屆學生邊用電腦邊吃餅乾、累積千年的鍵盤污垢與機殼灰塵所化！我的灰塵重甲連疾風劍氣都砍不穿，乖乖讓你的電腦過熱當機吧！」",
+        defeatQuote: "「嗚哇！想不到你竟懂得用『破魔穿雲箭』與正確的硬體保養觀念清除本座……通往綠洲石窟的太極傳送陣已經解開了！」"
+      },
+      'D': {
+        key: 'D', isSubBoss: true, name: "💀 卷二首領・格式化鐮刀死神", lv: 5, maxHp: 340, atk: 39, def: 22, exp: 140, gold: 150,
+        trait: "【守門首領】磁區抹除斬 (無視防禦)", skillName: "🌙 強制格式化死神鐮", skillType: "ignore_def",
+        introQuote: "「桀桀桀……踏入這座檔案石窟的人，作業跟報告都別想保住！本死神最愛不按 Ctrl+S 存檔、又亂改副檔名的糊塗蛋！接我一招強制格式化吧！」",
+        defeatQuote: "「可惡……你竟然熟記所有快捷鍵與雲端備份心法！我的格式化鐮刀斬不斷你的檔案……前往樓蘭幻境的封印解除！」"
+      },
+      'G': {
+        key: 'G', isSubBoss: true, name: "🎭 卷三首領・深淵駭客傀儡師", lv: 7, maxHp: 490, atk: 54, def: 32, exp: 220, gold: 220,
+        trait: "【守門首領】殭屍網路吸血陣", skillName: "🕸️ 暗網傀儡噬魂陣", skillType: "vampire",
+        introQuote: "「呵呵，恭喜你抽中最新款手機！只要踏入我的釣魚假網址、或是下課忘記登出公用電腦，你的帳號就會成為我的提線傀儡！乖乖交出你的個資與密碼吧！」",
+        defeatQuote: "「怎麼可能？！連雙重驗證與 HTTPS 加密防線都守護著你……暗網魔宮的大門已經敞開，但勒索魔神絕不會放過你！」"
+      },
 
-      // 最終章大魔王
-      'K': { key: 'K', isSubBoss: true, name: "👑 終極魔神・暗黑勒索魔神", lv: 10, maxHp: 780, atk: 75, def: 45, exp: 450, gold: 500, trait: "【終極魔神】天地加密鎖 (雙倍毀滅黑雷)", skillName: "⚡ 終極勒索滅世雷", skillType: "boss_nuke" }
+      // 最終章大魔王 + 專屬劇情
+      'K': {
+        key: 'K', isSubBoss: true, name: "👑 終極魔神・暗黑勒索魔神", lv: 10, maxHp: 780, atk: 75, def: 45, exp: 450, gold: 500,
+        trait: "【終極魔神】天地加密鎖 (雙倍毀滅黑雷)", skillName: "⚡ 終極勒索滅世雷", skillType: "boss_nuke",
+        introQuote: "「渺小的古月鍵俠，歡迎來到暗網魔宮王座！本魔神已將整座校園網路的檔案全部加密鎖死，若不交出贖金，所有珍貴照片與心血結晶都將灰飛煙滅！顫抖吧！」",
+        defeatQuote: "「不可能！！你竟然擁有『3-2-1 異地雲端備份』與無懈可擊的資安智慧，本魔神的加密鎖在你的備份面前毫無用處……數位世界的和平，就交給你守護了！」"
+      }
     };
 
     const mapDataList = [
@@ -923,7 +954,7 @@
       walkFrame: 0,
       isMoving: false,
       invulnerableUntil: 0,
-      ignoreNpcKey: null
+      ignoreTileKey: null // 紀錄剛剛關閉互動的座標 "gx,gy"，離開該格前不重複彈出對話/靈泉/BOSS劇情
     };
 
     const keysDown = {};
@@ -936,7 +967,7 @@
     }
 
     // =========================================================
-    // ★ 擴充版西域光華鍛造坊：15 件五階神兵護具 (含等級限制 reqLv 與副屬性) + 6 種丹藥秘卷
+    // ★ 五階神兵護具與戰術道具 (寶箱可開出裝備，商城亦可鍛造)
     // =========================================================
     const shopConsumables = [
       { id: "hp", name: "綠色乖乖金創藥", icon: "🏺", price: 22, desc: "恢復 65 點 命(HP)，居家旅行必備良藥。" },
@@ -949,25 +980,25 @@
 
     const shopEquipments = [
       // 【兵刃 Weapons - 5 階】
-      { id: "w1", type: "weapon", reqLv: 2, name: "一階・機械青軸快劍", icon: "🗡️", bonusAtk: 9, bonusDef: 0, bonusHp: 0, bonusMp: 10, price: 65, desc: "【需 Lv.2】敲擊清脆，提升 +9 武力、+10 靈力上限。" },
-      { id: "w2", type: "weapon", reqLv: 3, name: "二階・茶軸靜音刺劍", icon: "⚔️", bonusAtk: 19, bonusDef: 3, bonusHp: 0, bonusMp: 15, price: 155, desc: "【需 Lv.3】攻守兼備，提升 +19 武力、+3 防禦、+15 靈力。" },
-      { id: "w3", type: "weapon", reqLv: 5, name: "三階・RGB 流光龍泉劍", icon: "⚡", bonusAtk: 32, bonusDef: 5, bonusHp: 20, bonusMp: 25, price: 310, desc: "【需 Lv.5】霓虹劍氣縱橫，提升 +32 武力、+5 防禦、+25 靈力。" },
-      { id: "w4", type: "weapon", reqLv: 7, name: "四階・光纖雷射破魔劍", icon: "💠", bonusAtk: 48, bonusDef: 8, bonusHp: 40, bonusMp: 35, price: 520, desc: "【需 Lv.7】光速傳輸斬擊，提升 +48 武力、+8 防禦、+40 命。" },
-      { id: "w5", type: "weapon", reqLv: 9, name: "五階・軒轅 AI 聖皇神劍", icon: "🔱", bonusAtk: 70, bonusDef: 15, bonusHp: 80, bonusMp: 60, price: 820, desc: "【需 Lv.9】蘊含超級電腦神力！+70 武力、+15 防禦、+80 命！" },
+      { id: "w1", tier: 1, type: "weapon", reqLv: 2, name: "一階・機械青軸快劍", icon: "🗡️", bonusAtk: 9, bonusDef: 0, bonusHp: 0, bonusMp: 10, price: 65, desc: "【需 Lv.2】敲擊清脆，提升 +9 武力、+10 靈力上限。" },
+      { id: "w2", tier: 2, type: "weapon", reqLv: 3, name: "二階・茶軸靜音刺劍", icon: "⚔️", bonusAtk: 19, bonusDef: 3, bonusHp: 0, bonusMp: 15, price: 155, desc: "【需 Lv.3】攻守兼備，提升 +19 武力、+3 防禦、+15 靈力。" },
+      { id: "w3", tier: 3, type: "weapon", reqLv: 5, name: "三階・RGB 流光龍泉劍", icon: "⚡", bonusAtk: 32, bonusDef: 5, bonusHp: 20, bonusMp: 25, price: 310, desc: "【需 Lv.5】霓虹劍氣縱橫，提升 +32 武力、+5 防禦、+25 靈力。" },
+      { id: "w4", tier: 4, type: "weapon", reqLv: 7, name: "四階・光纖雷射破魔劍", icon: "💠", bonusAtk: 48, bonusDef: 8, bonusHp: 40, bonusMp: 35, price: 520, desc: "【需 Lv.7】光速傳輸斬擊，提升 +48 武力、+8 防禦、+40 命。" },
+      { id: "w5", tier: 5, type: "weapon", reqLv: 9, name: "五階・軒轅 AI 聖皇神劍", icon: "🔱", bonusAtk: 70, bonusDef: 15, bonusHp: 80, bonusMp: 60, price: 820, desc: "【需 Lv.9】蘊含超級電腦神力！+70 武力、+15 防禦、+80 命！" },
 
       // 【護甲 Armors - 5 階】
-      { id: "a1", type: "armor", reqLv: 2, name: "一階・防毒軟體布衣", icon: "🛡️", bonusAtk: 0, bonusDef: 7, bonusHp: 20, bonusMp: 0, price: 60, desc: "【需 Lv.2】基礎病毒防護，提升 +7 防禦、+20 命上限。" },
-      { id: "a2", type: "armor", reqLv: 3, name: "二階・雙重驗證鎖子甲", icon: "🥋", bonusAtk: 2, bonusDef: 15, bonusHp: 45, bonusMp: 10, price: 145, desc: "【需 Lv.3】兩步驟驗證護體，提升 +15 防禦、+45 命上限。" },
-      { id: "a3", type: "armor", reqLv: 5, name: "三階・玄武硬體防火鎧", icon: "🧱", bonusAtk: 5, bonusDef: 25, bonusHp: 80, bonusMp: 20, price: 290, desc: "【需 Lv.5】阻絕惡意封包，提升 +25 防禦、+80 命、+5 武力。" },
-      { id: "a4", type: "armor", reqLv: 7, name: "四階・SSL 加密金剛戰甲", icon: "🔐", bonusAtk: 8, bonusDef: 38, bonusHp: 130, bonusMp: 35, price: 490, desc: "【需 Lv.7】高強度加密鎧甲，提升 +38 防禦、+130 命上限。" },
-      { id: "a5", type: "armor", reqLv: 9, name: "五階・零信任無瑕聖皇袍", icon: "👑", bonusAtk: 15, bonusDef: 56, bonusHp: 220, bonusMp: 60, price: 780, desc: "【需 Lv.9】萬邪不侵的資安神袍！+56 防禦、+220 命、+15 武力！" },
+      { id: "a1", tier: 1, type: "armor", reqLv: 2, name: "一階・防毒軟體布衣", icon: "🛡️", bonusAtk: 0, bonusDef: 7, bonusHp: 20, bonusMp: 0, price: 60, desc: "【需 Lv.2】基礎病毒防護，提升 +7 防禦、+20 命上限。" },
+      { id: "a2", tier: 2, type: "armor", reqLv: 3, name: "二階・雙重驗證鎖子甲", icon: "🥋", bonusAtk: 2, bonusDef: 15, bonusHp: 45, bonusMp: 10, price: 145, desc: "【需 Lv.3】兩步驟驗證護體，提升 +15 防禦、+45 命上限。" },
+      { id: "a3", tier: 3, type: "armor", reqLv: 5, name: "三階・玄武硬體防火鎧", icon: "🧱", bonusAtk: 5, bonusDef: 25, bonusHp: 80, bonusMp: 20, price: 290, desc: "【需 Lv.5】阻絕惡意封包，提升 +25 防禦、+80 命、+5 武力。" },
+      { id: "a4", tier: 4, type: "armor", reqLv: 7, name: "四階・SSL 加密金剛戰甲", icon: "🔐", bonusAtk: 8, bonusDef: 38, bonusHp: 130, bonusMp: 35, price: 490, desc: "【需 Lv.7】高強度加密鎧甲，提升 +38 防禦、+130 命上限。" },
+      { id: "a5", tier: 5, type: "armor", reqLv: 9, name: "五階・零信任無瑕聖皇袍", icon: "👑", bonusAtk: 15, bonusDef: 56, bonusHp: 220, bonusMp: 60, price: 780, desc: "【需 Lv.9】萬邪不侵的資安神袍！+56 防禦、+220 命、+15 武力！" },
 
       // 【法寶 Accessories - 5 階】
-      { id: "c1", type: "acc", reqLv: 2, name: "一階・16GB 雙通道玉佩", icon: "📿", bonusAtk: 2, bonusDef: 2, bonusHp: 35, bonusMp: 25, price: 65, desc: "【需 Lv.2】擴充丹田容量，+35 命、+25 靈、攻防 +2。" },
-      { id: "c2", type: "acc", reqLv: 3, name: "二階・1TB 固態乾坤袋", icon: "💿", bonusAtk: 5, bonusDef: 4, bonusHp: 75, bonusMp: 45, price: 150, desc: "【需 Lv.3】高速讀寫法寶，+75 命、+45 靈、+5 武力。" },
-      { id: "c3", type: "acc", reqLv: 5, name: "三階・Wi-Fi 7 順風耳輪", icon: "📡", bonusAtk: 10, bonusDef: 8, bonusHp: 120, bonusMp: 75, price: 300, desc: "【需 Lv.5】超低延遲感應，+120 命、+75 靈、+10 武力。" },
-      { id: "c4", type: "acc", reqLv: 7, name: "四階・UPS 不斷電聚靈塔", icon: "🔋", bonusAtk: 15, bonusDef: 12, bonusHp: 180, bonusMp: 110, price: 500, desc: "【需 Lv.7】源源不絕供應真氣，+180 命、+110 靈、+15 武力。" },
-      { id: "c5", type: "acc", reqLv: 9, name: "五階・3-2-1 異地雲端輪迴鏡", icon: "🪞", bonusAtk: 25, bonusDef: 20, bonusHp: 280, bonusMp: 160, price: 790, desc: "【需 Lv.9】完美備份不滅神器！+280 命、+160 靈、+25 武力！" }
+      { id: "c1", tier: 1, type: "acc", reqLv: 2, name: "一階・16GB 雙通道玉佩", icon: "📿", bonusAtk: 2, bonusDef: 2, bonusHp: 35, bonusMp: 25, price: 65, desc: "【需 Lv.2】擴充丹田容量，+35 命、+25 靈、攻防 +2。" },
+      { id: "c2", tier: 2, type: "acc", reqLv: 3, name: "二階・1TB 固態乾坤袋", icon: "💿", bonusAtk: 5, bonusDef: 4, bonusHp: 75, bonusMp: 45, price: 150, desc: "【需 Lv.3】高速讀寫法寶，+75 命、+45 靈、+5 武力。" },
+      { id: "c3", tier: 3, type: "acc", reqLv: 5, name: "三階・Wi-Fi 7 順風耳輪", icon: "📡", bonusAtk: 10, bonusDef: 8, bonusHp: 120, bonusMp: 75, price: 300, desc: "【需 Lv.5】超低延遲感應，+120 命、+75 靈、+10 武力。" },
+      { id: "c4", tier: 4, type: "acc", reqLv: 7, name: "四階・UPS 不斷電聚靈塔", icon: "🔋", bonusAtk: 15, bonusDef: 12, bonusHp: 180, bonusMp: 110, price: 500, desc: "【需 Lv.7】源源不絕供應真氣，+180 命、+110 靈、+15 武力。" },
+      { id: "c5", tier: 5, type: "acc", reqLv: 9, name: "五階・3-2-1 異地雲端輪迴鏡", icon: "🪞", bonusAtk: 25, bonusDef: 20, bonusHp: 280, bonusMp: 160, price: 790, desc: "【需 Lv.9】完美備份不滅神器！+280 命、+160 靈、+25 武力！" }
     ];
 
     const titles = ["初階劍童", "鍵盤遊俠", "除錯劍客", "防毒護法", "御劍宗師", "資安掌門", "軒轅鍵聖"];
@@ -977,7 +1008,7 @@
       hp: 105, baseMaxHp: 105,
       mp: 55, baseMaxMp: 55,
       baseAtk: 15, baseDef: 4,
-      gold: 35,
+      gold: 40,
       potions: { hp: 2, mp: 1, superHp: 0, scroll: 0 },
       nextBattleAtkBuff: 0,
       nextBattleDefBuff: 0,
@@ -1011,6 +1042,7 @@
       tileY: 0,
       pendingSkillId: null,
       currentQuiz: null,
+      shuffledOpts: [],
       turnCount: 0,
       defDebuff: 0,
       defBuff: 0,
@@ -1385,10 +1417,30 @@
       }
     }
 
+    // 繪製右下角對話框立繪 (支援長老、商人、靈泉與四大章節 BOSS 立繪)
     function drawDialoguePortrait(type) {
       const pCanvas = document.getElementById('dlg-portrait-canvas');
       const c = pCanvas.getContext('2d');
       c.clearRect(0, 0, pCanvas.width, pCanvas.height);
+
+      if (['A', 'D', 'G', 'K'].includes(type)) {
+        drawMonsterCharacter(c, 85, 100, type, 2.35, performance.now(), false);
+        return;
+      }
+
+      if (type === 'H') {
+        // 靈泉精靈光球立繪
+        c.save();
+        c.translate(85, 95);
+        const g = c.createRadialGradient(0, 0, 5, 0, 0, 48);
+        g.addColorStop(0, "#ffffff");
+        g.addColorStop(0.4, "#34d399");
+        g.addColorStop(1, "rgba(5, 150, 105, 0)");
+        c.fillStyle = g;
+        c.beginPath(); c.arc(0, 0, 48, 0, Math.PI * 2); c.fill();
+        c.restore();
+        return;
+      }
 
       c.save();
       c.translate(85, 110);
@@ -1417,9 +1469,9 @@
     }
 
     // =========================================================
-    // 6. 主遊戲 60FPS 迴圈、陷阱寶箱與章節守門小BOSS判定
+    // 6. 主遊戲 60FPS 迴圈、靈泉選擇權、多元寶箱與 BOSS 戰前劇情
     // =========================================================
-    let activeDialogueNPC = null;
+    let dialogueCallback = null;
 
     function initGame() {
       const pCan = document.getElementById('hero-portrait-canvas');
@@ -1501,7 +1553,7 @@
       if (mapIdx > highestUnlockedMap) highestUnlockedMap = mapIdx;
       hero.x = gx * TILE_SIZE + TILE_SIZE / 2;
       hero.y = gy * TILE_SIZE + TILE_SIZE / 2;
-      hero.ignoreNpcKey = null;
+      hero.ignoreTileKey = null;
       const meta = mapDataList[mapIdx];
       document.getElementById('map-badge').innerText = meta.badge;
       document.getElementById('map-title').innerText = meta.name;
@@ -1510,7 +1562,6 @@
       updateSubBossBadge();
     }
 
-    // 修改：重生迷宮妖魔需消耗 30 兩銀子，防止零成本無限洗初階寶箱
     function respawnMapEntities() {
       if (player.gold < 30) {
         addLog("🪙 銀兩不足 30 Bytes！無法催動法陣重新召喚迷宮妖魔。", "text-rose-400 font-bold");
@@ -1566,7 +1617,7 @@
         hero.walkFrame += 0.22;
 
         tryMoveHero(dx, 0, time);
-        if (!battleState.active) tryMoveHero(0, dy, time);
+        if (!battleState.active && !isAnyModalOpen()) tryMoveHero(0, dy, time);
         updateFogMemory();
       } else {
         hero.isMoving = false;
@@ -1598,20 +1649,34 @@
 
       const gx = Math.floor(nx / TILE_SIZE);
       const gy = Math.floor(ny / TILE_SIZE);
+      const tileKey = `${gx},${gy}`;
       const grid = runtimeMaps[currentMapIdx];
       const cell = grid[gy][gx];
 
-      if (hero.ignoreNpcKey && cell !== hero.ignoreNpcKey) {
-        hero.ignoreNpcKey = null;
+      // 當玩家踏出剛剛暫退的格子時，解除忽略鎖定
+      if (hero.ignoreTileKey && hero.ignoreTileKey !== tileKey) {
+        hero.ignoreTileKey = null;
       }
 
+      // 1. 觸發長老或鍛造師 NPC 對話
       if (cell === 'N' || cell === 'M') {
-        if (hero.ignoreNpcKey !== cell) {
-          openSWDDialogue(cell);
+        if (hero.ignoreTileKey !== tileKey) {
+          hero.ignoreTileKey = tileKey;
+          openCustomDialogue(
+            cell,
+            cell === 'N' ? "【大漠智者・古月聖】" : "【西域鍛造師・薇達】",
+            cell === 'N'
+              ? "「少俠留步！每座迷宮的守門首領都有獨特武學，開啟寶箱也有機會直接獲得神兵利器或戰術卷軸！路過綠洲靈泉時，若體力尚足可先保留不喝，等決戰前再飲用！」"
+              : "「我的鍛造坊有五階神兵、寶甲與『超頻狂暴卷軸』！若你在迷宮寶箱開到了裝備，也可以來我這兒查看或換裝喔！」",
+            cell === 'M' ? "🏪 開啟鍛造商城" : null,
+            cell === 'M' ? () => openShopModal() : null,
+            "知曉了 (空白鍵)"
+          );
         }
         return;
       }
 
+      // 2. 傳送陣 P 與 B
       if (cell === 'P') {
         if (isSubBossAliveOnCurrentMap()) {
           if (time - lastSealWarnTime > 1500) {
@@ -1640,57 +1705,57 @@
         return;
       }
 
-      // 靈泉 H：飲用後變為普通地面 '.'，每章節限免費補滿一次，增加丹藥管理策略性
+      // 3. ★ 綠洲靈泉 H：允許直接經過，並彈出詢問視窗讓玩家自由選擇是否飲用！
       if (cell === 'H') {
-        hero.x = nx; hero.y = ny;
-        grid[gy][gx] = '.';
-        playSFX('coin');
-        player.hp = getMaxHp();
-        player.mp = getMaxMp();
-        updateUI();
-        addLog("⛲ 飲盡綠洲靈泉，命與靈完全恢復！（靈泉已乾涸，後續請善用丹藥與吸血武學）", "text-emerald-400 font-bold");
-        return;
-      }
-
-      // 寶箱 C：提高陷阱與寶箱怪刺激度，調降純銀兩數額防止直購神裝
-      if (cell === 'C') {
-        const roll = Math.random();
-        if (roll < 0.52) {
-          grid[gy][gx] = '.';
-          hero.x = nx; hero.y = ny;
-          playSFX('coin');
-          const bonus = 28 + currentMapIdx * 18;
-          player.gold += bonus;
-          if (Math.random() < 0.45) player.potions.hp++;
-          updateUI();
-          addLog(`📦 開啟上古吉箱！獲得 🪙 ${bonus} 銀兩(Bytes)！`, "text-amber-300 font-black");
-        } else if (roll < 0.80) {
-          grid[gy][gx] = '.';
-          hero.x = nx; hero.y = ny;
-          playSFX('trap');
-          if (Math.random() < 0.55) {
-            const trapDmg = Math.max(12, Math.floor(getMaxHp() * 0.18));
-            player.hp = Math.max(1, player.hp - trapDmg);
-            addLog(`💥 糟糕！寶箱裡藏著【釣魚木馬毒針機關】，受到 ${trapDmg} 點陷阱傷害！`, "text-rose-400 font-black");
-          } else {
-            const trapMp = Math.min(player.mp, 18);
-            player.mp -= trapMp;
-            player.gold += 20;
-            addLog(`⚡ 觸發【漏電火花陷阱】流失了 ${trapMp} 點靈力，僅在箱底撿到 🪙 20 銀兩！`, "text-orange-400 font-bold");
-          }
-          updateUI();
-        } else {
-          grid[gy][gx] = 'M_MIMIC';
-          playSFX('trap');
-          addLog("🦷 驚險萬分！這不是普通寶箱，是【噬人偽裝寶箱怪】張開血盆大口撲了過來！", "text-rose-400 font-black");
-          startCanvasBattle('M_MIMIC', gx, gy);
+        hero.x = nx;
+        hero.y = ny;
+        if (hero.ignoreTileKey !== tileKey) {
+          hero.ignoreTileKey = tileKey;
+          openCustomDialogue(
+            'H',
+            "【綠洲千年靈泉】",
+            `泉水清澈見底，散發著純淨的靈氣（目前 命：${player.hp}/${getMaxHp()}｜靈：${player.mp}/${getMaxMp()}）。每處靈泉僅能飲用一次，少俠現在要飲用嗎？`,
+            "⛲ 飲用靈泉 (回滿命/靈)",
+            () => {
+              grid[gy][gx] = '.';
+              playSFX('coin');
+              player.hp = getMaxHp();
+              player.mp = getMaxMp();
+              updateUI();
+              addLog("⛲ 飲盡綠洲靈泉，全身命(HP)與靈(MP)瞬間完全恢復！", "text-emerald-400 font-black");
+            },
+            "🚶 暫不飲用 (保留靈泉)"
+          );
         }
         return;
       }
 
+      // 4. ★ 寶箱 C：多元掉落（神兵裝備 / 戰術卷軸大補丸 / 銀兩 / 陷阱 / 寶箱怪）
+      if (cell === 'C') {
+        openTreasureChest(gx, gy, nx, ny);
+        return;
+      }
+
+      // 5. ★ 遭遇妖魔或章節守門 BOSS（若是 BOSS 先觸發《軒轅劍》風戰前劇情！）
       if (monsterCatalog[cell]) {
         if (time < hero.invulnerableUntil) {
           hero.x = nx; hero.y = ny;
+          return;
+        }
+        const mTpl = monsterCatalog[cell];
+        if (mTpl.isSubBoss) {
+          if (hero.ignoreTileKey !== tileKey) {
+            hero.ignoreTileKey = tileKey;
+            playSFX('heavy');
+            openCustomDialogue(
+              cell,
+              `【${mTpl.name} (Lv.${mTpl.lv})】`,
+              mTpl.introQuote,
+              "⚔️ 拔劍迎戰！",
+              () => startCanvasBattle(cell, gx, gy),
+              "🏃 暫且退避 (先去準備)"
+            );
+          }
           return;
         }
         startCanvasBattle(cell, gx, gy);
@@ -1701,36 +1766,139 @@
       hero.y = ny;
     }
 
-    function openSWDDialogue(npcType) {
-      clearInputState();
-      activeDialogueNPC = npcType;
-      hero.ignoreNpcKey = npcType;
-      drawDialoguePortrait(npcType);
+    // 寶箱多元平衡掉落系統
+    function openTreasureChest(gx, gy, nx, ny) {
+      const grid = runtimeMaps[currentMapIdx];
+      const roll = Math.random();
 
-      const speakerEl = document.getElementById('dlg-speaker');
-      const textEl = document.getElementById('dlg-text');
-      const actionBtn = document.getElementById('dlg-action-btn');
+      if (roll < 0.28) {
+        // 【28% 機率：直接開出神兵／護甲／法寶裝備！】
+        grid[gy][gx] = '.';
+        hero.x = nx; hero.y = ny;
+        playSFX('coin');
 
-      if (npcType === 'N') {
-        speakerEl.innerText = "【大漠智者・古月聖】";
-        textEl.innerText = "「少俠留步！如今妖魔護甲極為堅硬，光靠普通劍氣難以傷其分毫！務必升至 Lv.2 領悟『💠 破魔穿雲箭』，並在戰鬥中謹慎答題，否則答錯露出破綻會遭受重創！」";
-        actionBtn.classList.add('hidden');
+        // 根據當前章節決定掉落裝備階級 (卷一:1~2階, 卷二:2~3階, 卷三:3~4階, 終卷:4~5階)
+        const minTier = currentMapIdx + 1;
+        const maxTier = Math.min(5, currentMapIdx + 2);
+        const candidates = shopEquipments.filter(e => e.tier >= minTier && e.tier <= maxTier && !player.ownedIds.includes(e.id));
+
+        if (candidates.length > 0) {
+          const foundEq = candidates[Math.floor(Math.random() * candidates.length)];
+          player.ownedIds.push(foundEq.id);
+          // 寶箱尋獲的神兵直接幫玩家突破等級限制自動佩帶（若比身上強）
+          const curSlot = player.equipped[foundEq.type];
+          const isBetter = (foundEq.bonusAtk + foundEq.bonusDef + foundEq.bonusHp) >= (curSlot.bonusAtk + curSlot.bonusDef + curSlot.bonusHp);
+          if (isBetter) {
+            const prevMaxHp = getMaxHp();
+            const prevMaxMp = getMaxMp();
+            player.equipped[foundEq.type] = { ...foundEq };
+            if (getMaxHp() > prevMaxHp) player.hp += (getMaxHp() - prevMaxHp);
+            if (getMaxMp() > prevMaxMp) player.mp += (getMaxMp() - prevMaxMp);
+            addLog(`🎁 【寶箱神兵大獎】開啟寶箱發現了【${foundEq.icon} ${foundEq.name}】，已立即為你佩帶上身！`, "text-yellow-300 font-black");
+          } else {
+            addLog(`🎁 【寶箱裝備大獎】開啟寶箱獲得了【${foundEq.icon} ${foundEq.name}】，已收入行囊！`, "text-yellow-300 font-black");
+          }
+        } else {
+          // 若該階級裝備都已擁有，給予高價值秘寶卷軸與銀兩
+          const fallbackGold = 55 + currentMapIdx * 25;
+          player.gold += fallbackGold;
+          player.potions.scroll++;
+          addLog(`🎁 開啟上古寶箱！獲得 1 卷【📜 超頻狂暴卷軸】與 🪙 ${fallbackGold} 銀兩！`, "text-yellow-300 font-black");
+        }
+        updateUI();
+        renderShop();
+
+      } else if (roll < 0.56) {
+        // 【28% 機率：丹藥與戰術卷軸補給箱】
+        grid[gy][gx] = '.';
+        hero.x = nx; hero.y = ny;
+        playSFX('coin');
+        const smallGold = 18 + currentMapIdx * 10;
+        player.gold += smallGold;
+
+        const itemRoll = Math.random();
+        if (itemRoll < 0.35) {
+          player.potions.superHp++;
+          addLog(`📦 開啟秘寶箱！獲得 1 顆【🍱 伺服器重組大補丸】與 🪙 ${smallGold} 銀兩！`, "text-emerald-300 font-black");
+        } else if (itemRoll < 0.7) {
+          player.potions.scroll++;
+          addLog(`📦 開啟秘寶箱！獲得 1 卷【📜 CPU 超頻狂暴卷軸】與 🪙 ${smallGold} 銀兩！`, "text-purple-300 font-black");
+        } else {
+          player.potions.hp++;
+          player.potions.mp++;
+          addLog(`📦 開啟補給箱！獲得【🏺 金創藥 + ⚡ 聚靈丹】各 1 份與 🪙 ${smallGold} 銀兩！`, "text-sky-300 font-black");
+        }
+        updateUI();
+
+      } else if (roll < 0.75) {
+        // 【19% 機率：純銀兩箱】
+        grid[gy][gx] = '.';
+        hero.x = nx; hero.y = ny;
+        playSFX('coin');
+        const bonus = 38 + currentMapIdx * 22;
+        player.gold += bonus;
+        updateUI();
+        addLog(`📦 開啟銀兩箱！獲得 🪙 ${bonus} 銀兩(Bytes)！`, "text-amber-300 font-bold");
+
+      } else if (roll < 0.90) {
+        // 【15% 機率：機關毒針／漏電陷阱】
+        grid[gy][gx] = '.';
+        hero.x = nx; hero.y = ny;
+        playSFX('trap');
+        if (Math.random() < 0.55) {
+          const trapDmg = Math.max(10, Math.floor(getMaxHp() * 0.16));
+          player.hp = Math.max(1, player.hp - trapDmg);
+          addLog(`💥 糟糕！寶箱裡藏著【釣魚木馬毒針機關】，受到 ${trapDmg} 點陷阱傷害！`, "text-rose-400 font-black");
+        } else {
+          const trapMp = Math.min(player.mp, 16);
+          player.mp -= trapMp;
+          player.gold += 22;
+          addLog(`⚡ 觸發【漏電火花陷阱】流失了 ${trapMp} 點靈力，僅在箱底撿到 🪙 22 銀兩！`, "text-orange-400 font-bold");
+        }
+        updateUI();
+
       } else {
-        speakerEl.innerText = "【西域鍛造師・薇達】";
-        textEl.innerText = "「我的鍛造坊新進了五階神兵、寶甲與『超頻狂暴卷軸』！不過高階神兵都有修行等級限制，少俠須先多破敵歷練，方能駕馭神兵！」";
-        actionBtn.classList.remove('hidden');
+        // 【10% 機率：噬人偽裝寶箱怪伏擊】
+        grid[gy][gx] = 'M_MIMIC';
+        playSFX('trap');
+        addLog("🦷 驚險萬分！這不是普通寶箱，是【噬人偽裝寶箱怪】張開血盆大口撲了過來！", "text-rose-400 font-black");
+        startCanvasBattle('M_MIMIC', gx, gy);
       }
+    }
+
+    // 通用《軒轅劍》風底部對話框系統 (支援 NPC、靈泉選擇、BOSS 戰前與戰後劇情)
+    function openCustomDialogue(portraitType, speakerTitle, textContent, primaryBtnLabel, primaryCallback, cancelBtnLabel = "知曉了 (空白鍵)") {
+      clearInputState();
+      drawDialoguePortrait(portraitType);
+
+      document.getElementById('dlg-speaker').innerText = speakerTitle;
+      document.getElementById('dlg-text').innerText = textContent;
+
+      const actionBtn = document.getElementById('dlg-action-btn');
+      const cancelBtn = document.getElementById('dlg-cancel-btn');
+      cancelBtn.innerText = cancelBtnLabel;
+
+      if (primaryBtnLabel && primaryCallback) {
+        actionBtn.innerText = primaryBtnLabel;
+        actionBtn.classList.remove('hidden');
+        dialogueCallback = primaryCallback;
+      } else {
+        actionBtn.classList.add('hidden');
+        dialogueCallback = null;
+      }
+
       document.getElementById('swd-dialogue-overlay').classList.remove('hidden');
     }
 
     function triggerDialogueAction() {
+      const cb = dialogueCallback;
       closeDialogue();
-      openShopModal();
+      if (cb) cb();
     }
 
     function closeDialogue() {
       document.getElementById('swd-dialogue-overlay').classList.add('hidden');
-      activeDialogueNPC = null;
+      dialogueCallback = null;
     }
 
     // =========================================================
@@ -1909,7 +2077,6 @@
       battleState.tileY = gy;
       battleState.turnCount = 0;
       battleState.defDebuff = 0;
-      // 載入戰前使用的卷軸加持
       battleState.atkBuff = player.nextBattleAtkBuff || 0;
       battleState.defBuff = player.nextBattleDefBuff || 0;
       player.nextBattleAtkBuff = 0;
@@ -1931,7 +2098,7 @@
 
       document.getElementById('battle-ui-overlay').classList.remove('hidden');
       playSFX(tpl.isSubBoss ? 'heavy' : 'slash');
-      addLog(`⚔️ 遭遇【${tpl.name} (Lv.${tpl.lv}｜防禦 ${tpl.def})】！${tpl.trait}`, "text-amber-300 font-bold");
+      addLog(`⚔️ 迎戰【${tpl.name} (Lv.${tpl.lv}｜防禦 ${tpl.def})】！${tpl.trait}`, "text-amber-300 font-bold");
       updateUI();
     }
 
@@ -1968,7 +2135,6 @@
       ctx.fillStyle = groundGrad;
       ctx.fillRect(0, 280, mainCanvas.width, mainCanvas.height - 280);
 
-      // 怪物血條面板 (顯示怪物 ATK 與 DEF 讓玩家決策配招)
       ctx.fillStyle = "rgba(12, 10, 9, 0.9)";
       fillRoundRect(ctx, 395, 18, 375, 76, 10);
       ctx.strokeStyle = m.isSubBoss ? "#f43f5e" : "#b45309";
@@ -2115,7 +2281,7 @@
     }
 
     // =========================================================
-    // 9. 戰鬥技能判定與硬核傷害計算 (強調防禦減傷與破甲重要性)
+    // 9. 戰鬥技能判定、選項洗牌與 BOSS 戰後劇情
     // =========================================================
     function fleeBattle() {
       if (battleState.turnBusy) return;
@@ -2163,20 +2329,28 @@
       openQuizModal();
     }
 
+    // 每次開題時動態打亂 A/B/C/D 選項順序，防止死背位置
     function openQuizModal() {
       clearInputState();
       const qObj = drawNextQuestion();
       battleState.currentQuiz = qObj;
+
+      const optPairs = qObj.opts.map((text, idx) => ({ text, isCorrect: idx === qObj.ans }));
+      for (let i = optPairs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optPairs[i], optPairs[j]] = [optPairs[j], optPairs[i]];
+      }
+      battleState.shuffledOpts = optPairs;
 
       document.getElementById('quiz-category').innerText = `📜 符文類別：${qObj.cat}`;
       document.getElementById('quiz-question').innerText = qObj.q;
       document.getElementById('quiz-feedback').classList.add('hidden');
 
       const optsContainer = document.getElementById('quiz-options');
-      optsContainer.innerHTML = qObj.opts.map((optText, idx) => `
+      optsContainer.innerHTML = optPairs.map((item, idx) => `
         <button onclick="submitQuizAnswer(${idx})" class="quiz-opt-btn w-full text-left p-3 rounded-xl bg-stone-950 hover:bg-amber-950/60 border border-stone-700 hover:border-amber-400 text-sm font-bold text-stone-100 transition flex items-center gap-3">
           <span class="w-6 h-6 rounded-lg bg-stone-800 border border-amber-500/50 flex items-center justify-center text-xs text-amber-300 shrink-0">${['A','B','C','D'][idx]}</span>
-          <span>${optText}</span>
+          <span>${item.text}</span>
         </button>
       `).join('');
 
@@ -2185,12 +2359,13 @@
 
     function submitQuizAnswer(selectedIdx) {
       const qObj = battleState.currentQuiz;
-      const isCorrect = (selectedIdx === qObj.ans);
+      const optPairs = battleState.shuffledOpts;
+      const isCorrect = optPairs[selectedIdx].isCorrect;
       const buttons = document.querySelectorAll('.quiz-opt-btn');
       
       buttons.forEach((btn, idx) => {
         btn.disabled = true;
-        if (idx === qObj.ans) {
+        if (optPairs[idx].isCorrect) {
           btn.classList.add('bg-emerald-900/80', 'border-emerald-400');
         } else if (idx === selectedIdx && !isCorrect) {
           btn.classList.add('bg-rose-900/80', 'border-rose-400');
@@ -2206,7 +2381,7 @@
         feedbackEl.className = "mt-4 p-3 rounded-xl border bg-emerald-950/90 border-emerald-500 text-emerald-200 text-xs";
         feedbackEl.innerHTML = `<div class="font-black text-sm mb-1">✅ 符文詠唱正確！武學奧義發動！</div><div>${qObj.exp}</div>`;
       } else {
-        battleState.wrongAnswerPenalty = true; // 答錯露出破綻，本回合怪物反擊傷害 1.25 倍
+        battleState.wrongAnswerPenalty = true;
         feedbackEl.className = "mt-4 p-3 rounded-xl border bg-rose-950/90 border-rose-500 text-rose-200 text-xs";
         feedbackEl.innerHTML = `<div class="font-black text-sm mb-1">❌ 符文逆行！真氣潰散且露出破綻（將承受 1.25 倍反擊）！</div><div>正確心法：${qObj.exp}</div>`;
       }
@@ -2227,7 +2402,6 @@
         let sparkCol2 = "#38bdf8";
         let extraMsg = "";
 
-        // 提高怪物護甲影響力 (m.def * 1.15)，讓對付高防禦怪時「破魔穿雲箭」與高階技能不可或缺
         const effectiveEnemyDef = Math.floor(m.def * 1.15);
 
         switch (sk.id) {
@@ -2377,7 +2551,6 @@
         }
       }
 
-      // 若玩家剛才答錯題目，承受 1.25 倍破綻懲罰傷害
       if (battleState.wrongAnswerPenalty) {
         dmg = Math.floor(dmg * 1.25);
         logText += `（答錯破綻加成！）`;
@@ -2482,11 +2655,32 @@
         setBattleButtonsDisabled(false);
         document.getElementById('battle-ui-overlay').classList.add('hidden');
 
-        if (m.key === 'K') {
-          document.getElementById('vic-modal-title').innerText = "恭喜斬除暗黑勒索魔神！";
-          document.getElementById('vic-lv').innerText = player.lv;
-          document.getElementById('vic-correct').innerText = player.stats.correct;
-          document.getElementById('victory-modal').classList.remove('hidden');
+        // ★ 若擊敗的是章節守門首領或最終魔神，觸發戰後劇情對話框！
+        if (m.isSubBoss && m.defeatQuote) {
+          if (m.key === 'K') {
+            openCustomDialogue(
+              m.key,
+              `【${m.name}・戰敗謝幕】`,
+              m.defeatQuote,
+              "🏆 登錄全班英雄榜",
+              () => {
+                document.getElementById('vic-modal-title').innerText = "恭喜斬除暗黑勒索魔神！";
+                document.getElementById('vic-lv').innerText = player.lv;
+                document.getElementById('vic-correct').innerText = player.stats.correct;
+                document.getElementById('victory-modal').classList.remove('hidden');
+              },
+              "繼續探索魔宮"
+            );
+          } else {
+            openCustomDialogue(
+              m.key,
+              `【${m.name}・封印解除】`,
+              m.defeatQuote,
+              null,
+              null,
+              "繼續前進 (空白鍵)"
+            );
+          }
         }
       }, 750);
     }
@@ -2508,6 +2702,19 @@
       document.getElementById('player-gold').innerText = player.gold;
       const shopGold = document.getElementById('shop-gold-display');
       if (shopGold) shopGold.innerText = player.gold;
+
+      const ownedCountEl = document.getElementById('owned-eq-count');
+      if (ownedCountEl) ownedCountEl.innerText = player.ownedIds.length;
+
+      const nextBuffTag = document.getElementById('next-battle-buff-tag');
+      if (nextBuffTag) {
+        if (player.nextBattleAtkBuff > 0 || player.nextBattleDefBuff > 0) {
+          nextBuffTag.classList.remove('hidden');
+          nextBuffTag.innerText = `✨ 下戰+${player.nextBattleAtkBuff}攻/+${player.nextBattleDefBuff}防`;
+        } else {
+          nextBuffTag.classList.add('hidden');
+        }
+      }
 
       document.getElementById('player-hp').innerText = player.hp;
       document.getElementById('player-max-hp').innerText = maxHp;
@@ -2555,9 +2762,10 @@
       }
     }
 
-    function openShopModal() {
+    function openShopModal(defaultTab = null) {
       clearInputState();
-      renderShop();
+      if (defaultTab) switchShopTab(defaultTab);
+      else renderShop();
       document.getElementById('shop-modal').classList.remove('hidden');
     }
 
@@ -2636,7 +2844,7 @@
       const item = shopEquipments.find(e => e.id === itemId);
       if (!item) return;
       if (player.lv < item.reqLv) {
-        alert(`修行境界不足！需要達到 Lv.${item.reqLv} 才能駕馭【${item.name}】！`);
+        alert(`修行境界不足！需要達到 Lv.${item.reqLv} 才能鍛造【${item.name}】！`);
         return;
       }
       if (player.gold < item.price) {
@@ -2653,7 +2861,7 @@
     function equipItem(itemId) {
       const item = shopEquipments.find(e => e.id === itemId);
       if (!item) return;
-      if (player.lv < item.reqLv) {
+      if (player.lv < item.reqLv && !player.ownedIds.includes(item.id)) {
         alert(`需要達到 Lv.${item.reqLv} 才能佩帶此裝備！`);
         return;
       }
