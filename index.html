@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>數位迷宮大冒險：資訊勇者 RPG</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      user-select: none;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px) rotate(-2deg); }
+      75% { transform: translateX(8px) rotate(2deg); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .animate-shake { animation: shake 0.3s ease-in-out; }
+    .animate-float { animation: float 2.5s ease-in-out infinite; }
+    .bar-transition { transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-2 md:p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
+
+  <!-- 頂部標題與快速控制 -->
+  <header class="w-full max-w-6xl flex flex-wrap justify-between items-center mb-4 px-4 py-3 bg-slate-800/80 backdrop-blur border border-slate-700 rounded-2xl shadow-lg">
+    <div class="flex items-center gap-3">
+      <span class="text-3xl">🛡️</span>
+      <div>
+        <h1 class="text-xl md:text-2xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+          數位迷宮大冒險：資訊勇者 RPG
+        </h1>
+        <p class="text-xs text-slate-400">運用電腦基本知識與快捷鍵魔法，擊退病毒登上全班英雄榜！</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-2 sm:mt-0">
+      <button onclick="openLeaderboardModal('')" class="px-3 py-1.5 text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg border border-amber-500/40 transition flex items-center gap-1">
+        🏆 全班英雄榜
+      </button>
+      <button onclick="openQuestionManager()" class="px-3 py-1.5 text-xs font-bold bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg border border-slate-600 transition">
+        📚 題庫檢視 (<span id="q-count">0</span>題)
+      </button>
+      <button onclick="resetGame()" class="px-3 py-1.5 text-xs font-bold bg-rose-900/60 hover:bg-rose-800 text-rose-200 rounded-lg border border-rose-700/50 transition">
+        🔄 重新開始
+      </button>
+    </div>
+  </header>
+
+  <!-- 主遊戲容器 -->
+  <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+    <!-- 左側：勇者狀態與裝備欄 (佔 4 欄) -->
+    <section class="lg:col-span-4 flex flex-col gap-4">
+      
+      <!-- 勇者素質卡片 -->
+      <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 shadow-xl">
+        <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-14 h-14 rounded-2xl bg-indigo-600/30 border-2 border-indigo-400 flex items-center justify-center text-3xl shadow-inner">
+              🧑‍💻
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span id="player-title" class="text-xs px-2 py-0.5 bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-full font-bold">實習小網管</span>
+                <span class="text-sm font-bold text-amber-400">Lv.<span id="player-lv">1</span></span>
+              </div>
+              <h2 class="text-lg font-black text-white mt-0.5">資訊小勇者</h2>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-slate-400">持有資金</div>
+            <div class="text-lg font-black text-amber-400">🪙 <span id="player-gold">50</span> <span class="text-xs font-normal">Bytes</span></div>
+          </div>
+        </div>
+
+        <!-- HP / MP / EXP 狀態條 -->
+        <div class="space-y-3 mb-4">
+          <div>
+            <div class="flex justify-between text-xs font-bold mb-1">
+              <span class="text-rose-400">❤️ HP (系統穩定度)</span>
+              <span><span id="player-hp">100</span> / <span id="player-max-hp">100</span></span>
+            </div>
+            <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-700">
+              <div id="hp-bar" class="h-full bg-gradient-to-r from-rose-600 to-rose-400 rounded-full bar-transition" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-bold mb-1">
+              <span class="text-cyan-400">⚡ MP (電力能量)</span>
+              <span><span id="player-mp">50</span> / <span id="player-max-mp">50</span></span>
+            </div>
+            <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-700">
+              <div id="mp-bar" class="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 rounded-full bar-transition" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-bold mb-1">
+              <span class="text-purple-400">✨ EXP (升級經驗)</span>
+              <span><span id="player-exp">0</span> / <span id="player-next-exp">30</span></span>
+            </div>
+            <div class="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-700">
+              <div id="exp-bar" class="h-full bg-gradient-to-r from-purple-600 to-fuchsia-400 rounded-full bar-transition" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 攻防屬性與答題統計 -->
+        <div class="grid grid-cols-2 gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-700/60 text-sm">
+          <div class="flex items-center justify-between px-2 py-1">
+            <span class="text-slate-400">⚔️ 運算攻擊</span>
+            <span id="player-atk" class="font-black text-orange-400">15</span>
+          </div>
+          <div class="flex items-center justify-between px-2 py-1">
+            <span class="text-slate-400">🛡️ 防火防禦</span>
+            <span id="player-def" class="font-black text-emerald-400">5</span>
+          </div>
+          <div class="flex items-center justify-between px-2 py-1">
+            <span class="text-slate-400">🎯 答題正確</span>
+            <span id="stat-correct" class="font-bold text-cyan-300">0 題</span>
+          </div>
+          <div class="flex items-center justify-between px-2 py-1">
+            <span class="text-slate-400">👾 擊敗怪物</span>
+            <span id="stat-kills" class="font-bold text-amber-300">0 隻</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 當前裝備欄 -->
+      <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 shadow-xl flex-1 flex flex-col justify-between">
+        <div>
+          <h3 class="text-sm font-black text-slate-300 mb-3 flex items-center gap-2">
+            <span>🎒 當前硬體與資安裝備</span>
+          </h3>
+          <div class="space-y-2.5 text-sm">
+            <div class="flex items-center justify-between p-2.5 bg-slate-900/90 rounded-xl border border-slate-700/70">
+              <div class="flex items-center gap-2.5">
+                <span id="eq-weapon-icon" class="text-2xl">⌨️</span>
+                <div>
+                  <div class="text-[11px] text-slate-400">輸入武器 (提升攻擊)</div>
+                  <div id="eq-weapon-name" class="font-bold text-slate-100">老舊薄膜鍵盤</div>
+                </div>
+              </div>
+              <span id="eq-weapon-stat" class="text-xs font-bold px-2 py-1 bg-orange-500/20 text-orange-300 rounded-lg">+0 ATK</span>
+            </div>
+
+            <div class="flex items-center justify-between p-2.5 bg-slate-900/90 rounded-xl border border-slate-700/70">
+              <div class="flex items-center gap-2.5">
+                <span id="eq-armor-icon" class="text-2xl">🛡️</span>
+                <div>
+                  <div class="text-[11px] text-slate-400">資安防具 (提升防禦)</div>
+                  <div id="eq-armor-name" class="font-bold text-slate-100">基礎系統防火牆</div>
+                </div>
+              </div>
+              <span id="eq-armor-stat" class="text-xs font-bold px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded-lg">+0 DEF</span>
+            </div>
+
+            <div class="flex items-center justify-between p-2.5 bg-slate-900/90 rounded-xl border border-slate-700/70">
+              <div class="flex items-center gap-2.5">
+                <span id="eq-acc-icon" class="text-2xl">💾</span>
+                <div>
+                  <div class="text-[11px] text-slate-400">擴充核心 (提升HP/MP)</div>
+                  <div id="eq-acc-name" class="font-bold text-slate-100">4GB 小隨身碟</div>
+                </div>
+              </div>
+              <span id="eq-acc-stat" class="text-xs font-bold px-2 py-1 bg-purple-500/20 text-purple-300 rounded-lg">+0 HP/MP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 背包道具快捷列 -->
+        <div class="mt-4 pt-3 border-t border-slate-700">
+          <div class="text-xs font-bold text-slate-400 mb-2">🧪 隨身補給品 (戰鬥中也可使用)</div>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="usePotion('hp')" class="flex items-center justify-between p-2 bg-rose-950/60 hover:bg-rose-900/80 border border-rose-700/50 rounded-xl transition text-left">
+              <div class="flex items-center gap-1.5">
+                <span class="text-lg">🧃</span>
+                <div>
+                  <div class="text-xs font-bold text-rose-200">乖乖還原水</div>
+                  <div class="text-[10px] text-rose-400">+50 HP</div>
+                </div>
+              </div>
+              <span id="item-hp-count" class="text-xs font-black bg-rose-800 px-2 py-0.5 rounded-full text-white">2</span>
+            </button>
+
+            <button onclick="usePotion('mp')" class="flex items-center justify-between p-2 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-700/50 rounded-xl transition text-left">
+              <div class="flex items-center gap-1.5">
+                <span class="text-lg">🔋</span>
+                <div>
+                  <div class="text-xs font-bold text-cyan-200">行動電源包</div>
+                  <div class="text-[10px] text-cyan-400">+30 MP</div>
+                </div>
+              </div>
+              <span id="item-mp-count" class="text-xs font-black bg-cyan-800 px-2 py-0.5 rounded-full text-white">1</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 右側：主舞台與操作區 (佔 8 欄) -->
+    <section class="lg:col-span-8 flex flex-col gap-4">
+
+      <!-- 導航分頁按鈕 -->
+      <div class="grid grid-cols-3 gap-2 bg-slate-800/90 p-1.5 rounded-2xl border border-slate-700">
+        <button id="tab-explore" onclick="switchTab('explore')" class="py-2.5 rounded-xl font-black text-sm transition bg-indigo-600 text-white shadow">
+          🗺️ 區域探索與戰鬥
+        </button>
+        <button id="tab-shop" onclick="switchTab('shop')" class="py-2.5 rounded-xl font-black text-sm transition text-slate-300 hover:bg-slate-700/50">
+          🛒 光華數位商城
+        </button>
+        <button id="tab-codex" onclick="switchTab('codex')" class="py-2.5 rounded-xl font-black text-sm transition text-slate-300 hover:bg-slate-700/50">
+          📖 資訊小百科
+        </button>
+      </div>
+
+      <!-- 視窗 1：探索與戰鬥舞台 -->
+      <div id="view-explore" class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex-1 flex flex-col justify-between min-h-[420px]">
+        
+        <!-- 關卡選擇畫面 -->
+        <div id="stage-select-panel" class="space-y-4">
+          <div class="flex flex-wrap justify-between items-center gap-2">
+            <h2 class="text-lg font-black text-white flex items-center gap-2">
+              <span>🌐 選擇要巡邏的數位區域</span>
+            </h2>
+            <div class="flex gap-2">
+              <button onclick="openVictoryModalManual()" class="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 rounded-xl text-xs font-bold transition">
+                📝 登錄目前成績
+              </button>
+              <button onclick="restAtLab()" class="px-3 py-1.5 bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 rounded-xl text-xs font-bold transition">
+                💤 回電腦教室休息 (免費回滿 HP/MP)
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="zone-list"></div>
+        </div>
+
+        <!-- 戰鬥畫面 -->
+        <div id="battle-panel" class="hidden flex-1 flex flex-col justify-between">
+          <div class="flex justify-between items-center border-b border-slate-700 pb-2 mb-3">
+            <span id="battle-zone-title" class="text-xs font-bold px-2.5 py-1 bg-indigo-500/20 text-indigo-300 rounded-lg border border-indigo-500/30">
+              區域：新手電腦教室
+            </span>
+            <button onclick="fleeBattle()" class="text-xs text-slate-400 hover:text-rose-400 font-bold px-2 py-1 rounded transition">
+              🏃 強制登出撤退
+            </button>
+          </div>
+
+          <div id="monster-container" class="my-auto py-4 flex flex-col items-center justify-center bg-slate-900/70 rounded-2xl border border-slate-700/80 relative overflow-hidden">
+            <div id="damage-popup" class="hidden absolute top-4 font-black text-2xl drop-shadow-md z-10"></div>
+            
+            <div id="monster-emoji" class="text-7xl mb-2 animate-float select-none">👾</div>
+            <div class="flex items-center gap-2">
+              <span id="monster-lv" class="text-xs font-black px-2 py-0.5 bg-rose-600 text-white rounded">Lv.1</span>
+              <h3 id="monster-name" class="text-xl font-black text-white">亂碼史萊姆</h3>
+            </div>
+            <p id="monster-desc" class="text-xs text-slate-400 mt-1 max-w-md text-center px-4"></p>
+
+            <div class="w-64 max-w-[85%] mt-3">
+              <div class="flex justify-between text-xs font-bold mb-1">
+                <span class="text-rose-400">怪物 HP</span>
+                <span><span id="monster-hp">40</span> / <span id="monster-max-hp">40</span></span>
+              </div>
+              <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-700">
+                <div id="monster-hp-bar" class="h-full bg-gradient-to-r from-rose-600 to-orange-500 rounded-full bar-transition" style="width: 100%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <div class="text-xs text-amber-300 font-bold mb-2 flex items-center gap-1">
+              <span>💡 提示：點擊攻擊技能後，需答對電腦知識問題才能成功施放！</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <button onclick="prepareAction('normal')" class="p-3 bg-indigo-600 hover:bg-indigo-500 active:scale-95 rounded-xl font-black text-white shadow-lg transition flex flex-col items-center">
+                <span class="text-base">⌨️ 標準指令攻擊</span>
+                <span class="text-[11px] text-indigo-200 font-normal">消耗 0 MP｜100% 基礎傷害</span>
+              </button>
+
+              <button onclick="prepareAction('heavy')" class="p-3 bg-amber-600 hover:bg-amber-500 active:scale-95 rounded-xl font-black text-white shadow-lg transition flex flex-col items-center">
+                <span class="text-base">⚡ 快捷鍵超頻重擊</span>
+                <span class="text-[11px] text-amber-100 font-normal">消耗 10 MP｜180% 爆擊傷害</span>
+              </button>
+
+              <button onclick="prepareAction('heal')" class="p-3 bg-emerald-600 hover:bg-emerald-500 active:scale-95 rounded-xl font-black text-white shadow-lg transition flex flex-col items-center">
+                <span class="text-base">🛠️ 磁碟重組修復</span>
+                <span class="text-[11px] text-emerald-100 font-normal">消耗 12 MP｜免答題恢復 45% HP</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 視窗 2：光華數位商城 -->
+      <div id="view-shop" class="hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex-1 min-h-[420px]">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-lg font-black text-white">🛒 光華數位升級中心</h2>
+            <p class="text-xs text-slate-400">使用打怪獲得的 Bytes 金幣，升級你的鍵盤、防火牆與硬體配備！</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+          <div class="p-3 bg-slate-900/90 border border-slate-700 rounded-xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-3xl">🧃</span>
+              <div>
+                <div class="font-bold text-sm text-white">綠色乖乖還原水</div>
+                <div class="text-xs text-slate-400">恢復 50 點 HP 系統穩定度</div>
+              </div>
+            </div>
+            <button onclick="buyConsumable('hp', 20)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg transition">
+              🪙 20 購買
+            </button>
+          </div>
+
+          <div class="p-3 bg-slate-900/90 border border-slate-700 rounded-xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-3xl">🔋</span>
+              <div>
+                <div class="font-bold text-sm text-white">大容量行動電源</div>
+                <div class="text-xs text-slate-400">恢復 30 點 MP 電力能量</div>
+              </div>
+            </div>
+            <button onclick="buyConsumable('mp', 25)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg transition">
+              🪙 25 購買
+            </button>
+          </div>
+        </div>
+
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">⚙️ 硬體與資安裝備升級</h3>
+        <div id="shop-equipment-list" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-[260px] overflow-y-auto pr-1"></div>
+      </div>
+
+      <!-- 視窗 3：資訊小百科 -->
+      <div id="view-codex" class="hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex-1 min-h-[420px]">
+        <h2 class="text-lg font-black text-white mb-1">📖 資訊勇者作戰手冊（重點秘笈）</h2>
+        <p class="text-xs text-slate-400 mb-4">遇到打不過的怪物嗎？先來這裡複習電腦快捷鍵與資安常識吧！</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs leading-relaxed max-h-[330px] overflow-y-auto pr-1">
+          <div class="p-3.5 bg-slate-900/90 rounded-xl border border-slate-700 space-y-1.5">
+            <div class="font-black text-cyan-400 text-sm">⌨️ 必背鍵盤快捷鍵魔法</div>
+            <p>• <b class="text-white">Ctrl + C</b>：複製 (Copy)</p>
+            <p>• <b class="text-white">Ctrl + V</b>：貼上 (形狀像膠水漏斗)</p>
+            <p>• <b class="text-white">Ctrl + X</b>：剪下 (形狀像一把剪刀)</p>
+            <p>• <b class="text-white">Ctrl + Z</b>：復原上一步 (不小心刪掉時的救星)</p>
+            <p>• <b class="text-white">Ctrl + A</b>：全選所有內容 (All)</p>
+            <p>• <b class="text-white">Ctrl + S</b>：儲存檔案 (Save)</p>
+          </div>
+
+          <div class="p-3.5 bg-slate-900/90 rounded-xl border border-slate-700 space-y-1.5">
+            <div class="font-black text-amber-400 text-sm">🖥️ 電腦硬體五大支柱</div>
+            <p>• <b class="text-white">CPU (中央處理器)</b>：電腦的大腦，負責計算與處理指令。</p>
+            <p>• <b class="text-white">RAM (記憶體)</b>：電腦的書桌，暫存正在執行的程式，關機資料會消失。</p>
+            <p>• <b class="text-white">SSD / 硬碟</b>：電腦的書櫃，永久保存作業與照片。</p>
+            <p>• <b class="text-white">輸入設備</b>：滑鼠、鍵盤、麥克風、掃描器（把資料送進電腦）。</p>
+            <p>• <b class="text-white">輸出設備</b>：螢幕、喇叭、印表機（把結果表現出來）。</p>
+          </div>
+
+          <div class="p-3.5 bg-slate-900/90 rounded-xl border border-slate-700 space-y-1.5">
+            <div class="font-black text-emerald-400 text-sm">📁 檔案格式與副檔名</div>
+            <p>• <b class="text-white">圖片檔</b>：.jpg、.png、.gif</p>
+            <p>• <b class="text-white">聲音檔</b>：.mp3、.wav</p>
+            <p>• <b class="text-white">影片檔</b>：.mp4、.avi</p>
+            <p>• <b class="text-white">壓縮檔 / 執行檔</b>：.zip (壓縮檔)、.exe (程式執行檔，來路不明切勿亂點！)</p>
+          </div>
+
+          <div class="p-3.5 bg-slate-900/90 rounded-xl border border-slate-700 space-y-1.5">
+            <div class="font-black text-rose-400 text-sm">🛡️ 網路安全與資安防護</div>
+            <p>• <b class="text-white">強密碼原則</b>：混合英文大小寫、數字與符號，不可用生日或 123456。</p>
+            <p>• <b class="text-white">網路釣魚 (Phishing)</b>：假冒中獎或官方通知騙取帳密，切勿點擊不明連結。</p>
+            <p>• <b class="text-white">公用電腦習慣</b>：使用完畢務必「登出帳號」，不勾選記住密碼。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 戰鬥與系統紀錄器 -->
+      <div class="bg-slate-950/90 border border-slate-800 rounded-2xl p-3 shadow-inner">
+        <div class="text-[11px] font-bold text-slate-500 mb-1 flex justify-between">
+          <span>📟 系統終端機紀錄 (System Log)</span>
+          <span>最新訊息在最上方</span>
+        </div>
+        <div id="battle-log" class="h-24 overflow-y-auto space-y-1 text-xs font-mono pr-1">
+          <div class="text-cyan-400">> 歡迎來到《數位迷宮大冒險》！擊敗第 4 關的「勒索病毒大魔王」即可登錄全班英雄榜！</div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- 彈出視窗 1：戰鬥答題視窗 -->
+  <div id="quiz-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border-2 border-indigo-500 rounded-2xl max-w-lg w-full p-5 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
+        <span id="quiz-category" class="text-xs font-black px-2.5 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 rounded-full">
+          💻 電腦知識詠唱
+        </span>
+        <span class="text-xs text-amber-400 font-bold">答對即可發動攻擊！</span>
+      </div>
+
+      <h3 id="quiz-question" class="text-base md:text-lg font-black text-white mb-4 leading-snug">
+        題目載入中...
+      </h3>
+
+      <div id="quiz-options" class="space-y-2.5"></div>
+      <div id="quiz-feedback" class="hidden mt-4 p-3 rounded-xl border text-xs leading-relaxed"></div>
+    </div>
+  </div>
+
+  <!-- 彈出視窗 2：題庫檢視與自訂新增 -->
+  <div id="q-manager-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-600 rounded-2xl max-w-2xl w-full p-5 shadow-2xl max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-3">
+        <h3 class="text-base font-black text-white">📚 課堂題庫檢視與現場加題</h3>
+        <button onclick="closeQuestionManager()" class="text-slate-400 hover:text-white text-sm font-bold">✕ 關閉</button>
+      </div>
+      
+      <p class="text-xs text-slate-400 mb-3">
+        老師可在此即時新增本堂課剛教完的題目，新增後會立刻加入學生的戰鬥抽題池中！
+      </p>
+
+      <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 mb-3 space-y-2 text-xs">
+        <div class="font-bold text-cyan-400">➕ 新增自訂題目</div>
+        <input id="new-q-text" type="text" placeholder="輸入題目內容（例：在 Scratch 中，哪個積木代表開始執行？）" class="w-full p-2 rounded bg-slate-800 border border-slate-600 text-white">
+        <div class="grid grid-cols-2 gap-2">
+          <input id="new-q-opt0" type="text" placeholder="選項 A" class="p-1.5 rounded bg-slate-800 border border-slate-600 text-white">
+          <input id="new-q-opt1" type="text" placeholder="選項 B" class="p-1.5 rounded bg-slate-800 border border-slate-600 text-white">
+          <input id="new-q-opt2" type="text" placeholder="選項 C" class="p-1.5 rounded bg-slate-800 border border-slate-600 text-white">
+          <input id="new-q-opt3" type="text" placeholder="選項 D" class="p-1.5 rounded bg-slate-800 border border-slate-600 text-white">
+        </div>
+        <div class="flex gap-2 items-center pt-1">
+          <label class="text-slate-300">正確答案：</label>
+          <select id="new-q-ans" class="p-1.5 rounded bg-slate-800 border border-slate-600 text-white">
+            <option value="0">選項 A</option>
+            <option value="1">選項 B</option>
+            <option value="2">選項 C</option>
+            <option value="3">選項 D</option>
+          </select>
+          <input id="new-q-exp" type="text" placeholder="簡短解析（選填）" class="flex-1 p-1.5 rounded bg-slate-800 border border-slate-600 text-white">
+          <button onclick="addCustomQuestion()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded transition">加入題庫</button>
+        </div>
+      </div>
+
+      <div id="q-manager-list" class="flex-1 overflow-y-auto space-y-2 pr-1 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- 彈出視窗 3：擊敗最終魔王・登錄全班英雄榜 -->
+  <div id="victory-modal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border-2 border-amber-400 rounded-2xl max-w-md w-full p-6 shadow-2xl text-center">
+      <div class="text-6xl mb-2 animate-bounce">🏆</div>
+      <h3 id="vic-modal-title" class="text-2xl font-black text-amber-400 mb-1">恭喜擊敗勒索病毒大魔王！</h3>
+      <p class="text-xs text-slate-300 mb-4">快輸入你的班級、座號與姓名，將戰績上傳到雲端試算表吧！</p>
+
+      <div class="grid grid-cols-2 gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700 mb-4 text-sm">
+        <div>
+          <div class="text-xs text-slate-400">目前勇者等級</div>
+          <div class="font-black text-amber-400 text-lg">Lv.<span id="vic-lv">1</span></div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400">累積答對題數</div>
+          <div class="font-black text-cyan-400 text-lg"><span id="vic-correct">0</span> 題</div>
+        </div>
+      </div>
+
+      <div class="space-y-2.5 text-left text-sm mb-4">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-xs text-slate-400 font-bold">班級 (例：501 或 五甲)</label>
+            <input id="stu-class" type="text" placeholder="請輸入班級" class="w-full mt-1 p-2 rounded-lg bg-slate-900 border border-slate-600 text-white font-bold">
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 font-bold">座號 (例：05)</label>
+            <input id="stu-seat" type="number" placeholder="座號" class="w-full mt-1 p-2 rounded-lg bg-slate-900 border border-slate-600 text-white font-bold">
+          </div>
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 font-bold">姓名</label>
+          <input id="stu-name" type="text" placeholder="請輸入真實姓名" class="w-full mt-1 p-2 rounded-lg bg-slate-900 border border-slate-600 text-white font-bold">
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="document.getElementById('victory-modal').classList.add('hidden')" class="w-1/3 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold rounded-xl text-xs transition">
+          繼續練功
+        </button>
+        <button id="btn-submit-score" onclick="submitScoreToGAS()" class="w-2/3 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black rounded-xl text-sm shadow-lg transition">
+          🚀 上傳成績至英雄榜
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 彈出視窗 4：全班英雄榜檢視 -->
+  <div id="leaderboard-modal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-amber-500/50 rounded-2xl max-w-lg w-full p-5 shadow-2xl max-h-[80vh] flex flex-col">
+      <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-3">
+        <h3 class="text-lg font-black text-amber-400 flex items-center gap-2">🏆 資訊勇者全班英雄榜</h3>
+        <div class="flex items-center gap-2">
+          <button onclick="openLeaderboardModal('')" class="text-xs px-2 py-1 bg-slate-700 hover:bg-slate-600 text-cyan-300 rounded font-bold transition">🔄 重新整理</button>
+          <button onclick="document.getElementById('leaderboard-modal').classList.add('hidden')" class="text-slate-400 hover:text-white text-sm font-bold">✕ 關閉</button>
+        </div>
+      </div>
+      <div id="leaderboard-content" class="flex-1 overflow-y-auto space-y-2 pr-1 text-xs">
+        <div class="text-center py-8 text-slate-400">正在從雲端試算表讀取英雄榜...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // ★ 已綁定你的專屬 Google Apps Script 網址 ★
+    // ==========================================
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzYTS00tBENgM1gqy_COsdwNdq3AuxSaVvCVOr4zDVezw9CZki6eIyDkze0HpGID2Uy/exec";
+
+    // ==========================================
+    // 1. 國小電腦基本操作與素養題庫 (預設 24 題)
+    // ==========================================
+    const defaultQuestions = [
+      { cat: "鍵盤操作", q: "在編輯文件或畫圖時，不小心做錯了一步，按哪個快捷鍵可以「復原」上一步？", opts: ["Ctrl + Z", "Ctrl + C", "Ctrl + V", "Ctrl + S"], ans: 0, exp: "Ctrl + Z 是後悔藥，可以復原剛剛做錯的動作！" },
+      { cat: "鍵盤操作", q: "想要把選取起來的文字「複製」起來，應該按哪一個快捷鍵？", opts: ["Ctrl + X", "Ctrl + C", "Ctrl + A", "Ctrl + P"], ans: 1, exp: "Copy（複製）的第一個字母是 C，所以是 Ctrl + C。" },
+      { cat: "鍵盤操作", q: "複製完文字後，想要在別的地方「貼上」，應該按哪一個快捷鍵？", opts: ["Ctrl + C", "Ctrl + V", "Ctrl + Z", "Ctrl + F"], ans: 1, exp: "V 的形狀很像把東西倒進去的漏斗，Ctrl + V 就是貼上！" },
+      { cat: "鍵盤操作", q: "打字時想要換到下一行，應該按下鍵盤上的哪一個按鍵？", opts: ["Space (空白鍵)", "Enter (輸入/換行鍵)", "Shift (上檔鍵)", "Esc (取消鍵)"], ans: 1, exp: "Enter 鍵在文書處理中用來換到下一行，或代表確認執行。" },
+      { cat: "鍵盤操作", q: "英文打字時，如果發現打出來的全部都是大寫，是因為不小心按到了哪個燈號鍵？", opts: ["Num Lock", "Caps Lock (大寫鎖定)", "Tab 鍵", "Alt 鍵"], ans: 1, exp: "Caps Lock 亮起時會鎖定英文大寫，再按一下即可切換回小寫。" },
+      { cat: "鍵盤操作", q: "標準中文注音打字時，雙手食指放在鍵盤中間時，會摸到哪兩個有「小凸起」的定位鍵？", opts: ["A 和 S", "F 和 J", "G 和 H", "D 和 K"], ans: 1, exp: "英文字母 F（注音ㄑ）與 J（注音ㄨ）上面有小凸線，幫助手指不看鍵盤也能對準位置！" },
+      { cat: "鍵盤操作", q: "想要打出鍵盤按鍵「上半部」的符號（例如：！、＠、？），必須同時按住哪個鍵不放？", opts: ["Ctrl 鍵", "Shift 鍵", "Alt 鍵", "空白鍵"], ans: 1, exp: "按住 Shift（上檔鍵）再按符號鍵，就能打出上方的符號。" },
+      { cat: "滑鼠操作", q: "在電腦桌面上，想要針對某個檔案叫出「功能選單」（例如重新命名或看內容），要按滑鼠哪裡？", opts: ["左鍵一下", "右鍵一下", "滾輪往下滑", "拔掉滑鼠"], ans: 1, exp: "滑鼠左鍵是選取與執行，右鍵則是呼叫出輔助功能選單。" },
+      { cat: "硬體知識", q: "下列哪一個電腦零件被稱為「電腦的大腦」，負責所有的運算與指揮？", opts: ["CPU (中央處理器)", "滑鼠墊", "螢幕保護貼", "機殼風扇"], ans: 0, exp: "CPU（中央處理器）就像人類的大腦，負責計算與控制電腦運作。" },
+      { cat: "硬體知識", q: "我們要把聲音「錄進電腦裡」，需要用到下列哪一種「輸入設備」？", opts: ["喇叭 (耳機)", "印表機", "麥克風", "螢幕"], ans: 2, exp: "麥克風負責把外面的聲音傳進電腦，屬於輸入設備；喇叭則是放出聲音的輸出設備。" },
+      { cat: "硬體知識", q: "下列哪一個設備屬於「輸出設備」，可以把電腦裡的畫面或文件呈現出來給我們看？", opts: ["鍵盤", "螢幕與印表機", "滑鼠", "網路攝影機"], ans: 1, exp: "螢幕顯示畫面、印表機印出紙張，都是把電腦處理好的結果輸出給我們看。" },
+      { cat: "硬體知識", q: "電腦突然完全沒聲音了，第一步應該先檢查什麼最合理？", opts: ["拍打螢幕三下", "檢查右下角音量是否被調成靜音，或耳機線有沒有插好", "把鍵盤反過來敲", "馬上重灌電腦"], ans: 1, exp: "遇到沒聲音時，先檢查系統音量圖示是否靜音，以及音源線/耳機是否鬆脫。" },
+      { cat: "檔案管理", q: "辛苦做好了一份簡報或小畫家作品，按哪個快捷鍵可以快速「儲存檔案」？", opts: ["Ctrl + S", "Ctrl + D", "Ctrl + W", "Ctrl + Q"], ans: 0, exp: "Save（儲存）的第一個字母是 S，常按 Ctrl + S 才不會因為當機心血白費！" },
+      { cat: "檔案管理", q: "看到一個檔案名稱叫做「校慶運動會照片.jpg」，請問 `.jpg` 代表這是什麼類型的檔案？", opts: ["音樂檔", "圖片檔", "影片檔", "資料夾"], ans: 1, exp: ".jpg 與 .png 都是最常見的圖片檔案格式喔！" },
+      { cat: "檔案管理", q: "如果不小心把桌面的檔案刪掉了，只要還沒清空，可以去桌面的哪裡把它救回來？", opts: ["資源回收筒", "小算盤", "瀏覽器", "控制台"], ans: 0, exp: "一般刪除的檔案會先暫存在「資源回收筒」，點右鍵選「還原」就能救回原位。" },
+      { cat: "檔案管理", q: "整理電腦檔案時，怎樣的「檔案命名習慣」最好，以後才找得到？", opts: ["全部取名叫 111、222、333", "亂敲鍵盤取名 asdfg", "標註清楚主題與日期（例如：五年甲班自然報告_1014）", "全部不要取名字"], ans: 2, exp: "清楚標示主題、姓名或日期，未來搜尋檔案時才能一目了然！" },
+      { cat: "資安防護", q: "設定個人帳號的「密碼」時，下列哪一種密碼最安全、最不容易被駭客猜中？", opts: ["12345678", "自己的生日 8 碼", "包含英文大小寫與數字的組合（如 Tw#9527Go）", "aaaa1111"], ans: 2, exp: "混合大小寫字母、數字與符號的密碼強度最高，千萬別用 123456！" },
+      { cat: "資安防護", q: "在學校電腦教室上完課，離開座位前最重要的資安動作是什麼？", opts: ["把滑鼠藏起來", "登出自己的個人帳號並關閉瀏覽器，依老師指示關機", "直接拔掉電線插頭", "把螢幕亮度調成最暗"], ans: 1, exp: "公用電腦一定要登出帳號，否則下一位使用者就能直接看到你的信箱與雲端硬碟！" },
+      { cat: "資安防護", q: "上網時突然跳出視窗說：「恭喜你抽中最新手機！請立刻輸入爸媽的信用卡號與密碼領獎」，你應該怎麼做？", opts: ["趕快去偷拿爸媽錢包來填寫", "這是「網路釣魚詐騙」，立刻關閉視窗千萬不能填！", "轉發給全班同學一起填", "把家裡地址也寫上去"], ans: 1, exp: "要求輸入密碼或信用卡的陌生中獎訊息都是釣魚詐騙（Phishing），千萬別上當！" },
+      { cat: "資安防護", q: "收到一封陌生人寄來的電子郵件，裡面附帶一個叫做「免費寶石外掛.exe」的檔案，可以點開嗎？", opts: ["馬上點開來用", "不可以！來路不明的 .exe 執行檔很可能藏有木馬或勒索病毒", "先複製十份再點開", "把防毒軟體關掉再點開"], ans: 1, exp: ".exe 是程式執行檔，來路不明的外掛或郵件附件極容易夾帶電腦病毒。" },
+      { cat: "網路素養", q: "做專題報告時，在網路上找到別人拍得很漂亮的照片，正確的做法是什麼？", opts: ["直接拿來參賽說成是自己拍的", "優先使用「創用CC（CC授權）」免費素材，並依規定標註原作者出處", "把別人的名字塗掉就變自己的", "網路上的東西都沒有著作權"], ans: 1, exp: "尊重智慧財產權與著作權，使用網路素材應選擇合法授權並標明出處。" },
+      { cat: "網路素養", q: "在班級群組或網路留言板看到同學的搞笑照片，下列哪種行為符合「網路禮儀」？", opts: ["未經同意到處轉傳並取笑他", "在下面狂刷好幾十則罵人的話", "尊重他人隱私，不隨意散播他人照片，留言保持友善禮貌", "冒用別人的名字去留言"], ans: 2, exp: "網路世界跟真實世界一樣，要保護個人隱私並維持友善禮貌，不做網路霸凌。" },
+      { cat: "軟體應用", q: "想要在網路上搜尋資料，我們會打開「網頁瀏覽器（Browser）」，下列哪一個是瀏覽器？", opts: ["Google Chrome 或 Microsoft Edge", "小畫家", "記事本", "小算盤"], ans: 0, exp: "Chrome、Edge、Safari、Firefox 都是帶我們進入網際網路的瀏覽器軟體。" },
+      { cat: "軟體應用", q: "在瀏覽網頁時，網址開頭如果是「https://」並且有一個「小鎖頭」圖示，代表什麼意思？", opts: ["這個網站壞掉打不開了", "網站傳輸資料有經過加密保護，相對較安全", "這需要付錢才能看", "電腦中毒了"], ans: 1, exp: "HTTPS 的 S 代表 Secure（安全），代表網頁傳輸過程有加密保護。" }
+    ];
+
+    let questionPool = [...defaultQuestions];
+
+    // ==========================================
+    // 2. 遊戲資料設定：關卡、怪物、商店裝備
+    // ==========================================
+    const zones = [
+      {
+        id: 0,
+        name: "1. 新手電腦教室",
+        recLv: "建議 Lv.1~2",
+        desc: "充滿灰塵與卡鍵問題的初級訓練場，適合剛入學的資訊勇者。",
+        bgClass: "from-slate-800 to-indigo-950",
+        monsters: [
+          { name: "灰塵小精靈", emoji: "💨", lv: 1, maxHp: 35, atk: 8, def: 2, exp: 15, gold: 18, desc: "躲在主機散熱孔裡的灰塵怪，會讓電腦變熱變慢。" },
+          { name: "卡鍵毛毛蟲", emoji: "🐛", lv: 2, maxHp: 50, atk: 11, def: 3, exp: 22, gold: 25, desc: "因為在電腦前吃零食掉餅乾屑而誕生的害蟲！" }
+        ]
+      },
+      {
+        id: 1,
+        name: "2. 檔案迷霧森林",
+        recLv: "建議 Lv.3~4",
+        desc: "到處都是沒存檔與亂取名字的迷路檔案，小心別按錯快捷鍵！",
+        bgClass: "from-emerald-950 to-slate-900",
+        monsters: [
+          { name: "亂碼史萊姆", emoji: "🟢", lv: 3, maxHp: 80, atk: 16, def: 6, exp: 35, gold: 40, desc: "沒按 Ctrl+S 就直接拔插頭所產生的悲傷怪物。" },
+          { name: "誤刪小惡魔", emoji: "😈", lv: 4, maxHp: 110, atk: 21, def: 8, exp: 48, gold: 55, desc: "最喜歡趁你不注意把桌面檔案丟進資源回收筒。" }
+        ]
+      },
+      {
+        id: 2,
+        name: "3. 網路釣魚峽谷",
+        recLv: "建議 Lv.5~6",
+        desc: "充斥著假中獎訊息與弱密碼陷阱的危險網路地帶！",
+        bgClass: "from-amber-950 to-slate-900",
+        monsters: [
+          { name: "彈跳廣告幽靈", emoji: "👻", lv: 5, maxHp: 150, atk: 27, def: 12, exp: 70, gold: 80, desc: "偽裝成假關閉按鈕的討厭鬼，亂點就會跳出十個視窗！" },
+          { name: "釣魚信件怪客", emoji: "🎣", lv: 6, maxHp: 195, atk: 33, def: 15, exp: 95, gold: 110, desc: "專門寄送「恭喜抽中最新手機」假網址來騙取密碼的怪客。" }
+        ]
+      },
+      {
+        id: 3,
+        name: "4. 暗網核心魔王城",
+        recLv: "建議 Lv.7+",
+        desc: "終極電腦病毒盤踞的禁地，擊敗勒索病毒大魔王即可登錄英雄榜！",
+        bgClass: "from-rose-950 to-slate-950",
+        monsters: [
+          { name: "特洛伊木馬巨獸", emoji: "🐴", lv: 7, maxHp: 260, atk: 42, def: 20, exp: 140, gold: 160, desc: "偽裝成免費遊戲外掛的危險程式，會在背景偷走你的資料。" },
+          { name: "👑 勒索病毒大魔王", emoji: "👾", lv: 9, maxHp: 380, atk: 55, def: 25, exp: 300, gold: 350, desc: "會把電腦所有檔案加密鎖起來的終極魔王！用最強的資安知識擊敗牠吧！" }
+        ]
+      }
+    ];
+
+    const shopEquipments = [
+      { id: "w1", type: "weapon", name: "機械式青軸鍵盤", icon: "⌨️", bonus: 10, price: 60, desc: "清脆的敲擊感，打字輸入指令速度大幅提升！(+10 ATK)" },
+      { id: "w2", type: "weapon", name: "RGB 光學電競鍵鼠組", icon: "🖱️", bonus: 24, price: 160, desc: "擁有發光特效與精準游標定位的高階配備！(+24 ATK)" },
+      { id: "w3", type: "weapon", name: "AI 量子語音控制中樞", icon: "🎙️", bonus: 45, price: 360, desc: "結合人工智慧與超高速快捷鍵的傳說級武器！(+45 ATK)" },
+      { id: "a1", type: "armor", name: "正版即時防毒護甲", icon: "🛡️", bonus: 8, price: 55, desc: "隨時更新病毒碼，阻擋常見的木馬與惡意程式。(+8 DEF)" },
+      { id: "a2", type: "armor", name: "企業級硬體防火牆", icon: "🧱", bonus: 18, price: 150, desc: "過濾一切可疑的網路封包與釣魚連線！(+18 DEF)" },
+      { id: "a3", type: "armor", name: "零信任雙重驗證聖盾", icon: "🔐", bonus: 35, price: 340, desc: "就算駭客知道密碼也進不來的最高等級資安防禦！(+35 DEF)" },
+      { id: "c1", type: "acc", name: "16GB 高速記憶體", icon: "🎫", bonusHp: 40, bonusMp: 20, price: 70, desc: "加大電腦的工作桌面，同時開很多視窗也不卡頓！(+40 HP / +20 MP)" },
+      { id: "c2", type: "acc", name: "1TB NVMe 高速固態硬碟", icon: "💿", bonusHp: 90, bonusMp: 45, price: 180, desc: "讀寫速度飛快，系統穩定度與電力大幅擴充！(+90 HP / +45 MP)" },
+      { id: "c3", type: "acc", name: "異地雲端自動備份核心", icon: "☁️", bonusHp: 180, bonusMp: 90, price: 380, desc: "完美達成 3-2-1 備份原則，連勒索病毒也拿你沒轍！(+180 HP / +90 MP)" }
+    ];
+
+    const titles = ["實習小網管", "鍵盤快手", "除錯工程師", "防毒小隊長", "系統管理員", "資安總工程師", "傳說資訊勇者"];
+
+    // ==========================================
+    // 3. 玩家與戰鬥狀態變數
+    // ==========================================
+    let player = {
+      lv: 1,
+      exp: 0,
+      nextExp: 30,
+      hp: 100,
+      baseMaxHp: 100,
+      mp: 50,
+      baseMaxMp: 50,
+      baseAtk: 15,
+      baseDef: 5,
+      gold: 50,
+      potions: { hp: 2, mp: 1 },
+      stats: { correct: 0, kills: 0 },
+      hasUploaded: false,
+      equipped: {
+        weapon: { id: "w0", name: "老舊薄膜鍵盤", icon: "⌨️", bonus: 0 },
+        armor: { id: "a0", name: "基礎系統防火牆", icon: "🛡️", bonus: 0 },
+        acc: { id: "c0", name: "4GB 小隨身碟", icon: "💾", bonusHp: 0, bonusMp: 0 }
+      },
+      ownedIds: []
+    };
+
+    let currentBattle = {
+      active: false,
+      zone: null,
+      monster: null,
+      pendingSkill: null,
+      currentQuiz: null
+    };
+
+    function getMaxHp() { return player.baseMaxHp + (player.equipped.acc.bonusHp || 0); }
+    function getMaxMp() { return player.baseMaxMp + (player.equipped.acc.bonusMp || 0); }
+    function getTotalAtk() { return player.baseAtk + (player.equipped.weapon.bonus || 0); }
+    function getTotalDef() { return player.baseDef + (player.equipped.armor.bonus || 0); }
+
+    // ==========================================
+    // 4. 介面更新與初始化
+    // ==========================================
+    function initGame() {
+      renderZones();
+      renderShop();
+      updateUI();
+      document.getElementById('q-count').innerText = questionPool.length;
+    }
+
+    function updateUI() {
+      const maxHp = getMaxHp();
+      const maxMp = getMaxMp();
+      if (player.hp > maxHp) player.hp = maxHp;
+      if (player.mp > maxMp) player.mp = maxMp;
+
+      document.getElementById('player-lv').innerText = player.lv;
+      document.getElementById('player-title').innerText = titles[Math.min(player.lv - 1, titles.length - 1)];
+      document.getElementById('player-gold').innerText = player.gold;
+
+      document.getElementById('player-hp').innerText = player.hp;
+      document.getElementById('player-max-hp').innerText = maxHp;
+      document.getElementById('hp-bar').style.width = `${Math.max(0, (player.hp / maxHp) * 100)}%`;
+
+      document.getElementById('player-mp').innerText = player.mp;
+      document.getElementById('player-max-mp').innerText = maxMp;
+      document.getElementById('mp-bar').style.width = `${Math.max(0, (player.mp / maxMp) * 100)}%`;
+
+      document.getElementById('player-exp').innerText = player.exp;
+      document.getElementById('player-next-exp').innerText = player.nextExp;
+      document.getElementById('exp-bar').style.width = `${Math.min(100, (player.exp / player.nextExp) * 100)}%`;
+
+      document.getElementById('player-atk').innerText = getTotalAtk();
+      document.getElementById('player-def').innerText = getTotalDef();
+      document.getElementById('stat-correct').innerText = `${player.stats.correct} 題`;
+      document.getElementById('stat-kills').innerText = `${player.stats.kills} 隻`;
+
+      document.getElementById('eq-weapon-icon').innerText = player.equipped.weapon.icon;
+      document.getElementById('eq-weapon-name').innerText = player.equipped.weapon.name;
+      document.getElementById('eq-weapon-stat').innerText = `+${player.equipped.weapon.bonus} ATK`;
+
+      document.getElementById('eq-armor-icon').innerText = player.equipped.armor.icon;
+      document.getElementById('eq-armor-name').innerText = player.equipped.armor.name;
+      document.getElementById('eq-armor-stat').innerText = `+${player.equipped.armor.bonus} DEF`;
+
+      document.getElementById('eq-acc-icon').innerText = player.equipped.acc.icon;
+      document.getElementById('eq-acc-name').innerText = player.equipped.acc.name;
+      document.getElementById('eq-acc-stat').innerText = `+${player.equipped.acc.bonusHp}HP/+${player.equipped.acc.bonusMp}MP`;
+
+      document.getElementById('item-hp-count').innerText = player.potions.hp;
+      document.getElementById('item-mp-count').innerText = player.potions.mp;
+
+      if (currentBattle.active && currentBattle.monster) {
+        const m = currentBattle.monster;
+        document.getElementById('monster-hp').innerText = Math.max(0, m.hp);
+        document.getElementById('monster-max-hp').innerText = m.maxHp;
+        document.getElementById('monster-hp-bar').style.width = `${Math.max(0, (m.hp / m.maxHp) * 100)}%`;
+      }
+    }
+
+    function addLog(msg, colorClass = "text-slate-300") {
+      const logBox = document.getElementById('battle-log');
+      const entry = document.createElement('div');
+      entry.className = colorClass;
+      entry.innerHTML = `> ${msg}`;
+      logBox.prepend(entry);
+    }
+
+    function switchTab(tab) {
+      ['explore', 'shop', 'codex'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tab-${t}`);
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+        btn.classList.add('text-slate-300');
+      });
+      document.getElementById(`view-${tab}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-${tab}`);
+      activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow');
+      activeBtn.classList.remove('text-slate-300');
+    }
+
+    // ==========================================
+    // 5. 區域渲染與戰鬥流程
+    // ==========================================
+    function renderZones() {
+      const container = document.getElementById('zone-list');
+      container.innerHTML = zones.map(z => `
+        <div class="p-4 rounded-2xl bg-gradient-to-br ${z.bgClass} border border-slate-700 hover:border-indigo-400 transition flex flex-col justify-between shadow-lg">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <h3 class="font-black text-base text-white">${z.name}</h3>
+              <span class="text-[11px] font-bold px-2 py-0.5 bg-slate-900/80 text-amber-300 rounded-full border border-amber-500/30">${z.recLv}</span>
+            </div>
+            <p class="text-xs text-slate-300 mb-3">${z.desc}</p>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-700/60">
+            <div class="text-xs text-slate-400">
+              出沒怪物：${z.monsters.map(m => `${m.emoji}${m.name}`).join('、')}
+            </div>
+            <button onclick="startBattle(${z.id})" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs rounded-xl shadow transition shrink-0">
+              ⚔️ 進入巡邏
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function startBattle(zoneId) {
+      if (player.hp <= 0) {
+        addLog("系統穩定度 (HP) 不足！已自動幫你在電腦教室重開機恢復體力。", "text-emerald-400");
+        restAtLab();
+      }
+      const zone = zones[zoneId];
+      const template = zone.monsters[Math.floor(Math.random() * zone.monsters.length)];
+      currentBattle.active = true;
+      currentBattle.zone = zone;
+      currentBattle.monster = { ...template, hp: template.maxHp };
+
+      document.getElementById('stage-select-panel').classList.add('hidden');
+      document.getElementById('battle-panel').classList.remove('hidden');
+
+      document.getElementById('battle-zone-title').innerText = `📍 ${zone.name}`;
+      document.getElementById('monster-emoji').innerText = currentBattle.monster.emoji;
+      document.getElementById('monster-lv').innerText = `Lv.${currentBattle.monster.lv}`;
+      document.getElementById('monster-name').innerText = currentBattle.monster.name;
+      document.getElementById('monster-desc').innerText = currentBattle.monster.desc;
+
+      addLog(`遭遇了野生的【${currentBattle.monster.emoji} ${currentBattle.monster.name} (Lv.${currentBattle.monster.lv})】！`, "text-amber-300 font-bold");
+      updateUI();
+    }
+
+    function fleeBattle() {
+      currentBattle.active = false;
+      document.getElementById('battle-panel').classList.add('hidden');
+      document.getElementById('stage-select-panel').classList.remove('hidden');
+      addLog("你選擇安全登出，撤退回到了電腦教室選單。", "text-slate-400");
+    }
+
+    function restAtLab() {
+      player.hp = getMaxHp();
+      player.mp = getMaxMp();
+      updateUI();
+      addLog("💤 在電腦教室進行了系統維護與充電，HP 與 MP 完全恢復了！", "text-emerald-400 font-bold");
+    }
+
+    function prepareAction(skillType) {
+      if (!currentBattle.active) return;
+
+      if (skillType === 'heavy' && player.mp < 10) {
+        addLog("⚡ MP 電力不足 10 點！請使用行動電源或改用標準指令攻擊。", "text-rose-400 font-bold");
+        return;
+      }
+
+      if (skillType === 'heal') {
+        if (player.mp < 12) {
+          addLog("⚡ MP 電力不足 12 點，無法啟動磁碟重組修復！", "text-rose-400 font-bold");
+          return;
+        }
+        player.mp -= 12;
+        const healAmt = Math.floor(getMaxHp() * 0.45);
+        player.hp = Math.min(getMaxHp(), player.hp + healAmt);
+        addLog(`🛠️ 執行【磁碟重組修復】！消耗 12 MP，恢復了 ${healAmt} 點 HP！`, "text-emerald-400 font-bold");
+        updateUI();
+        setTimeout(() => monsterCounterAttack(), 500);
+        return;
+      }
+
+      if (skillType === 'heavy') player.mp -= 10;
+      currentBattle.pendingSkill = skillType;
+      updateUI();
+      openQuizModal();
+    }
+
+    function openQuizModal() {
+      const qObj = questionPool[Math.floor(Math.random() * questionPool.length)];
+      currentBattle.currentQuiz = qObj;
+
+      document.getElementById('quiz-category').innerText = `💻 類別：${qObj.cat}`;
+      document.getElementById('quiz-question').innerText = qObj.q;
+      
+      const feedbackEl = document.getElementById('quiz-feedback');
+      feedbackEl.classList.add('hidden');
+
+      const optsContainer = document.getElementById('quiz-options');
+      optsContainer.innerHTML = qObj.opts.map((optText, idx) => `
+        <button onclick="submitQuizAnswer(${idx})" class="quiz-opt-btn w-full text-left p-3 rounded-xl bg-slate-900 hover:bg-indigo-950 border border-slate-700 hover:border-indigo-400 text-sm font-bold text-slate-100 transition flex items-center gap-3">
+          <span class="w-6 h-6 rounded-lg bg-slate-800 border border-slate-600 flex items-center justify-center text-xs text-cyan-400 shrink-0">${['A','B','C','D'][idx]}</span>
+          <span>${optText}</span>
+        </button>
+      `).join('');
+
+      document.getElementById('quiz-modal').classList.remove('hidden');
+    }
+
+    function submitQuizAnswer(selectedIdx) {
+      const qObj = currentBattle.currentQuiz;
+      const isCorrect = (selectedIdx === qObj.ans);
+      const buttons = document.querySelectorAll('.quiz-opt-btn');
+      
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === qObj.ans) {
+          btn.classList.add('bg-emerald-900/80', 'border-emerald-400');
+        } else if (idx === selectedIdx && !isCorrect) {
+          btn.classList.add('bg-rose-900/80', 'border-rose-400');
+        }
+      });
+
+      const feedbackEl = document.getElementById('quiz-feedback');
+      feedbackEl.classList.remove('hidden');
+
+      if (isCorrect) {
+        player.stats.correct++;
+        feedbackEl.className = "mt-4 p-3 rounded-xl border bg-emerald-950/90 border-emerald-500 text-emerald-200 text-xs";
+        feedbackEl.innerHTML = `<div class="font-black text-sm mb-1">✅ 答對了！指令詠唱成功！</div><div>${qObj.exp}</div>`;
+      } else {
+        feedbackEl.className = "mt-4 p-3 rounded-xl border bg-rose-950/90 border-rose-500 text-rose-200 text-xs";
+        feedbackEl.innerHTML = `<div class="font-black text-sm mb-1">❌ 答錯了！指令輸入錯誤，攻擊失敗！</div><div>正確觀念：${qObj.exp}</div>`;
+      }
+
+      setTimeout(() => {
+        document.getElementById('quiz-modal').classList.add('hidden');
+        resolvePlayerAttack(isCorrect);
+      }, 1500);
+    }
+
+    function resolvePlayerAttack(isCorrect) {
+      const m = currentBattle.monster;
+      if (isCorrect) {
+        const multiplier = currentBattle.pendingSkill === 'heavy' ? 1.8 : 1.0;
+        const skillName = currentBattle.pendingSkill === 'heavy' ? "⚡ 快捷鍵超頻重擊" : "⌨️ 標準指令攻擊";
+        
+        const rawDmg = Math.floor(getTotalAtk() * multiplier) - m.def + Math.floor(Math.random() * 5);
+        const finalDmg = Math.max(5, rawDmg);
+        m.hp -= finalDmg;
+
+        showDamageEffect(`-${finalDmg}`, "text-amber-400");
+        const container = document.getElementById('monster-container');
+        container.classList.add('animate-shake');
+        setTimeout(() => container.classList.remove('animate-shake'), 350);
+
+        addLog(`答題正確！施放【${skillName}】，對 ${m.name} 造成了 ${finalDmg} 點傷害！`, "text-cyan-300 font-bold");
+        updateUI();
+
+        if (m.hp <= 0) {
+          handleMonsterDefeated();
+          return;
+        }
+      } else {
+        addLog(`因為答題錯誤，指令失效，沒能對 ${m.name} 造成傷害！`, "text-rose-400");
+      }
+
+      setTimeout(() => monsterCounterAttack(), 450);
+    }
+
+    function monsterCounterAttack() {
+      if (!currentBattle.active) return;
+      const m = currentBattle.monster;
+      const dmg = Math.max(2, m.atk - getTotalDef() + Math.floor(Math.random() * 4) - 1);
+      player.hp = Math.max(0, player.hp - dmg);
+
+      addLog(`👾 【${m.name}】發動病毒反擊，你的系統受到了 ${dmg} 點傷害！`, "text-rose-400");
+      updateUI();
+
+      if (player.hp <= 0) {
+        addLog("💥 系統穩定度歸零（藍白畫面當機）！已自動將你送回電腦教室重啟修復。", "text-rose-500 font-black");
+        currentBattle.active = false;
+        setTimeout(() => {
+          restAtLab();
+          document.getElementById('battle-panel').classList.add('hidden');
+          document.getElementById('stage-select-panel').classList.remove('hidden');
+        }, 1000);
+      }
+    }
+
+    function handleMonsterDefeated() {
+      const m = currentBattle.monster;
+      player.stats.kills++;
+      player.gold += m.gold;
+      player.exp += m.exp;
+
+      addLog(`🎉 成功清除【${m.name}】！獲得 ${m.exp} EXP 與 🪙 ${m.gold} Bytes！`, "text-amber-300 font-black");
+
+      while (player.exp >= player.nextExp) {
+        player.exp -= player.nextExp;
+        player.lv++;
+        player.nextExp = Math.floor(player.nextExp * 1.45);
+        player.baseMaxHp += 25;
+        player.baseMaxMp += 12;
+        player.baseAtk += 5;
+        player.baseDef += 3;
+        player.hp = getMaxHp();
+        player.mp = getMaxMp();
+        addLog(`🎊 恭喜升級到 Lv.${player.lv}！各項電腦素質全面提升，HP 與 MP 完全恢復！`, "text-fuchsia-400 font-black");
+      }
+
+      updateUI();
+      renderShop();
+
+      setTimeout(() => {
+        currentBattle.active = false;
+        document.getElementById('battle-panel').classList.add('hidden');
+        document.getElementById('stage-select-panel').classList.remove('hidden');
+
+        if (m.name.includes("勒索病毒大魔王")) {
+          document.getElementById('vic-modal-title').innerText = "恭喜擊敗勒索病毒大魔王！";
+          document.getElementById('vic-lv').innerText = player.lv;
+          document.getElementById('vic-correct').innerText = player.stats.correct;
+          document.getElementById('victory-modal').classList.remove('hidden');
+        }
+      }, 900);
+    }
+
+    function openVictoryModalManual() {
+      document.getElementById('vic-modal-title').innerText = "登錄資訊勇者學習戰績";
+      document.getElementById('vic-lv').innerText = player.lv;
+      document.getElementById('vic-correct').innerText = player.stats.correct;
+      document.getElementById('victory-modal').classList.remove('hidden');
+    }
+
+    function showDamageEffect(text, colorClass) {
+      const popup = document.getElementById('damage-popup');
+      popup.innerText = text;
+      popup.className = `absolute top-4 font-black text-3xl drop-shadow z-10 ${colorClass}`;
+      popup.classList.remove('hidden');
+      setTimeout(() => popup.classList.add('hidden'), 650);
+    }
+
+    // ==========================================
+    // 6. 商城購買與道具系統
+    // ==========================================
+    function renderShop() {
+      const listEl = document.getElementById('shop-equipment-list');
+      listEl.innerHTML = shopEquipments.map(item => {
+        const isOwned = player.ownedIds.includes(item.id);
+        const isEquipped = (
+          player.equipped.weapon.id === item.id ||
+          player.equipped.armor.id === item.id ||
+          player.equipped.acc.id === item.id
+        );
+
+        let btnHtml = '';
+        if (isEquipped) {
+          btnHtml = `<span class="px-3 py-1.5 bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-bold text-xs rounded-lg">已裝備</span>`;
+        } else if (isOwned) {
+          btnHtml = `<button onclick="equipItem('${item.id}')" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs rounded-lg transition">換上裝備</button>`;
+        } else {
+          btnHtml = `<button onclick="buyEquipment('${item.id}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg transition">🪙 ${item.price} 購買</button>`;
+        }
+
+        return `
+          <div class="p-3 bg-slate-900/90 border border-slate-700 rounded-xl flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">${item.icon}</span>
+              <div>
+                <div class="font-bold text-sm text-white">${item.name}</div>
+                <div class="text-[11px] text-slate-400">${item.desc}</div>
+              </div>
+            </div>
+            <div class="shrink-0">${btnHtml}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function buyEquipment(itemId) {
+      const item = shopEquipments.find(e => e.id === itemId);
+      if (!item) return;
+      if (player.gold < item.price) {
+        addLog(`🪙 Bytes 金幣不足！購買【${item.name}】需要 ${item.price} Bytes。`, "text-rose-400");
+        return;
+      }
+      player.gold -= item.price;
+      player.ownedIds.push(item.id);
+      addLog(`🛒 成功購買硬體裝備【${item.name}】！已自動為你安裝裝備。`, "text-amber-300 font-bold");
+      equipItem(itemId);
+    }
+
+    function equipItem(itemId) {
+      const item = shopEquipments.find(e => e.id === itemId);
+      if (!item) return;
+      if (item.type === 'weapon') {
+        player.equipped.weapon = { id: item.id, name: item.name, icon: item.icon, bonus: item.bonus };
+      } else if (item.type === 'armor') {
+        player.equipped.armor = { id: item.id, name: item.name, icon: item.icon, bonus: item.bonus };
+      } else if (item.type === 'acc') {
+        player.equipped.acc = { id: item.id, name: item.name, icon: item.icon, bonusHp: item.bonusHp, bonusMp: item.bonusMp };
+        player.hp += item.bonusHp;
+        player.mp += item.bonusMp;
+      }
+      updateUI();
+      renderShop();
+    }
+
+    function buyConsumable(type, cost) {
+      if (player.gold < cost) {
+        addLog("🪙 Bytes 金幣不足，無法購買補給品！", "text-rose-400");
+        return;
+      }
+      player.gold -= cost;
+      player.potions[type]++;
+      addLog(`🛒 購買了 1 個${type === 'hp' ? '【乖乖還原水】' : '【行動電源包】'}！`, "text-emerald-300");
+      updateUI();
+    }
+
+    function usePotion(type) {
+      if (player.potions[type] <= 0) {
+        addLog("🎒 該補給品已經用完囉！請去光華數位商城購買。", "text-rose-400");
+        return;
+      }
+      if (type === 'hp') {
+        if (player.hp >= getMaxHp()) {
+          addLog("❤️ 目前 HP 已經是滿的，不需要使用乖乖還原水喔！", "text-slate-400");
+          return;
+        }
+        player.potions.hp--;
+        player.hp = Math.min(getMaxHp(), player.hp + 50);
+        addLog("🧃 使用了【乖乖還原水】，系統穩定度恢復 50 HP！", "text-emerald-400 font-bold");
+      } else {
+        if (player.mp >= getMaxMp()) {
+          addLog("⚡ 目前 MP 電力已經是滿的，不需要充電喔！", "text-slate-400");
+          return;
+        }
+        player.potions.mp--;
+        player.mp = Math.min(getMaxMp(), player.mp + 30);
+        addLog("🔋 使用了【行動電源包】，電力能量恢復 30 MP！", "text-cyan-400 font-bold");
+      }
+      updateUI();
+    }
+
+    // ==========================================
+    // 7. 教師題庫檢視與即時新增功能
+    // ==========================================
+    function openQuestionManager() {
+      renderQuestionList();
+      document.getElementById('q-manager-modal').classList.remove('hidden');
+    }
+
+    function closeQuestionManager() {
+      document.getElementById('q-manager-modal').classList.add('hidden');
+    }
+
+    function renderQuestionList() {
+      const list = document.getElementById('q-manager-list');
+      list.innerHTML = questionPool.map((item, idx) => `
+        <div class="p-2.5 bg-slate-900 rounded-lg border border-slate-700 flex justify-between items-start gap-2">
+          <div>
+            <span class="px-1.5 py-0.5 bg-indigo-500/20 text-indigo-300 rounded text-[10px] font-bold mr-1">${item.cat}</span>
+            <span class="font-bold text-slate-200">${idx + 1}. ${item.q}</span>
+            <div class="text-slate-400 mt-1">正解：<span class="text-emerald-400 font-bold">${item.opts[item.ans]}</span></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addCustomQuestion() {
+      const q = document.getElementById('new-q-text').value.trim();
+      const o0 = document.getElementById('new-q-opt0').value.trim();
+      const o1 = document.getElementById('new-q-opt1').value.trim();
+      const o2 = document.getElementById('new-q-opt2').value.trim();
+      const o3 = document.getElementById('new-q-opt3').value.trim();
+      const ans = parseInt(document.getElementById('new-q-ans').value, 10);
+      const exp = document.getElementById('new-q-exp').value.trim() || "熟記課堂重點就能輕鬆擊敗怪物！";
+
+      if (!q || !o0 || !o1 || !o2 || !o3) {
+        alert("請完整填寫題目與四個選項喔！");
+        return;
+      }
+
+      questionPool.unshift({ cat: "老師加題", q, opts: [o0, o1, o2, o3], ans, exp });
+      document.getElementById('q-count').innerText = questionPool.length;
+      document.getElementById('new-q-text').value = '';
+      document.getElementById('new-q-opt0').value = '';
+      document.getElementById('new-q-opt1').value = '';
+      document.getElementById('new-q-opt2').value = '';
+      document.getElementById('new-q-opt3').value = '';
+      document.getElementById('new-q-exp').value = '';
+
+      renderQuestionList();
+      addLog(`📚 老師新增了一道題目：「${q}」，已加入戰鬥題庫！`, "text-cyan-400 font-bold");
+    }
+
+    // ==========================================
+    // 8. Google Apps Script 雲端英雄榜串接
+    // ==========================================
+    async function submitScoreToGAS() {
+      const className = document.getElementById('stu-class').value.trim();
+      const seatNo = document.getElementById('stu-seat').value.trim();
+      const studentName = document.getElementById('stu-name').value.trim();
+
+      if (!className || !seatNo || !studentName) {
+        alert("請完整填寫「班級、座號、姓名」才能紀錄成績喔！");
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit-score');
+      btn.disabled = true;
+      btn.innerText = "⏳ 正在寫入雲端試算表...";
+
+      const isBossCleared = document.getElementById('vic-modal-title').innerText.includes("大魔王");
+
+      const payload = {
+        className: className,
+        seatNo: seatNo,
+        studentName: studentName,
+        level: player.lv,
+        correctCount: player.stats.correct,
+        bossCleared: isBossCleared
+      };
+
+      try {
+        const res = await fetch(GAS_WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        player.hasUploaded = true;
+        const scoreMsg = result.score ? `（課堂平時成績：${result.score} 分）` : '';
+        addLog(`🏆 【${className}班 ${seatNo}號 ${studentName}】成績已紀錄至試算表！${scoreMsg}`, "text-amber-300 font-black");
+        
+        document.getElementById('victory-modal').classList.add('hidden');
+        openLeaderboardModal(className);
+      } catch (err) {
+        alert("上傳失敗，請檢查網路連線或確認 GAS 部署權限已設為「所有人」！");
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "🚀 上傳成績至英雄榜";
+      }
+    }
+
+    async function openLeaderboardModal(filterClass = '') {
+      document.getElementById('leaderboard-modal').classList.remove('hidden');
+      const container = document.getElementById('leaderboard-content');
+
+      container.innerHTML = `<div class="text-center py-8 text-cyan-400 animate-pulse">📡 正在從 Google 試算表讀取最新成績與排名...</div>`;
+
+      try {
+        const url = filterClass 
+          ? `${GAS_WEB_APP_URL}?className=${encodeURIComponent(filterClass)}` 
+          : GAS_WEB_APP_URL;
+
+        const res = await fetch(url);
+        const data = await res.json();
+
+        const filterHeader = `
+          <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 mb-2">
+            <span class="text-slate-400 font-bold">目前顯示：<b class="text-amber-300">${filterClass ? filterClass + ' 班排行榜' : '全校總排行榜'}</b></span>
+            <div class="flex gap-1">
+              <input id="filter-class-input" type="text" value="${filterClass}" placeholder="輸入班級(如501)" class="w-28 px-2 py-1 rounded bg-slate-800 border border-slate-600 text-white text-xs">
+              <button onclick="openLeaderboardModal(document.getElementById('filter-class-input').value.trim())" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-bold">篩選班級</button>
+              <button onclick="openLeaderboardModal('')" class="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded">全部</button>
+            </div>
+          </div>
+        `;
+
+        if (!data.leaderboard || data.leaderboard.length === 0) {
+          container.innerHTML = filterHeader + `<div class="text-center py-8 text-slate-400">目前還沒有該班級的勇者成績紀錄喔！</div>`;
+          return;
+        }
+
+        const listHtml = data.leaderboard.map((row, idx) => {
+          const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
+          const scoreBadge = row.score ? `<span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded font-black">${row.score} 分</span>` : '';
+          return `
+            <div class="p-3 bg-slate-900 rounded-xl border border-slate-700 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="text-lg font-black w-7 text-center text-amber-400">${medal}</span>
+                <div>
+                  <div class="font-black text-white text-sm">
+                    ${row.className}班 ${row.seatNo}號 - ${row.studentName}
+                    <span class="text-[11px] ml-1 text-emerald-400">${row.bossCleared === '👑 已通關' ? '👑' : ''}</span>
+                  </div>
+                  <div class="text-[10px] text-slate-500">更新時間：${row.time}</div>
+                </div>
+              </div>
+              <div class="text-right flex flex-col sm:flex-row sm:items-center gap-1">
+                <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded font-bold">Lv.${row.level}</span>
+                <span class="px-2 py-0.5 bg-cyan-500/20 text-cyan-300 rounded font-bold">答對 ${row.correctCount} 題</span>
+                ${scoreBadge}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        container.innerHTML = filterHeader + listHtml;
+      } catch (err) {
+        container.innerHTML = `<div class="text-center py-8 text-rose-400">讀取英雄榜失敗，請確認 GAS 部署權限已設為「所有人」。</div>`;
+      }
+    }
+
+    function resetGame() {
+      if (!confirm("確定要重新開始遊戲嗎？目前的等級與裝備將會重設喔！")) return;
+      location.reload();
+    }
+
+    window.onload = initGame;
+  </script>
+</body>
+</html>
