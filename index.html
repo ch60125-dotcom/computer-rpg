@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>雲與鍵的彼端：資訊勇者傳說 RPG (劇情與策略平衡版)</title>
+  <title>雲與鍵的彼端：資訊勇者傳說 (HD-2D 旗艦重製版)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;700;900&display=swap');
     body {
       font-family: 'Noto Sans TC', sans-serif;
-      background-color: #0c0a09;
+      background-color: #070605;
       color: #f5f5f4;
       user-select: none;
       -webkit-user-select: none;
@@ -17,20 +17,22 @@
     }
     .serif-title { font-family: 'Noto Serif TC', serif; }
     .rpg-panel {
-      background: linear-gradient(145deg, #1c1917 0%, #0c0a09 100%);
-      border: 2px solid #785c38;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,215,150,0.2);
+      background: linear-gradient(155deg, rgba(28, 24, 21, 0.96) 0%, rgba(12, 10, 9, 0.98) 100%);
+      border: 2px solid #8c6d46;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,225,170,0.25);
     }
     .rpg-btn {
-      background: linear-gradient(to bottom, #44403c, #292524);
-      border: 1.5px solid #a88a5c;
+      background: linear-gradient(to bottom, #4a3f35, #29221c);
+      border: 1.5px solid #b5925f;
       color: #fef3c7;
-      transition: all 0.15s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .rpg-btn:hover:not(:disabled) {
-      background: linear-gradient(to bottom, #57534e, #44403c);
-      border-color: #fbbf24;
+      background: linear-gradient(to bottom, #615245, #3d332a);
+      border-color: #fde047;
       transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
     }
     .rpg-btn:active:not(:disabled) { transform: translateY(1px); }
     .bar-fill { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -40,28 +42,34 @@
     }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #1c1917; }
-    ::-webkit-scrollbar-thumb { background: #785c38; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: #8c6d46; border-radius: 3px; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-2 md:p-4 bg-[radial-gradient(circle_at_center,_#292524_0%,_#0c0a09_100%)]">
+<body class="min-h-screen flex flex-col items-center justify-center p-2 md:p-3 bg-[radial-gradient(ellipse_at_top,_#2e241d_0%,_#070605_100%)]">
 
-  <!-- 頂部復古鎏金導覽列 -->
-  <header class="w-full max-w-6xl rpg-panel rounded-2xl px-4 py-2.5 mb-3 flex flex-wrap justify-between items-center gap-2">
+  <!-- 頂部鎏金導覽列 -->
+  <header class="w-full max-w-6xl rpg-panel rounded-2xl px-4 py-2 mb-2.5 flex flex-wrap justify-between items-center gap-2">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 to-yellow-900 border border-amber-300 flex items-center justify-center shadow-lg">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 via-amber-700 to-stone-900 border border-amber-300 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.5)]">
         <span class="text-xl">⚔️</span>
       </div>
       <div>
-        <h1 class="text-lg md:text-xl font-black serif-title bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 bg-clip-text text-transparent tracking-wider">
-          雲與鍵的彼端：資訊勇者傳說
-        </h1>
+        <div class="flex items-center gap-2">
+          <h1 class="text-lg md:text-xl font-black serif-title bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-100 bg-clip-text text-transparent tracking-wider">
+            雲與鍵的彼端：資訊勇者傳說
+          </h1>
+          <span class="text-[10px] px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-400/40 rounded-full font-black">HD-2D 旗艦版</span>
+        </div>
         <p class="text-[11px] text-stone-400">
-          按住 <kbd class="px-1.5 py-0.5 bg-stone-800 text-amber-300 border border-stone-600 rounded text-[10px]">↑↓←→</kbd> 探索迷宮・開啟寶箱可獲神兵與秘卷・挑戰各章首領體驗劇情對決！
+          方向鍵 <kbd class="px-1 bg-stone-800 text-amber-300 border border-stone-600 rounded text-[10px]">↑↓←→</kbd> 移動 ｜ 擊碎怪物 <b class="text-cyan-300">🛡️護盾</b> 觸發破防暈眩 ｜ 敵襲瞬間按 <kbd class="px-1 bg-stone-800 text-amber-300 border border-stone-600 rounded text-[10px]">空白鍵</kbd> 完美格擋！
         </p>
       </div>
     </div>
 
     <div class="flex flex-wrap items-center gap-1.5">
+      <button id="bgm-btn" onclick="toggleBGM()" class="rpg-btn px-2.5 py-1.5 rounded-lg text-xs font-bold">
+        🎵 音樂：開
+      </button>
       <button id="sfx-btn" onclick="toggleAudio()" class="rpg-btn px-2.5 py-1.5 rounded-lg text-xs font-bold">
         🔊 音效：開
       </button>
@@ -69,7 +77,7 @@
         🧘 武學配招 (<span id="unlocked-skill-count">3</span>/8)
       </button>
       <button onclick="openShopModal()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-900/80 hover:bg-amber-800 text-amber-100 border border-amber-400/60 transition shadow">
-        🏪 西域鍛造坊
+        🏪 鍛造坊
       </button>
       <button onclick="openVictoryModalManual()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-950/90 hover:bg-emerald-900 text-emerald-200 border border-emerald-500/60 transition">
         📝 登錄成績
@@ -80,22 +88,22 @@
       <button onclick="openQuestionManager()" class="rpg-btn px-2.5 py-1.5 rounded-lg text-xs font-bold">
         🔒 題庫 (<span id="q-count">45</span>)
       </button>
-      <button onclick="resetGame()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-700/60 transition">
-        🔄 重來
+      <button onclick="resetGame()" class="px-2 py-1.5 rounded-lg text-xs font-bold bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-700/60 transition">
+        🔄
       </button>
     </div>
   </header>
 
   <!-- 主遊戲舞台 -->
-  <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-3.5">
+  <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-3">
 
     <!-- 左側：角色立繪狀態與行囊 (佔 4 欄) -->
-    <section class="lg:col-span-4 flex flex-col gap-3">
+    <section class="lg:col-span-4 flex flex-col gap-2.5">
       
       <!-- 勇者狀態卡 -->
-      <div class="rpg-panel rounded-2xl p-4 relative overflow-hidden">
-        <div class="flex items-center gap-3 border-b border-stone-700/80 pb-3 mb-3">
-          <canvas id="hero-portrait-canvas" width="76" height="76" class="w-16 h-16 rounded-xl bg-stone-900 border-2 border-amber-500/80 shadow-inner shrink-0"></canvas>
+      <div class="rpg-panel rounded-2xl p-3.5 relative overflow-hidden">
+        <div class="flex items-center gap-3 border-b border-stone-700/80 pb-2.5 mb-2.5">
+          <canvas id="hero-portrait-canvas" width="80" height="80" class="w-16 h-16 rounded-xl bg-stone-900 border-2 border-amber-500/80 shadow-[0_0_15px_rgba(245,158,11,0.3)] shrink-0"></canvas>
           <div class="flex-1">
             <div class="flex items-center justify-between">
               <span id="player-title" class="text-[11px] px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded font-bold">初階劍童</span>
@@ -104,19 +112,19 @@
             <h2 class="text-base font-black text-stone-100 mt-0.5 serif-title tracking-wide">古月鍵俠</h2>
             <div class="flex items-center justify-between mt-0.5">
               <span class="text-xs text-amber-400 font-bold">🪙 銀兩：<span id="player-gold">40</span> <span class="text-[10px] text-stone-400 font-normal">Bytes</span></span>
-              <span id="next-battle-buff-tag" class="hidden text-[10px] px-1.5 py-0.5 bg-purple-950 text-purple-300 border border-purple-500/40 rounded font-bold">✨ 戰前符咒加持</span>
+              <span id="next-battle-buff-tag" class="hidden text-[10px] px-1.5 py-0.5 bg-purple-950 text-purple-300 border border-purple-500/40 rounded font-bold">✨ 戰前符咒</span>
             </div>
           </div>
         </div>
 
-        <!-- 命 / 靈 / 歷練 狀態條 -->
-        <div class="space-y-2 mb-3">
+        <!-- 命 / 靈 / 劍意 / 歷練 狀態條 -->
+        <div class="space-y-2 mb-2.5">
           <div>
             <div class="flex justify-between text-xs font-bold mb-0.5">
               <span class="text-rose-400">❤️ 命 (系統穩定度 HP)</span>
-              <span class="font-mono text-stone-200"><span id="player-hp">105</span> / <span id="player-max-hp">105</span></span>
+              <span class="font-mono text-stone-200"><span id="player-hp">110</span> / <span id="player-max-hp">110</span></span>
             </div>
-            <div class="w-full h-3 bg-stone-950 rounded-full overflow-hidden p-0.5 border border-stone-700">
+            <div class="w-full h-2.5 bg-stone-950 rounded-full overflow-hidden p-0.5 border border-stone-700">
               <div id="hp-bar" class="h-full bg-gradient-to-r from-red-700 via-rose-500 to-orange-400 rounded-full bar-fill" style="width: 100%"></div>
             </div>
           </div>
@@ -124,16 +132,16 @@
           <div>
             <div class="flex justify-between text-xs font-bold mb-0.5">
               <span class="text-sky-400">💧 靈 (電力真氣 MP)</span>
-              <span class="font-mono text-stone-200"><span id="player-mp">55</span> / <span id="player-max-mp">55</span></span>
+              <span class="font-mono text-stone-200"><span id="player-mp">60</span> / <span id="player-max-mp">60</span></span>
             </div>
-            <div class="w-full h-3 bg-stone-950 rounded-full overflow-hidden p-0.5 border border-stone-700">
+            <div class="w-full h-2.5 bg-stone-950 rounded-full overflow-hidden p-0.5 border border-stone-700">
               <div id="mp-bar" class="h-full bg-gradient-to-r from-blue-700 via-sky-500 to-cyan-300 rounded-full bar-fill" style="width: 100%"></div>
             </div>
           </div>
 
           <div>
             <div class="flex justify-between text-[11px] font-bold mb-0.5">
-              <span class="text-amber-300">✨ 修行歷練 (升級解鎖高階裝備與新招)</span>
+              <span class="text-amber-300">✨ 修行歷練 (EXP)</span>
               <span class="font-mono text-stone-300"><span id="player-exp">0</span> / <span id="player-next-exp">35</span></span>
             </div>
             <div class="w-full h-2 bg-stone-950 rounded-full overflow-hidden border border-stone-700">
@@ -146,11 +154,11 @@
         <div class="grid grid-cols-2 gap-1.5 bg-stone-950/90 p-2 rounded-xl border border-stone-800 text-xs">
           <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-stone-400">⚔️ 武力(ATK)</span>
-            <span id="player-atk" class="font-black text-orange-400">15</span>
+            <span id="player-atk" class="font-black text-orange-400">16</span>
           </div>
           <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-stone-400">🛡️ 防禦(DEF)</span>
-            <span id="player-def" class="font-black text-emerald-400">4</span>
+            <span id="player-def" class="font-black text-emerald-400">5</span>
           </div>
           <div class="flex items-center justify-between px-1.5 py-0.5">
             <span class="text-stone-400">🎯 破敵題數</span>
@@ -164,7 +172,7 @@
       </div>
 
       <!-- 隨身裝備、武學配置預覽與丹藥行囊 -->
-      <div class="rpg-panel rounded-2xl p-4 flex-1 flex flex-col justify-between">
+      <div class="rpg-panel rounded-2xl p-3.5 flex-1 flex flex-col justify-between">
         <div>
           <div class="flex justify-between items-center mb-2">
             <h3 class="text-xs font-black text-amber-200 serif-title tracking-wider">🎒 神兵與護具行囊</h3>
@@ -178,7 +186,7 @@
             </div>
           </div>
           <div class="space-y-1.5 text-xs">
-            <div onclick="openShopModal('weapon')" class="cursor-pointer flex items-center justify-between p-2 bg-stone-950/80 hover:bg-stone-900 rounded-xl border border-stone-800 transition" title="點擊切換或升級兵刃">
+            <div onclick="openShopModal('weapon')" class="cursor-pointer flex items-center justify-between p-2 bg-stone-950/80 hover:bg-stone-900 rounded-xl border border-stone-800 transition">
               <div class="flex items-center gap-2">
                 <span id="eq-weapon-icon" class="text-lg">🗡️</span>
                 <div>
@@ -189,7 +197,7 @@
               <span id="eq-weapon-stat" class="text-[11px] font-bold px-2 py-0.5 bg-orange-950 text-orange-300 border border-orange-700/40 rounded">+0 ATK</span>
             </div>
 
-            <div onclick="openShopModal('armor')" class="cursor-pointer flex items-center justify-between p-2 bg-stone-950/80 hover:bg-stone-900 rounded-xl border border-stone-800 transition" title="點擊切換或升級護甲">
+            <div onclick="openShopModal('armor')" class="cursor-pointer flex items-center justify-between p-2 bg-stone-950/80 hover:bg-stone-900 rounded-xl border border-stone-800 transition">
               <div class="flex items-center gap-2">
                 <span id="eq-armor-icon" class="text-lg">🥋</span>
                 <div>
@@ -200,7 +208,7 @@
               <span id="eq-armor-stat" class="text-[11px] font-bold px-2 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-700/40 rounded">+0 DEF</span>
             </div>
 
-            <div onclick="openShopModal('acc')" class="cursor-pointer flex items-center justify-between p-2 bg-stone-950/80 hover:bg-stone-900 rounded-xl border border-stone-800 transition" title="點擊切換或升級法寶">
+            <div onclick="openShopModal('acc')" class="cursor-pointer flex items-center justify-between p-2 bg-stone-950/80 hover:bg-stone-900 rounded-xl border border-stone-800 transition">
               <div class="flex items-center gap-2">
                 <span id="eq-acc-icon" class="text-lg">📿</span>
                 <div>
@@ -213,7 +221,7 @@
           </div>
         </div>
 
-        <div class="mt-3 pt-2.5 border-t border-stone-800">
+        <div class="mt-2.5 pt-2 border-t border-stone-800">
           <div class="flex justify-between items-center mb-1.5">
             <span class="text-[11px] font-bold text-stone-400">🧪 隨身丹藥與戰術符咒</span>
             <button onclick="openCodexModal()" class="text-[11px] text-sky-400 hover:underline font-bold">📖 翻閱《資訊天書》</button>
@@ -268,8 +276,8 @@
 
     </section>
 
-    <!-- 右側：全 Canvas 復古 2.5D 18x12 複雜迷宮主畫面 (佔 8 欄) -->
-    <section class="lg:col-span-8 flex flex-col gap-3">
+    <!-- 右側：HD-2D 光影畫布與戰鬥舞台 (佔 8 欄) -->
+    <section class="lg:col-span-8 flex flex-col gap-2.5">
       
       <div class="rpg-panel rounded-2xl p-3 flex flex-col justify-between relative">
         
@@ -301,13 +309,13 @@
           </div>
         </div>
 
-        <!-- 核心高畫質遊戲畫布容器 (792 x 528, 18x12 格，每格 44px) -->
-        <div class="relative w-full rounded-xl overflow-hidden border-2 border-[#9a7b4f] shadow-[0_0_35px_rgba(0,0,0,0.95)] bg-black">
-          <canvas id="main-canvas" width="792" height="528" class="w-full h-auto"></canvas>
+        <!-- 核心高畫質 HD-2D 遊戲畫布容器 (792 x 528, 18x12 格，每格 44px) -->
+        <div class="relative w-full rounded-xl overflow-hidden border-2 border-[#b5925f] shadow-[0_0_45px_rgba(0,0,0,0.95)] bg-black">
+          <canvas id="main-canvas" width="792" height="528" onclick="triggerParry()" class="w-full h-auto cursor-pointer"></canvas>
 
           <!-- 《軒轅劍》風格：底部半透明對話框 + 右下角大型人物/BOSS立繪 -->
           <div id="swd-dialogue-overlay" class="hidden absolute inset-x-0 bottom-0 h-40 pointer-events-auto z-20 flex items-end">
-            <div class="w-full h-32 bg-stone-900/92 backdrop-blur-md border-t-2 border-amber-500/80 px-5 py-3 pr-36 sm:pr-44 flex flex-col justify-between shadow-2xl">
+            <div class="w-full h-32 bg-stone-950/92 backdrop-blur-md border-t-2 border-amber-500/80 px-5 py-3 pr-36 sm:pr-44 flex flex-col justify-between shadow-2xl">
               <div>
                 <div id="dlg-speaker" class="text-amber-300 font-black text-sm serif-title tracking-wider mb-1">【大漠長老・古月聖】</div>
                 <p id="dlg-text" class="text-stone-100 text-xs md:text-sm leading-relaxed font-medium drop-shadow"></p>
@@ -328,7 +336,7 @@
           <div id="battle-ui-overlay" class="hidden absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black via-stone-950/95 to-transparent z-20">
             <div class="flex justify-between items-center mb-2 px-1">
               <div class="flex flex-wrap items-center gap-1.5">
-                <span class="text-xs font-bold text-amber-300">⚠️ 注意：答錯題目會露出破綻，遭受妖魔 1.25 倍痛擊！</span>
+                <span class="text-xs font-bold text-amber-300">💡 擊碎敵方 <b class="text-cyan-300">🛡️護盾</b> 可觸發 1.6 倍破防暈眩！敵襲瞬間按 <kbd class="px-1 bg-stone-800 text-amber-200 border border-amber-500 rounded">空白鍵</kbd> 完美格擋！</span>
                 <span id="battle-buff-badge" class="hidden text-[11px] px-2 py-0.5 bg-sky-900 text-sky-200 border border-sky-400 rounded font-bold">🛡️ 金鐘罩生效</span>
               </div>
               <button id="btn-flee" onclick="fleeBattle()" class="px-2.5 py-1 bg-stone-800 hover:bg-rose-900 text-stone-300 hover:text-white text-xs font-bold rounded border border-stone-600 shrink-0">
@@ -340,12 +348,12 @@
         </div>
 
         <!-- 底部：虛擬搖桿與快捷操作 -->
-        <div class="mt-2.5 flex flex-wrap items-center justify-between gap-2 px-1 text-xs">
+        <div class="mt-2 flex flex-wrap items-center justify-between gap-2 px-1 text-xs">
           <div class="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-stone-400">
-            <span>🔥 火把視野</span>
-            <span>👹 首領(觸發劇情戰)</span>
-            <span>📦 寶箱(出神裝/道具/陷阱)</span>
-            <span>⛲ 靈泉(可選擇是否飲用)</span>
+            <span>🔥 動態火把光暈</span>
+            <span>🛡️ 破盾擊暈系統</span>
+            <span>⚔️ 空白鍵完美格擋</span>
+            <span>📦 寶箱(出神裝/卷軸/陷阱)</span>
           </div>
 
           <div class="flex items-center gap-1 mx-auto sm:mx-0">
@@ -366,21 +374,21 @@
       <!-- 江湖傳書紀錄 (Log) -->
       <div class="rpg-panel rounded-2xl p-2.5">
         <div id="battle-log" class="h-14 overflow-y-auto space-y-1 text-xs font-mono pr-1">
-          <div class="text-amber-300">> 【系統】歡迎踏入《雲與鍵的彼端》！寶箱有機率直接開出神兵與戰術卷軸，路過靈泉可自由選擇是否飲用！</div>
+          <div class="text-amber-300">> 【系統】HD-2D 光影引擎已啟動！移動角色即可啟動西域古風配樂，戰鬥中擊碎敵方護盾可觸發 BREAK 破防暈眩！</div>
         </div>
       </div>
 
     </section>
   </main>
 
-  <!-- 彈出視窗 1：電腦知識符文詠唱 (選項長度平衡 + 隨機順序) -->
+  <!-- 彈出視窗 1：電腦知識符文詠唱 -->
   <div id="quiz-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
     <div class="rpg-panel rounded-2xl max-w-lg w-full p-5 border-2 border-amber-400">
       <div class="flex justify-between items-center border-b border-stone-700 pb-3 mb-4">
         <span id="quiz-category" class="text-xs font-black px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full serif-title">
           📜 資訊符文詠唱
         </span>
-        <span class="text-xs text-rose-400 font-bold">⚠️ 答錯將露出破綻承受 1.25 倍反擊！</span>
+        <span class="text-xs text-cyan-300 font-bold">⚡ 答對即可揮劍破盾！（答錯將承受 1.25 倍反擊）</span>
       </div>
       <h3 id="quiz-question" class="text-base md:text-lg font-black text-white mb-4 leading-snug"></h3>
       <div id="quiz-options" class="space-y-2.5"></div>
@@ -394,7 +402,7 @@
       <div class="flex justify-between items-center border-b border-stone-700 pb-3 mb-3">
         <div>
           <h3 class="text-lg font-black text-indigo-300 serif-title">🧘 古月劍派・武學奧義自由配招</h3>
-          <p class="text-xs text-stone-400">面對高防禦的首領與重甲妖魔，單靠普攻難以破防！請挑選 <b class="text-amber-300">最多 4 招</b> 組合出戰：</p>
+          <p class="text-xs text-stone-400">不同武學具備不同的 <b class="text-cyan-300">「破盾值」</b> 與特效！請挑選 <b class="text-amber-300">最多 4 招</b> 組合出戰：</p>
         </div>
         <button onclick="document.getElementById('skill-deck-modal').classList.add('hidden')" class="rpg-btn px-3 py-1 rounded-lg text-xs font-bold">✓ 完成配招</button>
       </div>
@@ -587,10 +595,17 @@
     let pendingProtectedAction = null;
 
     // =========================================================
-    // 1. Web Audio API 即時合成音效引擎
+    // 1. 3A 級雙聲道 Web Audio 合成器 (西域五聲音階 BGM + 白噪音真實物理音效)
     // =========================================================
     let audioCtx = null;
     let soundEnabled = true;
+    let bgmEnabled = true;
+    let bgmInterval = null;
+    let bgmStep = 0;
+
+    // 西域古風五聲音階與戰鬥緊湊音階
+    const exploreMelody = [293.66, 329.63, 392.00, 440.00, 523.25, 440.00, 392.00, 329.63];
+    const battleMelody  = [146.83, 146.83, 220.00, 146.83, 261.63, 246.94, 220.00, 196.00];
 
     function initAudio() {
       if (!audioCtx) {
@@ -598,6 +613,39 @@
         if (AudioContext) audioCtx = new AudioContext();
       }
       if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      if (bgmEnabled && !bgmInterval) startBGM();
+    }
+
+    function startBGM() {
+      if (bgmInterval) clearInterval(bgmInterval);
+      bgmInterval = setInterval(() => {
+        if (!bgmEnabled || !audioCtx || audioCtx.state !== 'running') return;
+        try {
+          const now = audioCtx.currentTime;
+          const notes = battleState.active ? battleMelody : exploreMelody;
+          const freq = notes[bgmStep % notes.length];
+          bgmStep++;
+
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = battleState.active ? 'sawtooth' : 'triangle';
+          osc.frequency.setValueAtTime(freq, now);
+
+          gain.gain.setValueAtTime(battleState.active ? 0.035 : 0.028, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (battleState.active ? 0.22 : 0.42));
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + (battleState.active ? 0.23 : 0.45));
+        } catch (e) {}
+      }, 320);
+    }
+
+    function toggleBGM() {
+      bgmEnabled = !bgmEnabled;
+      document.getElementById('bgm-btn').innerText = bgmEnabled ? "🎵 音樂：開" : "🎵 音樂：關";
+      if (bgmEnabled) initAudio();
     }
 
     function toggleAudio() {
@@ -605,6 +653,7 @@
       document.getElementById('sfx-btn').innerText = soundEnabled ? "🔊 音效：開" : "🔇 音效：關";
     }
 
+    // 結合白噪音衝擊波與多重震盪器的真實音效
     function playSFX(type) {
       if (!soundEnabled) return;
       try {
@@ -616,26 +665,40 @@
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(540, now);
-          osc.frequency.exponentialRampToValueAtTime(80, now + 0.16);
-          gain.gain.setValueAtTime(0.25, now);
+          osc.frequency.setValueAtTime(680, now);
+          osc.frequency.exponentialRampToValueAtTime(90, now + 0.16);
+          gain.gain.setValueAtTime(0.26, now);
           gain.gain.exponentialRampToValueAtTime(0.01, now + 0.17);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start(now);
           osc.stop(now + 0.17);
-        } else if (type === 'heavy') {
+        } else if (type === 'heavy' || type === 'break') {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'square';
-          osc.frequency.setValueAtTime(260, now);
-          osc.frequency.exponentialRampToValueAtTime(32, now + 0.34);
-          gain.gain.setValueAtTime(0.32, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.frequency.setValueAtTime(type === 'break' ? 420 : 280, now);
+          osc.frequency.exponentialRampToValueAtTime(32, now + 0.38);
+          gain.gain.setValueAtTime(0.35, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start(now);
-          osc.stop(now + 0.35);
+          osc.stop(now + 0.4);
+        } else if (type === 'parry') {
+          // 清脆金屬格擋鏘聲
+          [880, 1318.5, 1760].forEach((f, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(f, now + idx * 0.03);
+            gain.gain.setValueAtTime(0.22, now + idx * 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.008, now + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.03);
+            osc.stop(now + 0.36);
+          });
         } else if (type === 'hit') {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
@@ -677,10 +740,9 @@
     }
 
     // =========================================================
-    // 2. 45 題「選項長度完全平衡」題庫 (杜絕學生靠最長選項猜答案)
+    // 2. 45 題「選項長度完全平衡」題庫
     // =========================================================
     const defaultQuestions = [
-      // 【1. 鍵盤與快捷鍵操作】
       { cat: "鍵盤操作", q: "在編輯文件或畫圖時，不小心做錯了一步，按哪個快捷鍵可以「復原」上一步？", opts: ["Ctrl + Z", "Ctrl + C", "Ctrl + V", "Ctrl + S"], ans: 0, exp: "Ctrl + Z 是後悔藥，可以復原剛剛做錯的動作！" },
       { cat: "鍵盤操作", q: "想要把選取起來的文字「複製」到剪貼簿，應該按哪一個快捷鍵？", opts: ["Ctrl + X", "Ctrl + C", "Ctrl + A", "Ctrl + P"], ans: 1, exp: "Copy（複製）的第一個字母是 C，所以是 Ctrl + C。" },
       { cat: "鍵盤操作", q: "複製完文字後，想要在別的地方「貼上」，應該按哪一個快捷鍵？", opts: ["Ctrl + C", "Ctrl + V", "Ctrl + Z", "Ctrl + F"], ans: 1, exp: "V 的形狀很像把東西倒進去的漏斗，Ctrl + V 就是貼上！" },
@@ -693,22 +755,16 @@
       { cat: "鍵盤操作", q: "想要打出鍵盤按鍵「上半部」的符號（如：！、＠、？），必須按住哪個鍵不放？", opts: ["Ctrl 控制鍵", "Shift 上檔鍵", "Alt 轉換鍵", "Tab 定位鍵"], ans: 1, exp: "按住 Shift（上檔鍵）再按符號鍵，就能打出上方的符號。" },
       { cat: "鍵盤操作", q: "打字時想要刪除游標「左邊（前面）」剛剛打錯的字，應該按哪一個按鍵？", opts: ["Backspace 倒退鍵", "Delete 刪除鍵", "Insert 插入鍵", "Home 首頁鍵"], ans: 0, exp: "Backspace（← 倒退鍵）刪除游標左邊的字；Delete 則刪除游標右邊的字。" },
       { cat: "鍵盤操作", q: "鍵盤最右側的「九宮格數字區」若按不出數字，應該先檢查哪顆燈號鍵有沒有亮？", opts: ["Num Lock 數字鎖", "Caps Lock 大寫鎖", "Shift 上檔切換鍵", "Ctrl 系統控制鍵"], ans: 0, exp: "Num Lock 燈號熄滅時九宮格會變成方向鍵，按一下點亮就能打數字了。" },
-
-      // 【2. 滑鼠與視窗操作（選項長度平衡化）】
       { cat: "視窗操作", q: "在電腦桌面上，想要針對某個檔案叫出「功能選單」（如重新命名），要怎麼操作滑鼠？", opts: ["按一下滑鼠左鍵", "按一下滑鼠右鍵", "向下轉動滑鼠滾輪", "同時按住左右雙鍵"], ans: 1, exp: "滑鼠左鍵是選取與執行，右鍵則是呼叫出輔助功能選單。" },
       { cat: "視窗操作", q: "瀏覽網頁時，如果畫面卡住或想更新最新內容，按哪一個功能鍵可以「重新整理」？", opts: ["F1 說明鍵", "F5 重整鍵", "F11 全螢幕鍵", "F12 開發者鍵"], ans: 1, exp: "F5 是網頁瀏覽器最常用的「重新整理 (Refresh)」快捷鍵！" },
       { cat: "視窗操作", q: "在視窗右上角的三個按鈕「－、□、✕」中，點擊「－」代表什麼視窗功能？", opts: ["將程式檔案永久刪除", "將視窗縮到下方工作列", "將視窗放大至全螢幕", "直接關閉並退出程式"], ans: 1, exp: "「－」是最小化（縮到工作列），「□」是最大化，「✕」則是關閉視窗。" },
       { cat: "視窗操作", q: "想要把桌面上的檔案「移動放進」資料夾裡面，最標準的滑鼠操作方式為何？", opts: ["按住左鍵拖曳至資料夾放開", "對著檔案連續快速點兩下右鍵", "按住滾輪將檔案推向螢幕上方", "點選檔案後按下鍵盤 Esc 鍵"], ans: 0, exp: "按住左鍵移動再放開稱為「拖曳 (Drag and Drop)」，常用於移動檔案或拉積木。" },
-
-      // 【3. 電腦硬體與網路設備（選項長度平衡化）】
       { cat: "硬體知識", q: "下列哪一個電腦零件被稱為「電腦的大腦」，負責所有的邏輯運算與指揮？", opts: ["CPU 中央處理器", "RAM 隨機記憶體", "SSD 固態硬碟機", "PSU 電源供應器"], ans: 0, exp: "CPU（中央處理器）就像人類的大腦，負責計算與控制電腦運作。" },
       { cat: "硬體知識", q: "哪一個電腦零件負責「暫存執行中的程式」，而且只要關機斷電資料就會清空？", opts: ["RAM 隨機存取記憶體", "SSD 高速固態硬碟", "HDD 傳統磁錄硬碟", "USB 外接隨身硬碟"], ans: 0, exp: "RAM（記憶體）像書桌，速度快但斷電會清空；SSD/HDD 像書櫃，關機仍會保存檔案。" },
       { cat: "硬體知識", q: "我們要把自己的聲音「錄進電腦裡」，需要用到下列哪一種「輸入設備」？", opts: ["立體聲喇叭", "彩色印表機", "收音麥克風", "液晶顯示器"], ans: 2, exp: "麥克風負責把外部聲音傳進電腦，屬於輸入設備；喇叭則是輸出設備。" },
       { cat: "硬體知識", q: "下列哪一組設備全部屬於「輸出設備」，能把電腦處理好的結果呈現出來？", opts: ["鍵盤與光學滑鼠", "螢幕與彩色印表機", "麥克風與掃描器", "網路攝影機與手寫板"], ans: 1, exp: "螢幕顯示畫面、印表機印出紙張，都是把電腦訊號輸出給我們看的設備。" },
       { cat: "硬體知識", q: "電腦播放影片時突然完全沒聲音，第一步先做哪一項檢查最合理？", opts: ["用力拍打螢幕邊框三次", "檢查系統音量與耳機插孔", "立刻將硬碟格式化重灌", "把鍵盤與滑鼠插頭拔掉"], ans: 1, exp: "遇到沒聲音時，應先檢查右下角音量是否靜音，以及耳機/喇叭線是否鬆脫。" },
       { cat: "硬體知識", q: "比較電腦儲存容量的大小單位時，下列哪一個排列順序是「由小到大」正確的？", opts: ["KB < MB < GB < TB", "TB < GB < MB < KB", "GB < KB < TB < MB", "MB < KB < GB < TB"], ans: 0, exp: "容量由小到大依序為 KB、MB、GB、TB（1 TB 約等於 1024 GB）。" },
-
-      // 【4. 檔案管理與雲端概念（選項長度平衡化）】
       { cat: "檔案管理", q: "辛苦做好了一份簡報或小畫家作品，按哪個快捷鍵可以快速「儲存檔案」？", opts: ["Ctrl + S", "Ctrl + D", "Ctrl + W", "Ctrl + Q"], ans: 0, exp: "Save（儲存）的第一個字母是 S，常按 Ctrl + S 才不會因當機心血白費！" },
       { cat: "檔案管理", q: "看到一個檔案名稱叫做「校慶運動會.jpg」，請問 `.jpg` 代表什麼類型的檔案？", opts: ["錄音音樂檔", "靜態圖片檔", "高畫質影片檔", "系統執行檔"], ans: 1, exp: ".jpg 與 .png 都是最常見的圖片檔案格式喔！" },
       { cat: "檔案管理", q: "下列哪一組副檔名代表的全部都是「聲音或音樂檔案」？", opts: [".mp3 與 .wav", ".jpg 與 .png", ".txt 與 .pdf", ".exe 與 .msi"], ans: 0, exp: ".mp3 與 .wav 是常見的聲音檔；.jpg 是圖片檔，.exe 是程式執行檔。" },
@@ -716,23 +772,17 @@
       { cat: "檔案管理", q: "整理電腦裡的報告檔案時，下列哪一種「檔案命名習慣」最方便未來搜尋？", opts: ["全部依序取名為 1、2、3", "隨意敲擊鍵盤取名 asdfg", "標註清楚主題與日期姓名", "保留未命名的新增資料夾"], ans: 2, exp: "清楚標示主題、姓名或日期（如：自然報告_王小明），未來找檔案才一目了然！" },
       { cat: "檔案管理", q: "想要把整個資料夾好幾個檔案「打包壓縮」成單一檔案傳送，常會轉成什麼格式？", opts: [".zip 壓縮檔", ".mp3 音訊檔", ".jpg 影像檔", ".txt 文字檔"], ans: 0, exp: ".zip 與 .7z 是常見的壓縮檔格式，能將多個檔案打包並減少體積。" },
       { cat: "檔案管理", q: "把作業存放在「雲端硬碟 (如 Google Drive)」最主要的核心優點是什麼？", opts: ["沒連網路也能下載別人的電腦", "跨裝置連網登入即可存取檔案", "可以讓家裡的電腦螢幕變更大", "能夠自動幫電腦清理機殼灰塵"], ans: 1, exp: "雲端硬碟將檔案保存在遠端伺服器，換電腦只要連網登入帳號就能繼續編輯！" },
-
-      // 【5. 網路安全與防毒資安（選項長度平衡化）】
       { cat: "資安防護", q: "設定個人帳號的「密碼」時，下列哪一種密碼組合最安全、最不容易被猜中？", opts: ["連續數字 12345678", "自己的西元出生年月日", "大小寫英文混合數字與符號", "全部使用相同的英文字母"], ans: 2, exp: "混合大小寫字母、數字與符號（如 Tw#9527Go）的密碼強度最高！" },
       { cat: "資安防護", q: "在學校電腦教室上完課，離開座位前最重要的「資訊安全動作」是什麼？", opts: ["把滑鼠塞進抽屜深處藏好", "登出個人帳號並關閉瀏覽器", "直接拔除主機後方的電源線", "將電腦螢幕的亮度調到最暗"], ans: 1, exp: "公用電腦務必登出帳號，否則下一位使用者能直接存取你的信箱與雲端硬碟！" },
       { cat: "資安防護", q: "網頁突然跳出視窗：「恭喜抽中最新手機！請輸入父母信用卡號領獎」，應如何處理？", opts: ["立刻去拿父母的信用卡輸入", "屬於網路釣魚詐騙應直接關閉", "趕緊轉發連結給全班同學填寫", "先輸入家裡地址與電話再觀望"], ans: 1, exp: "要求輸入密碼或信用卡的陌生中獎訊息都是釣魚詐騙（Phishing），應立即關閉！" },
       { cat: "資安防護", q: "收到陌生人寄來的電子郵件，裡面附帶一個「免費寶石外掛.exe」檔案，該怎麼做？", opts: ["立刻雙擊下載並安裝使用", "切勿開啟以免感染木馬病毒", "先關閉防毒軟體再點開執行", "複製十份到隨身碟分送同學"], ans: 1, exp: ".exe 是程式執行檔，來路不明的外掛或郵件附件極容易夾帶木馬或勒索病毒！" },
       { cat: "資安防護", q: "為了防範「勒索病毒」鎖死檔案，專家提倡的「3-2-1 備份原則」核心觀念為何？", opts: ["每天固定把電腦重灌三次以上", "重要資料需在異地或雲端多備份", "把所有檔案名稱都改成英文數字", "同時在電腦安裝三套免費防毒"], ans: 1, exp: "準備 3 份資料、2 種不同媒介、1 份異地/雲端保存，中毒也能隨時還原！" },
       { cat: "資安防護", q: "登入網站時除了輸入密碼，還需輸入手機收到的動態驗證碼，這稱為什麼機制？", opts: ["雙重驗證 (2FA 兩步驟驗證)", "磁碟重組與系統最佳化機制", "無痕瀏覽與快取清除機制", "螢幕保護與自動休眠機制"], ans: 0, exp: "雙重驗證 (2FA) 就像幫帳號加上第二把鎖，就算密碼外洩駭客也無法登入！" },
-
-      // 【6. Scratch 程式設計與運算思維（選項長度平衡化）】
       { cat: "程式邏輯", q: "在 Scratch 程式設計中，點擊舞台上方的哪一個圖示代表「開始執行程式」？", opts: ["紅色八角形圖示", "綠色旗子圖示", "藍色小貓圖示", "黃色閃電圖示"], ans: 1, exp: "「當綠旗被點擊時」是 Scratch 最常用的程式啟動事件積木！" },
       { cat: "程式邏輯", q: "在 Scratch 的舞台座標系統中，正中央中心點的座標 (X, Y) 數值是多少？", opts: ["(X: 100, Y: 100)", "(X: 0, Y: 0)", "(X: 240, Y: 180)", "(X: -100, Y: -100)"], ans: 1, exp: "Scratch 舞台正中央的座標是 (X: 0, Y: 0)，X 控制左右，Y 控制上下。" },
       { cat: "程式邏輯", q: "希望 Scratch 角色「一直重複來回走動直到停止」，應把移動積木放進哪個積木裡？", opts: ["重複無限次積木", "等待一秒鐘積木", "廣播訊息積木", "分身刪除積木"], ans: 0, exp: "「重複無限次」屬於迴圈 (Loop) 結構，會讓內部的積木周而復始地不斷執行。" },
       { cat: "程式邏輯", q: "程式中寫道：「如果碰到邊緣就反彈，否則繼續前進」，這屬於哪種運算思維結構？", opts: ["條件判斷（選擇結構）", "變數宣告（儲存結構）", "畫筆圖章（繪圖結構）", "清單排序（陣列結構）"], ans: 0, exp: "「如果...那麼...否則... (If...Then...Else)」是用來做決策的條件判斷結構！" },
       { cat: "程式邏輯", q: "在 Scratch 遊戲中，想設計一個「計分板」記錄目前得分，應該建立什麼功能？", opts: ["建立一個「變數」存放分數", "更換十張不同的舞台背景圖", "將角色造型切換為向量模式", "把音效的音量調整到最大值"], ans: 0, exp: "「變數 (Variable)」就像存放數值的盒子，最適合用來記錄得分、血量或倒數時間。" },
-
-      // 【7. AI 人工智慧與數位公民素養（選項長度平衡化）】
       { cat: "AI與素養", q: "使用生成式 AI 聊天機器人查詢報告資料時，我們應該抱持哪一種正確態度？", opts: ["AI 產生的內容絕對正確無須檢查", "AI 可能產生錯誤幻覺需查證事實", "可將個人身分證與密碼交給 AI", "直接複製 AI 的回答當作自己作業"], ans: 1, exp: "生成式 AI 有時會捏造不存在的資訊（AI 幻覺），重要事實一定要多方查證！" },
       { cat: "AI與素養", q: "用 Teachable Machine 訓練 AI 辨識「剪刀石頭布」時，怎麼做能提高辨識準確度？", opts: ["每種手勢只拍一張模糊照片即可", "提供多角度且光線充足的手勢照片", "把鏡頭完全遮住拍攝全黑的畫面", "故意將石頭的照片貼上布的標籤"], ans: 1, exp: "機器學習需要充足且多元的高品質訓練樣本，AI 模型的辨識率才會高！" },
       { cat: "AI與素養", q: "做專題簡報時想使用網路上別人拍攝的風景照，下列哪一種做法最尊重著作權？", opts: ["直接下載並宣稱是自己拍的作品", "選用創用 CC 授權素材並標註出處", "用修圖軟體把原作者浮水印塗掉", "只要不印出來就完全沒有版權問題"], ans: 1, exp: "尊重智慧財產權，應優先選用合法「創用 CC」授權素材並依規定標明作者出處。" },
@@ -755,100 +805,97 @@
     }
 
     // =========================================================
-    // 3. 主角 8 大武學奧義與自由配招系統
+    // 3. 主角 8 大武學奧義 (新增 shieldBreak 破盾值設定)
     // =========================================================
     const skillCatalog = [
       {
-        id: 'slash', name: "🗡️ 疾風劍氣", unlockLv: 1, mpCost: 0, type: "attack",
-        shortDesc: "0 靈｜100% 基礎斬擊",
-        fullDesc: "不消耗靈力的基本劍招，對付低防禦小怪適用，但難以斬穿高階首領的重甲。",
+        id: 'slash', name: "🗡️ 疾風劍氣", unlockLv: 1, mpCost: 0, shieldBreak: 1, type: "attack",
+        shortDesc: "0靈｜100%傷｜破盾1",
+        fullDesc: "不消耗靈力的基本劍招，可削減敵方 1 層護盾。",
         borderClass: "border-amber-500/70 from-stone-700 to-stone-900", textClass: "text-amber-200"
       },
       {
-        id: 'heal', name: "🌿 迴風沐雨訣", unlockLv: 1, mpCost: 14, type: "heal",
-        shortDesc: "14 靈｜免答題 +42%命",
+        id: 'heal', name: "🌿 迴風沐雨訣", unlockLv: 1, mpCost: 14, shieldBreak: 0, type: "heal",
+        shortDesc: "14靈｜免答題 +42%命",
         fullDesc: "不需答題直接運功療傷，恢復 42% 最大命(HP)並清除破甲狀態。",
         borderClass: "border-emerald-400 from-emerald-800 to-emerald-950", textClass: "text-emerald-200"
       },
       {
-        id: 'thunder', name: "⚡ 九天雷霆斬", unlockLv: 1, mpCost: 12, type: "attack",
-        shortDesc: "12 靈｜185% 雷電爆擊",
-        fullDesc: "引動九天狂雷灌注劍身，答對符文造成 185% 高額爆擊傷害！",
+        id: 'thunder', name: "⚡ 九天雷霆斬", unlockLv: 1, mpCost: 12, shieldBreak: 1, type: "attack",
+        shortDesc: "12靈｜185%爆擊｜破盾1",
+        fullDesc: "引動九天狂雷灌注劍身，造成 185% 雷電爆擊傷害並削減 1 層護盾！",
         borderClass: "border-yellow-400 from-amber-700 to-amber-950", textClass: "text-yellow-200"
       },
       {
-        id: 'pierce', name: "💠 破魔穿雲箭", unlockLv: 2, mpCost: 10, type: "attack",
-        shortDesc: "10 靈｜無視怪物防禦",
-        fullDesc: "【Lv.2 領悟】凝聚防毒破甲光束，無視敵方 100% 防禦力！對付重甲怪必備！",
+        id: 'pierce', name: "💠 破魔穿雲箭", unlockLv: 2, mpCost: 10, shieldBreak: 2, type: "attack",
+        shortDesc: "10靈｜無視防禦｜破盾2",
+        fullDesc: "【Lv.2 領悟】無視敵方 100% 防禦力，並一口氣擊碎 2 層護盾！對付重甲首領必備！",
         borderClass: "border-cyan-400 from-sky-800 to-slate-950", textClass: "text-cyan-200"
       },
       {
-        id: 'vamp', name: "✂️ Ctrl+X 奪命剪", unlockLv: 3, mpCost: 14, type: "attack",
-        shortDesc: "14 靈｜140%傷害+吸血",
-        fullDesc: "【Lv.3 領悟】施展剪下奧義造成 140% 傷害，並將 50% 傷害轉為自身生命！",
+        id: 'vamp', name: "✂️ Ctrl+X 奪命剪", unlockLv: 3, mpCost: 14, shieldBreak: 1, type: "attack",
+        shortDesc: "14靈｜140%吸血｜破盾1",
+        fullDesc: "【Lv.3 領悟】造成 140% 傷害並將 50% 傷害轉為自身生命，同時削減 1 層護盾！",
         borderClass: "border-rose-400 from-rose-900 to-stone-950", textClass: "text-rose-200"
       },
       {
-        id: 'twin', name: "👥 Ctrl+C 雙重影斬", unlockLv: 4, mpCost: 16, type: "attack",
-        shortDesc: "16 靈｜連續 2 次 115%斬",
-        fullDesc: "【Lv.4 領悟】複製劍氣分身，一次出招連續斬擊敵人 2 下（共 230% 威力）！",
+        id: 'twin', name: "👥 Ctrl+C 雙重影斬", unlockLv: 4, mpCost: 16, shieldBreak: 2, type: "attack",
+        shortDesc: "16靈｜二連斬｜破盾2",
+        fullDesc: "【Lv.4 領悟】複製劍氣分身連續斬擊 2 下（共 230% 威力），並擊碎 2 層護盾！",
         borderClass: "border-purple-400 from-purple-900 to-stone-950", textClass: "text-purple-200"
       },
       {
-        id: 'shield', name: "🛡️ F5 重整金鐘罩", unlockLv: 5, mpCost: 12, type: "attack",
-        shortDesc: "12 靈｜130%傷+護盾+14DEF",
-        fullDesc: "【Lv.5 領悟】重整系統防線，造成 130% 傷害並在本場戰鬥提升 14 點防禦！",
+        id: 'shield', name: "🛡️ F5 重整金鐘罩", unlockLv: 5, mpCost: 12, shieldBreak: 1, type: "attack",
+        shortDesc: "12靈｜+14防禦｜破盾1",
+        fullDesc: "【Lv.5 領悟】造成 130% 傷害並在本場戰鬥提升 +14 防禦，削減 1 層護盾！",
         borderClass: "border-teal-400 from-teal-900 to-stone-950", textClass: "text-teal-200"
       },
       {
-        id: 'ultimate', name: "🌟 AI 神算萬劍訣", unlockLv: 7, mpCost: 26, type: "attack",
-        shortDesc: "26 靈｜260% 無視防禦神招",
-        fullDesc: "【Lv.7 終極奧義】召喚萬柄數據光劍齊發，無視防禦造成 260% 毀滅傷害！",
+        id: 'ultimate', name: "🌟 AI 神算萬劍訣", unlockLv: 7, mpCost: 26, shieldBreak: 3, type: "attack",
+        shortDesc: "26靈｜260%神招｜破盾3",
+        fullDesc: "【Lv.7 終極奧義】萬柄數據光劍齊發，無視防禦造成 260% 毀滅傷害並瞬間擊碎 3 層護盾！",
         borderClass: "border-amber-300 from-yellow-600 via-red-800 to-stone-950", textClass: "text-yellow-100"
       }
     ];
 
     // =========================================================
-    // 4. 怪物圖鑑与四大章節 BOSS 專屬戰前／戰後劇情台詞
+    // 4. 怪物圖鑑 (新增 maxShield 護盾層數與 BOSS 專屬劇情)
     // =========================================================
     const TILE_SIZE = 44;
     const COLS = 18;
     const ROWS = 12;
 
     const monsterCatalog = {
-      '1': { key: '1', name: "砂岩灰塵魔像", lv: 1, maxHp: 58, atk: 12, def: 4, exp: 16, gold: 16, trait: "特技：風沙迷眼 (吸取 8 點靈力)", skillName: "🌪️ 大漠風沙障", skillType: "drain_mp" },
-      '2': { key: '2', name: "甲殼吞鍵蟲", lv: 2, maxHp: 82, atk: 16, def: 11, exp: 24, gold: 22, trait: "【重甲】普攻難傷・建議用破魔穿雲箭", skillName: "🪲 破鍵裂甲咬", skillType: "heavy_hit" },
-      '3': { key: '3', name: "符文亂碼妖", lv: 3, maxHp: 128, atk: 23, def: 12, exp: 38, gold: 34, trait: "特技：未存檔詛咒 (無視 50% 防禦)", skillName: "🟢 亂碼蝕骨咒", skillType: "ignore_def" },
-      '4': { key: '4', name: "赤焰竊盜魔", lv: 4, maxHp: 168, atk: 30, def: 16, exp: 52, gold: 46, trait: "特技：探囊取物 (竊取銀兩 Bytes)", skillName: "🔥 劫火掠財爪", skillType: "steal_gold" },
-      '5': { key: '5', name: "幻影魔鏡靈", lv: 5, maxHp: 225, atk: 38, def: 22, exp: 75, gold: 65, trait: "特技：幻象三連擊 (連續 3 段傷害)", skillName: "🪞 彈窗幻影連斬", skillType: "multi_hit" },
-      '6': { key: '6', name: "深淵釣魚妖", lv: 6, maxHp: 285, atk: 46, def: 28, exp: 105, gold: 88, trait: "特技：噬魂金鉤 (吸取生命恢復自身)", skillName: "🪝 詭信噬魂鉤", skillType: "vampire" },
-      '7': { key: '7', name: "青銅木馬巨兵", lv: 7, maxHp: 370, atk: 56, def: 38, exp: 145, gold: 120, trait: "【重甲】破城重踏 (降低勇者防禦)", skillName: "🐴 木馬破甲踐踏", skillType: "break_def" },
-      'M_MIMIC': { key: 'M_MIMIC', name: "📦 噬人偽裝寶箱怪", lv: 5, maxHp: 190, atk: 34, def: 16, exp: 65, gold: 95, trait: "陷阱突襲：狂暴撕咬 (高賞金怪獸)", skillName: "🦷 寶箱巨顎吞噬", skillType: "heavy_hit" },
+      '1': { key: '1', name: "砂岩灰塵魔像", lv: 1, maxHp: 58, atk: 12, def: 4, maxShield: 2, exp: 16, gold: 16, trait: "特技：風沙迷眼 (吸取 8 點靈力)", skillName: "🌪️ 大漠風沙障", skillType: "drain_mp" },
+      '2': { key: '2', name: "甲殼吞鍵蟲", lv: 2, maxHp: 82, atk: 16, def: 11, maxShield: 2, exp: 24, gold: 22, trait: "【重甲】普攻難傷・建議用破魔穿雲箭", skillName: "🪲 破鍵裂甲咬", skillType: "heavy_hit" },
+      '3': { key: '3', name: "符文亂碼妖", lv: 3, maxHp: 128, atk: 23, def: 12, maxShield: 2, exp: 38, gold: 34, trait: "特技：未存檔詛咒 (無視 50% 防禦)", skillName: "🟢 亂碼蝕骨咒", skillType: "ignore_def" },
+      '4': { key: '4', name: "赤焰竊盜魔", lv: 4, maxHp: 168, atk: 30, def: 16, maxShield: 3, exp: 52, gold: 46, trait: "特技：探囊取物 (竊取銀兩 Bytes)", skillName: "🔥 劫火掠財爪", skillType: "steal_gold" },
+      '5': { key: '5', name: "幻影魔鏡靈", lv: 5, maxHp: 225, atk: 38, def: 22, maxShield: 3, exp: 75, gold: 65, trait: "特技：幻象三連擊 (連續 3 段傷害)", skillName: "🪞 彈窗幻影連斬", skillType: "multi_hit" },
+      '6': { key: '6', name: "深淵釣魚妖", lv: 6, maxHp: 285, atk: 46, def: 28, maxShield: 3, exp: 105, gold: 88, trait: "特技：噬魂金鉤 (吸取生命恢復自身)", skillName: "🪝 詭信噬魂鉤", skillType: "vampire" },
+      '7': { key: '7', name: "青銅木馬巨兵", lv: 7, maxHp: 370, atk: 56, def: 38, maxShield: 4, exp: 145, gold: 120, trait: "【重甲】破城重踏 (降低勇者防禦)", skillName: "🐴 木馬破甲踐踏", skillType: "break_def" },
+      'M_MIMIC': { key: 'M_MIMIC', name: "📦 噬人偽裝寶箱怪", lv: 5, maxHp: 190, atk: 34, def: 16, maxShield: 3, exp: 65, gold: 95, trait: "陷阱突襲：狂暴撕咬 (高賞金怪獸)", skillName: "🦷 寶箱巨顎吞噬", skillType: "heavy_hit" },
 
-      // 三大章節守門小 BOSS + 專屬劇情
       'A': {
-        key: 'A', isSubBoss: true, name: "👹 卷一首領・千年鍵垢巨魔", lv: 3, maxHp: 195, atk: 24, def: 13, exp: 75, gold: 90,
-        trait: "【守門首領】厚重鍵垢甲＋泰山壓頂", skillName: "🪨 萬年鍵垢泰山壓頂", skillType: "heavy_hit",
+        key: 'A', isSubBoss: true, name: "👹 卷一首領・千年鍵垢巨魔", lv: 3, maxHp: 205, atk: 24, def: 13, maxShield: 3, exp: 75, gold: 90,
+        trait: "【守門首領】3層護盾・萬年黏滯震擊", skillName: "🪨 萬年鍵垢泰山壓頂", skillType: "heavy_hit",
         introQuote: "「吼哈哈哈！本座乃歷屆學生邊用電腦邊吃餅乾、累積千年的鍵盤污垢與機殼灰塵所化！我的灰塵重甲連疾風劍氣都砍不穿，乖乖讓你的電腦過熱當機吧！」",
-        defeatQuote: "「嗚哇！想不到你竟懂得用『破魔穿雲箭』與正確的硬體保養觀念清除本座……通往綠洲石窟的太極傳送陣已經解開了！」"
+        defeatQuote: "「嗚哇！想不到你竟懂得擊碎本座護盾並用正確硬體保養觀念除垢……通往綠洲石窟的太極傳送陣已經解開了！」"
       },
       'D': {
-        key: 'D', isSubBoss: true, name: "💀 卷二首領・格式化鐮刀死神", lv: 5, maxHp: 340, atk: 39, def: 22, exp: 140, gold: 150,
-        trait: "【守門首領】磁區抹除斬 (無視防禦)", skillName: "🌙 強制格式化死神鐮", skillType: "ignore_def",
+        key: 'D', isSubBoss: true, name: "💀 卷二首領・格式化鐮刀死神", lv: 5, maxHp: 350, atk: 39, def: 22, maxShield: 4, exp: 140, gold: 150,
+        trait: "【守門首領】4層護盾・磁區抹除斬", skillName: "🌙 強制格式化死神鐮", skillType: "ignore_def",
         introQuote: "「桀桀桀……踏入這座檔案石窟的人，作業跟報告都別想保住！本死神最愛不按 Ctrl+S 存檔、又亂改副檔名的糊塗蛋！接我一招強制格式化吧！」",
         defeatQuote: "「可惡……你竟然熟記所有快捷鍵與雲端備份心法！我的格式化鐮刀斬不斷你的檔案……前往樓蘭幻境的封印解除！」"
       },
       'G': {
-        key: 'G', isSubBoss: true, name: "🎭 卷三首領・深淵駭客傀儡師", lv: 7, maxHp: 490, atk: 54, def: 32, exp: 220, gold: 220,
-        trait: "【守門首領】殭屍網路吸血陣", skillName: "🕸️ 暗網傀儡噬魂陣", skillType: "vampire",
+        key: 'G', isSubBoss: true, name: "🎭 卷三首領・深淵駭客傀儡師", lv: 7, maxHp: 510, atk: 54, def: 32, maxShield: 4, exp: 220, gold: 220,
+        trait: "【守門首領】4層護盾・殭屍網路吸血陣", skillName: "🕸️ 暗網傀儡噬魂陣", skillType: "vampire",
         introQuote: "「呵呵，恭喜你抽中最新款手機！只要踏入我的釣魚假網址、或是下課忘記登出公用電腦，你的帳號就會成為我的提線傀儡！乖乖交出你的個資與密碼吧！」",
         defeatQuote: "「怎麼可能？！連雙重驗證與 HTTPS 加密防線都守護著你……暗網魔宮的大門已經敞開，但勒索魔神絕不會放過你！」"
       },
-
-      // 最終章大魔王 + 專屬劇情
       'K': {
-        key: 'K', isSubBoss: true, name: "👑 終極魔神・暗黑勒索魔神", lv: 10, maxHp: 780, atk: 75, def: 45, exp: 450, gold: 500,
-        trait: "【終極魔神】天地加密鎖 (雙倍毀滅黑雷)", skillName: "⚡ 終極勒索滅世雷", skillType: "boss_nuke",
+        key: 'K', isSubBoss: true, name: "👑 終極魔神・暗黑勒索魔神", lv: 10, maxHp: 820, atk: 75, def: 45, maxShield: 5, exp: 450, gold: 500,
+        trait: "【終極魔神】5層護盾・天地加密滅世雷", skillName: "⚡ 終極勒索滅世雷", skillType: "boss_nuke",
         introQuote: "「渺小的古月鍵俠，歡迎來到暗網魔宮王座！本魔神已將整座校園網路的檔案全部加密鎖死，若不交出贖金，所有珍貴照片與心血結晶都將灰飛煙滅！顫抖吧！」",
         defeatQuote: "「不可能！！你竟然擁有『3-2-1 異地雲端備份』與無懈可擊的資安智慧，本魔神的加密鎖在你的備份面前毫無用處……數位世界的和平，就交給你守護了！」"
       }
@@ -857,9 +904,9 @@
     const mapDataList = [
       {
         badge: "卷一", name: "大漠古鎮・千迴書院迷宮",
-        subBossName: "千年鍵垢巨魔",
+        subBossName: "千年鍵垢巨魔", weatherColor: "rgba(251, 191, 36, 0.45)",
         startX: 1, startY: 1, returnX: 15, returnY: 9,
-        floorColor1: "#d6be96", floorColor2: "#cbb084", wallTop: "#8c7355", wallFront: "#5c4934",
+        floorColor1: "#c7ab80", floorColor2: "#b89b6e", wallTop: "#7d6447", wallFront: "#4f3e2b",
         grid: [
           "##################",
           "#..N.#...1..#...C#",
@@ -877,9 +924,9 @@
       },
       {
         badge: "卷二", name: "迷霧綠洲・九曲石窟迷宮",
-        subBossName: "格式化鐮刀死神",
+        subBossName: "格式化鐮刀死神", weatherColor: "rgba(52, 211, 153, 0.5)",
         startX: 1, startY: 5, returnX: 14, returnY: 10,
-        floorColor1: "#9ca38f", floorColor2: "#8c947e", wallTop: "#576352", wallFront: "#384234",
+        floorColor1: "#8b967e", floorColor2: "#7c876f", wallTop: "#4b5746", wallFront: "#2f382c",
         grid: [
           "##################",
           "#C..T..#...3..#C.#",
@@ -897,9 +944,9 @@
       },
       {
         badge: "卷三", name: "樓蘭幻境・暗流迴廊迷宮",
-        subBossName: "深淵駭客傀儡師",
+        subBossName: "深淵駭客傀儡師", weatherColor: "rgba(192, 132, 252, 0.5)",
         startX: 1, startY: 5, returnX: 14, returnY: 10,
-        floorColor1: "#b89f82", floorColor2: "#a88e70", wallTop: "#6e5544", wallFront: "#473529",
+        floorColor1: "#a68c70", floorColor2: "#967c60", wallTop: "#5e4738", wallFront: "#3b2b21",
         grid: [
           "##################",
           "#C..W..#...5..#C.#",
@@ -917,9 +964,9 @@
       },
       {
         badge: "終卷", name: "暗網魔宮・深淵王座迷宮",
-        subBossName: "暗黑勒索魔神",
+        subBossName: "暗黑勒索魔神", weatherColor: "rgba(244, 63, 94, 0.6)",
         startX: 1, startY: 5, returnX: 14, returnY: 10,
-        floorColor1: "#4a3b47", floorColor2: "#3d2f3a", wallTop: "#332230", wallFront: "#1f131d",
+        floorColor1: "#3d2f3a", floorColor2: "#30242e", wallTop: "#261824", wallFront: "#140b13",
         grid: [
           "##################",
           "#C..J..#...7..#C.#",
@@ -945,6 +992,10 @@
     let lastSealWarnTime = 0;
     let currentShopTab = 'item';
 
+    // HD-2D 氣候粒子與腳步煙塵陣列
+    let weatherParticles = [];
+    let footstepDusts = [];
+
     let hero = {
       x: 1 * TILE_SIZE + TILE_SIZE / 2,
       y: 1 * TILE_SIZE + TILE_SIZE / 2,
@@ -954,7 +1005,7 @@
       walkFrame: 0,
       isMoving: false,
       invulnerableUntil: 0,
-      ignoreTileKey: null // 紀錄剛剛關閉互動的座標 "gx,gy"，離開該格前不重複彈出對話/靈泉/BOSS劇情
+      ignoreTileKey: null
     };
 
     const keysDown = {};
@@ -966,9 +1017,6 @@
       hero.isMoving = false;
     }
 
-    // =========================================================
-    // ★ 五階神兵護具與戰術道具 (寶箱可開出裝備，商城亦可鍛造)
-    // =========================================================
     const shopConsumables = [
       { id: "hp", name: "綠色乖乖金創藥", icon: "🏺", price: 22, desc: "恢復 65 點 命(HP)，居家旅行必備良藥。" },
       { id: "mp", name: "行動電源聚靈丹", icon: "⚡", price: 26, desc: "恢復 40 點 靈(MP)，補充施展奧義所需真氣。" },
@@ -979,21 +1027,18 @@
     ];
 
     const shopEquipments = [
-      // 【兵刃 Weapons - 5 階】
       { id: "w1", tier: 1, type: "weapon", reqLv: 2, name: "一階・機械青軸快劍", icon: "🗡️", bonusAtk: 9, bonusDef: 0, bonusHp: 0, bonusMp: 10, price: 65, desc: "【需 Lv.2】敲擊清脆，提升 +9 武力、+10 靈力上限。" },
       { id: "w2", tier: 2, type: "weapon", reqLv: 3, name: "二階・茶軸靜音刺劍", icon: "⚔️", bonusAtk: 19, bonusDef: 3, bonusHp: 0, bonusMp: 15, price: 155, desc: "【需 Lv.3】攻守兼備，提升 +19 武力、+3 防禦、+15 靈力。" },
       { id: "w3", tier: 3, type: "weapon", reqLv: 5, name: "三階・RGB 流光龍泉劍", icon: "⚡", bonusAtk: 32, bonusDef: 5, bonusHp: 20, bonusMp: 25, price: 310, desc: "【需 Lv.5】霓虹劍氣縱橫，提升 +32 武力、+5 防禦、+25 靈力。" },
       { id: "w4", tier: 4, type: "weapon", reqLv: 7, name: "四階・光纖雷射破魔劍", icon: "💠", bonusAtk: 48, bonusDef: 8, bonusHp: 40, bonusMp: 35, price: 520, desc: "【需 Lv.7】光速傳輸斬擊，提升 +48 武力、+8 防禦、+40 命。" },
       { id: "w5", tier: 5, type: "weapon", reqLv: 9, name: "五階・軒轅 AI 聖皇神劍", icon: "🔱", bonusAtk: 70, bonusDef: 15, bonusHp: 80, bonusMp: 60, price: 820, desc: "【需 Lv.9】蘊含超級電腦神力！+70 武力、+15 防禦、+80 命！" },
 
-      // 【護甲 Armors - 5 階】
       { id: "a1", tier: 1, type: "armor", reqLv: 2, name: "一階・防毒軟體布衣", icon: "🛡️", bonusAtk: 0, bonusDef: 7, bonusHp: 20, bonusMp: 0, price: 60, desc: "【需 Lv.2】基礎病毒防護，提升 +7 防禦、+20 命上限。" },
       { id: "a2", tier: 2, type: "armor", reqLv: 3, name: "二階・雙重驗證鎖子甲", icon: "🥋", bonusAtk: 2, bonusDef: 15, bonusHp: 45, bonusMp: 10, price: 145, desc: "【需 Lv.3】兩步驟驗證護體，提升 +15 防禦、+45 命上限。" },
       { id: "a3", tier: 3, type: "armor", reqLv: 5, name: "三階・玄武硬體防火鎧", icon: "🧱", bonusAtk: 5, bonusDef: 25, bonusHp: 80, bonusMp: 20, price: 290, desc: "【需 Lv.5】阻絕惡意封包，提升 +25 防禦、+80 命、+5 武力。" },
       { id: "a4", tier: 4, type: "armor", reqLv: 7, name: "四階・SSL 加密金剛戰甲", icon: "🔐", bonusAtk: 8, bonusDef: 38, bonusHp: 130, bonusMp: 35, price: 490, desc: "【需 Lv.7】高強度加密鎧甲，提升 +38 防禦、+130 命上限。" },
       { id: "a5", tier: 5, type: "armor", reqLv: 9, name: "五階・零信任無瑕聖皇袍", icon: "👑", bonusAtk: 15, bonusDef: 56, bonusHp: 220, bonusMp: 60, price: 780, desc: "【需 Lv.9】萬邪不侵的資安神袍！+56 防禦、+220 命、+15 武力！" },
 
-      // 【法寶 Accessories - 5 階】
       { id: "c1", tier: 1, type: "acc", reqLv: 2, name: "一階・16GB 雙通道玉佩", icon: "📿", bonusAtk: 2, bonusDef: 2, bonusHp: 35, bonusMp: 25, price: 65, desc: "【需 Lv.2】擴充丹田容量，+35 命、+25 靈、攻防 +2。" },
       { id: "c2", tier: 2, type: "acc", reqLv: 3, name: "二階・1TB 固態乾坤袋", icon: "💿", bonusAtk: 5, bonusDef: 4, bonusHp: 75, bonusMp: 45, price: 150, desc: "【需 Lv.3】高速讀寫法寶，+75 命、+45 靈、+5 武力。" },
       { id: "c3", tier: 3, type: "acc", reqLv: 5, name: "三階・Wi-Fi 7 順風耳輪", icon: "📡", bonusAtk: 10, bonusDef: 8, bonusHp: 120, bonusMp: 75, price: 300, desc: "【需 Lv.5】超低延遲感應，+120 命、+75 靈、+10 武力。" },
@@ -1005,9 +1050,9 @@
 
     let player = {
       lv: 1, exp: 0, nextExp: 35,
-      hp: 105, baseMaxHp: 105,
-      mp: 55, baseMaxMp: 55,
-      baseAtk: 15, baseDef: 4,
+      hp: 110, baseMaxHp: 110,
+      mp: 60, baseMaxMp: 60,
+      baseAtk: 16, baseDef: 5,
       gold: 40,
       potions: { hp: 2, mp: 1, superHp: 0, scroll: 0 },
       nextBattleAtkBuff: 0,
@@ -1048,6 +1093,12 @@
       defBuff: 0,
       atkBuff: 0,
       wrongAnswerPenalty: false,
+      // 3A 戰鬥演出與完美格擋 QTE 狀態
+      parryWindowActive: false,
+      parrySucceeded: false,
+      cameraZoom: 1,
+      cinemaBars: 0,
+      flashScreenAlpha: 0,
       heroOffsetX: 0,
       monsterOffsetX: 0,
       monsterFlash: 0,
@@ -1055,6 +1106,7 @@
       screenShake: 0,
       hitStopFrames: 0,
       particles: [],
+      shockwaves: [],
       floatingTexts: [],
       slashEffects: [],
       bannerText: "",
@@ -1062,7 +1114,7 @@
     };
 
     // =========================================================
-    // 5. Canvas 精細美術繪圖函式庫
+    // 5. HD-2D 精細角色、怪獸與立體環境繪圖管線
     // =========================================================
     const mainCanvas = document.getElementById('main-canvas');
     const ctx = mainCanvas.getContext('2d');
@@ -1083,105 +1135,131 @@
       c.translate(x, y);
       c.scale(facing * scale, scale);
 
-      const legSwing = Math.sin(walkStep) * 6;
+      const legSwing = Math.sin(walkStep) * 6.5;
       const bob = Math.abs(Math.sin(walkStep)) * 2.5;
 
-      c.fillStyle = "rgba(0,0,0,0.45)";
+      // 多層次立體柔影
+      c.fillStyle = "rgba(0,0,0,0.55)";
       c.beginPath();
-      c.ellipse(0, 20, 14, 5, 0, 0, Math.PI * 2);
+      c.ellipse(0, 21, 15, 5.5, 0, 0, Math.PI * 2);
       c.fill();
 
       c.translate(0, -bob);
 
       if (flashWhite) {
         c.shadowColor = "#ffffff";
-        c.shadowBlur = 20;
+        c.shadowBlur = 22;
       }
 
-      c.fillStyle = "#991b1b";
+      // 飄逸漸層紅披風
+      const capeGrad = c.createLinearGradient(-4, -8, -22, 18);
+      capeGrad.addColorStop(0, "#b91c1c");
+      capeGrad.addColorStop(1, "#450a0a");
+      c.fillStyle = capeGrad;
       c.beginPath();
-      c.moveTo(-6, -8);
-      c.quadraticCurveTo(-20, 6, -16 - legSwing * 0.4, 17);
-      c.lineTo(-4, 14);
+      c.moveTo(-5, -8);
+      c.quadraticCurveTo(-22, 5, -18 - legSwing * 0.45, 19);
+      c.lineTo(-3, 15);
       c.fill();
 
+      // 雙腿與皮靴高光
       c.fillStyle = "#1c1917";
       c.fillRect(-6 + legSwing * 0.5, 9, 5, 10);
       c.fillRect(2 - legSwing * 0.5, 9, 5, 10);
       c.fillStyle = "#78350f";
-      c.fillRect(-7 + legSwing * 0.5, 15, 6, 5);
-      c.fillRect(1 - legSwing * 0.5, 15, 6, 5);
+      c.fillRect(-7 + legSwing * 0.5, 15, 6.5, 5);
+      c.fillRect(1 - legSwing * 0.5, 15, 6.5, 5);
 
+      // 背負發光古劍
       if (!isAttacking) {
         c.save();
         c.rotate(-0.6);
         c.fillStyle = "#fbbf24";
-        c.fillRect(-4, -26, 4, 10);
+        c.fillRect(-4, -27, 4, 10);
         c.fillStyle = "#38bdf8";
-        c.fillRect(-6, -18, 8, 3);
+        c.fillRect(-7, -19, 10, 3);
         c.restore();
       }
 
-      c.fillStyle = "#1e3a8a";
-      fillRoundRect(c, -9, -8, 18, 18, 4);
-      c.strokeStyle = "#f59e0b";
+      // 藍金織錦勁裝 (參考軒轅劍主角立體服飾)
+      const armorGrad = c.createLinearGradient(-9, -8, 9, 10);
+      armorGrad.addColorStop(0, "#2563eb");
+      armorGrad.addColorStop(1, "#1e3a8a");
+      c.fillStyle = armorGrad;
+      fillRoundRect(c, -9.5, -8, 19, 18, 4);
+      c.strokeStyle = "#fbbf24";
       c.lineWidth = 1.6;
       c.stroke();
 
-      c.fillStyle = "#b45309";
-      c.fillRect(-9, 3, 18, 3.5);
+      // 護肩甲片與腰封
+      c.fillStyle = "#d97706";
+      fillRoundRect(c, -12, -8, 5, 6, 2);
+      fillRoundRect(c, 7, -8, 5, 6, 2);
+      c.fillStyle = "#92400e";
+      c.fillRect(-9.5, 3, 19, 4);
       c.fillStyle = "#fde047";
-      c.fillRect(-2.5, 2.5, 5, 5);
+      c.fillRect(-3, 2.5, 6, 5);
 
+      // 臉部光影
       c.fillStyle = "#fed7aa";
       c.beginPath();
-      c.arc(0, -16, 10, 0, Math.PI * 2);
+      c.arc(0, -16, 10.5, 0, Math.PI * 2);
       c.fill();
 
-      c.fillStyle = "#1c1917";
-      c.fillRect(2, -18, 2.5, 3.5);
-      c.fillRect(6.5, -18, 2.2, 3.5);
+      // 銳利眼神與高光
+      c.fillStyle = "#0c0a09";
+      c.fillRect(2, -18, 2.6, 3.8);
+      c.fillRect(6.5, -18, 2.3, 3.8);
+      c.fillStyle = "#ffffff";
+      c.fillRect(2.3, -18, 1.2, 1.4);
 
-      c.fillStyle = "#78350f";
+      // 層次感棕髮與飄帶
+      const hairGrad = c.createLinearGradient(0, -29, 0, -10);
+      hairGrad.addColorStop(0, "#92400e");
+      hairGrad.addColorStop(1, "#451a03");
+      c.fillStyle = hairGrad;
       c.beginPath();
-      c.arc(-1, -19, 11, Math.PI * 0.85, Math.PI * 2.15);
+      c.arc(-1, -19, 11.5, Math.PI * 0.82, Math.PI * 2.18);
       c.fill();
       c.beginPath();
-      c.moveTo(-11, -17);
-      c.lineTo(-7, -10);
+      c.moveTo(-12, -17);
+      c.lineTo(-8, -10);
       c.lineTo(-3, -16);
       c.lineTo(2, -11);
       c.lineTo(6, -17);
       c.lineTo(11, -13);
-      c.lineTo(10, -23);
-      c.lineTo(-10, -23);
+      c.lineTo(10, -24);
+      c.lineTo(-10, -24);
       c.fill();
 
+      // 額頭寶石護額
       c.fillStyle = "#0284c7";
-      c.fillRect(-9, -22, 19, 3);
-      c.fillStyle = "#facc15";
+      c.fillRect(-9.5, -22.5, 19.5, 3.2);
+      c.fillStyle = "#fde047";
       c.beginPath();
-      c.arc(4, -20.5, 2, 0, Math.PI * 2);
+      c.arc(4, -21, 2.2, 0, Math.PI * 2);
       c.fill();
 
       if (isAttacking) {
         c.save();
         c.translate(5, -2);
-        c.rotate(0.3);
-        const grad = c.createLinearGradient(0, 0, 38, -18);
+        c.rotate(0.25);
+        const grad = c.createLinearGradient(0, 0, 44, -18);
         grad.addColorStop(0, "#fef08a");
         grad.addColorStop(0.5, "#38bdf8");
         grad.addColorStop(1, "#ffffff");
         c.fillStyle = grad;
+        c.shadowColor = "#38bdf8";
+        c.shadowBlur = 15;
         c.beginPath();
         c.moveTo(4, -2);
-        c.lineTo(40, -15);
-        c.lineTo(44, -11);
+        c.lineTo(44, -16);
+        c.lineTo(48, -11);
         c.lineTo(6, 3);
         c.closePath();
         c.fill();
         c.fillStyle = "#f59e0b";
-        c.fillRect(2, -6, 4, 12);
+        c.fillRect(2, -7, 4.5, 14);
         c.restore();
       } else {
         c.fillStyle = "#9a3412";
@@ -1196,7 +1274,7 @@
       c.translate(x, y);
       c.scale(scale, scale);
 
-      c.fillStyle = "rgba(0,0,0,0.45)";
+      c.fillStyle = "rgba(0,0,0,0.5)";
       c.beginPath();
       c.ellipse(0, 22, 15, 6, 0, 0, Math.PI * 2);
       c.fill();
@@ -1213,9 +1291,9 @@
         c.fillStyle = "#f5f5f4";
         c.beginPath();
         c.moveTo(-8, -13);
-        c.quadraticCurveTo(0, 4, 8, -13);
+        c.quadraticCurveTo(0, 5, 8, -13);
         c.fill();
-        c.fillStyle = "#a8a29e";
+        c.fillStyle = "#e7e5e4";
         c.beginPath();
         c.ellipse(0, -23, 13, 7, 0, 0, Math.PI * 2);
         c.fill();
@@ -1236,15 +1314,15 @@
       c.restore();
     }
 
-    function drawMonsterCharacter(c, x, y, key, scale = 0.85, time = 0, flashWhite = false) {
+    function drawMonsterCharacter(c, x, y, key, scale = 0.85, time = 0, flashWhite = false, isStunned = false) {
       c.save();
       c.translate(x, y);
       c.scale(scale, scale);
 
-      const floatY = Math.sin(time * 0.005) * 3.5;
-      c.fillStyle = "rgba(0,0,0,0.5)";
+      const floatY = isStunned ? 4 : Math.sin(time * 0.005) * 4;
+      c.fillStyle = "rgba(0,0,0,0.55)";
       c.beginPath();
-      c.ellipse(0, 24, 18, 6, 0, 0, Math.PI * 2);
+      c.ellipse(0, 24, 19, 6.5, 0, 0, Math.PI * 2);
       c.fill();
 
       c.translate(0, floatY);
@@ -1254,26 +1332,28 @@
       }
 
       if (key === '1') {
-        c.fillStyle = "#57534e";
+        const g = c.createRadialGradient(-4, -4, 2, 0, 0, 20);
+        g.addColorStop(0, "#78716c"); g.addColorStop(1, "#292524");
+        c.fillStyle = g;
         c.beginPath(); c.arc(0, 0, 18, 0, Math.PI * 2); c.fill();
-        c.fillStyle = "#78716c";
+        c.fillStyle = "#57534e";
         for (let i = 0; i < 5; i++) {
           const ang = time * 0.004 + (i * Math.PI * 2) / 5;
-          c.beginPath(); c.arc(Math.cos(ang) * 14, Math.sin(ang) * 10, 8, 0, Math.PI * 2); c.fill();
+          c.beginPath(); c.arc(Math.cos(ang) * 15, Math.sin(ang) * 10, 7.5, 0, Math.PI * 2); c.fill();
         }
         c.fillStyle = "#facc15";
         c.beginPath(); c.arc(-6, -2, 4, 0, Math.PI * 2); c.arc(6, -2, 4, 0, Math.PI * 2); c.fill();
 
       } else if (key === '2') {
         c.fillStyle = "#3f6212";
-        c.beginPath(); c.ellipse(5, 4, 16, 12, 0, 0, Math.PI * 2); c.fill();
+        c.beginPath(); c.ellipse(5, 4, 17, 13, 0, 0, Math.PI * 2); c.fill();
         c.strokeStyle = "#a3e635"; c.lineWidth = 2; c.stroke();
         c.fillStyle = "#65a30d";
-        c.beginPath(); c.arc(-9, 4, 10, 0, Math.PI * 2); c.fill();
-        c.strokeStyle = "#fef08a"; c.lineWidth = 2.5;
-        c.beginPath(); c.moveTo(-16, 0); c.lineTo(-24, -5); c.moveTo(-16, 8); c.lineTo(-24, 13); c.stroke();
+        c.beginPath(); c.arc(-9, 4, 10.5, 0, Math.PI * 2); c.fill();
+        c.strokeStyle = "#fef08a"; c.lineWidth = 2.8;
+        c.beginPath(); c.moveTo(-16, 0); c.lineTo(-25, -5); c.moveTo(-16, 8); c.lineTo(-25, 13); c.stroke();
         c.fillStyle = "#ef4444";
-        c.beginPath(); c.arc(-12, 1, 3, 0, Math.PI * 2); c.fill();
+        c.beginPath(); c.arc(-12, 1, 3.2, 0, Math.PI * 2); c.fill();
 
       } else if (key === '3') {
         const grad = c.createRadialGradient(-4, -6, 3, 0, 0, 22);
@@ -1288,8 +1368,8 @@
       } else if (key === '4') {
         const wing = Math.sin(time * 0.01) * 5;
         c.fillStyle = "#7f1d1d";
-        c.beginPath(); c.moveTo(0, -4); c.lineTo(-24, -16 + wing); c.lineTo(-15, 7); c.fill();
-        c.beginPath(); c.moveTo(0, -4); c.lineTo(24, -16 + wing); c.lineTo(15, 7); c.fill();
+        c.beginPath(); c.moveTo(0, -4); c.lineTo(-25, -16 + wing); c.lineTo(-15, 7); c.fill();
+        c.beginPath(); c.moveTo(0, -4); c.lineTo(25, -16 + wing); c.lineTo(15, 7); c.fill();
         c.fillStyle = "#dc2626";
         c.beginPath(); c.arc(0, 2, 14, 0, Math.PI * 2); c.fill();
         c.fillStyle = "#facc15";
@@ -1333,8 +1413,8 @@
         c.beginPath(); c.arc(-7, -9, 3.5, 0, Math.PI * 2); c.arc(7, -9, 3.5, 0, Math.PI * 2); c.fill();
 
       } else if (key === 'A' || key === 'D' || key === 'G') {
-        c.fillStyle = "rgba(245, 158, 11, 0.25)";
-        c.beginPath(); c.arc(0, 0, 25, 0, Math.PI * 2); c.fill();
+        c.fillStyle = "rgba(245, 158, 11, 0.28)";
+        c.beginPath(); c.arc(0, 0, 26, 0, Math.PI * 2); c.fill();
         c.fillStyle = key === 'A' ? "#78350f" : key === 'D' ? "#064e3b" : "#3b0764";
         fillRoundRect(c, -18, -14, 36, 34, 6);
         c.strokeStyle = "#fbbf24"; c.lineWidth = 3; c.stroke();
@@ -1346,8 +1426,8 @@
 
       } else if (key === 'K') {
         const aura = Math.sin(time * 0.008) * 4;
-        c.fillStyle = "rgba(225, 29, 72, 0.32)";
-        c.beginPath(); c.arc(0, 0, 27 + aura, 0, Math.PI * 2); c.fill();
+        c.fillStyle = "rgba(225, 29, 72, 0.35)";
+        c.beginPath(); c.arc(0, 0, 28 + aura, 0, Math.PI * 2); c.fill();
         c.fillStyle = "#4c0519";
         fillRoundRect(c, -19, -14, 38, 35, 8);
         c.strokeStyle = "#f43f5e"; c.lineWidth = 3; c.stroke();
@@ -1360,25 +1440,48 @@
         c.beginPath(); c.arc(-7, -3, 4.5, 0, Math.PI * 2); c.arc(7, -3, 4.5, 0, Math.PI * 2); c.fill();
       }
 
+      // 若處於 BREAK 破防暈眩狀態，頭頂繪製旋轉金星
+      if (isStunned) {
+        for (let s = 0; s < 3; s++) {
+          const sa = time * 0.008 + (s * Math.PI * 2) / 3;
+          c.fillStyle = "#fde047";
+          c.beginPath();
+          c.arc(Math.cos(sa) * 16, -28 + Math.sin(sa) * 5, 3.5, 0, Math.PI * 2);
+          c.fill();
+        }
+      }
+
       c.restore();
     }
 
+    // HD-2D 材質磚塊渲染
     function drawEnvironmentTile(c, cell, gx, gy, mapMeta, time) {
       const px = gx * TILE_SIZE;
       const py = gy * TILE_SIZE;
 
       c.fillStyle = (gx + gy) % 2 === 0 ? mapMeta.floorColor1 : mapMeta.floorColor2;
       c.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-      c.strokeStyle = "rgba(0,0,0,0.08)";
+      c.strokeStyle = "rgba(0,0,0,0.12)";
       c.strokeRect(px, py, TILE_SIZE, TILE_SIZE);
 
+      // 石板裂紋與砂礫細節
+      if ((gx * 11 + gy * 7) % 4 === 0) {
+        c.fillStyle = "rgba(255,255,255,0.06)";
+        c.fillRect(px + 4, py + 4, TILE_SIZE - 8, 2);
+        c.fillStyle = "rgba(0,0,0,0.12)";
+        c.fillRect(px + 14, py + 24, 5, 3);
+      }
+
       if (cell === '#') {
-        c.fillStyle = "rgba(0,0,0,0.35)";
-        c.fillRect(px, py + TILE_SIZE - 5, TILE_SIZE, 6);
+        // 立體 2.5D 浮雕厚石牆
+        c.fillStyle = "rgba(0,0,0,0.45)";
+        c.fillRect(px, py + TILE_SIZE - 5, TILE_SIZE, 7);
         c.fillStyle = mapMeta.wallFront;
-        c.fillRect(px, py + 11, TILE_SIZE, TILE_SIZE - 11);
+        c.fillRect(px, py + 12, TILE_SIZE, TILE_SIZE - 12);
         c.fillStyle = mapMeta.wallTop;
         c.fillRect(px, py, TILE_SIZE, 14);
+        c.fillStyle = "rgba(255,235,190,0.14)";
+        c.fillRect(px, py + 12, TILE_SIZE, 2);
       } else if (cell === 'J') {
         c.fillStyle = "#9a3412";
         c.beginPath(); c.arc(px + 15, py + 22, 8.5, 0, Math.PI * 2); c.fill();
@@ -1387,6 +1490,8 @@
         c.fillStyle = "#b45309";
         c.beginPath(); c.arc(px + 22, py + 31, 9, 0, Math.PI * 2); c.fill();
       } else if (cell === 'T') {
+        c.fillStyle = "rgba(0,0,0,0.35)";
+        c.beginPath(); c.ellipse(px + 22, py + 38, 13, 5, 0, 0, Math.PI * 2); c.fill();
         c.fillStyle = "#78350f";
         c.fillRect(px + 19, py + 16, 6, 22);
         c.fillStyle = "#15803d";
@@ -1417,19 +1522,17 @@
       }
     }
 
-    // 繪製右下角對話框立繪 (支援長老、商人、靈泉與四大章節 BOSS 立繪)
     function drawDialoguePortrait(type) {
       const pCanvas = document.getElementById('dlg-portrait-canvas');
       const c = pCanvas.getContext('2d');
       c.clearRect(0, 0, pCanvas.width, pCanvas.height);
 
       if (['A', 'D', 'G', 'K'].includes(type)) {
-        drawMonsterCharacter(c, 85, 100, type, 2.35, performance.now(), false);
+        drawMonsterCharacter(c, 85, 100, type, 2.35, performance.now(), false, false);
         return;
       }
 
       if (type === 'H') {
-        // 靈泉精靈光球立繪
         c.save();
         c.translate(85, 95);
         const g = c.createRadialGradient(0, 0, 5, 0, 0, 48);
@@ -1469,16 +1572,28 @@
     }
 
     // =========================================================
-    // 6. 主遊戲 60FPS 迴圈、靈泉選擇權、多元寶箱與 BOSS 戰前劇情
+    // 6. 主遊戲 60FPS 迴圈、氣候粒子與地圖互動
     // =========================================================
     let dialogueCallback = null;
 
     function initGame() {
       const pCan = document.getElementById('hero-portrait-canvas');
-      drawHeroCharacter(pCan.getContext('2d'), 38, 48, 1.45, 1, 0, false, false);
+      drawHeroCharacter(pCan.getContext('2d'), 40, 50, 1.5, 1, 0, false, false);
 
       runtimeMaps = mapDataList.map(m => m.grid.map(r => r.split('')));
       exploredMaps = mapDataList.map(() => Array.from({ length: ROWS }, () => Array(COLS).fill(false)));
+
+      // 初始化 35 顆環境漂浮微粒
+      for (let i = 0; i < 35; i++) {
+        weatherParticles.push({
+          x: Math.random() * mainCanvas.width,
+          y: Math.random() * mainCanvas.height,
+          vx: 0.3 + Math.random() * 0.7,
+          vy: -0.2 - Math.random() * 0.5,
+          size: 1.5 + Math.random() * 2.5,
+          alpha: 0.25 + Math.random() * 0.55
+        });
+      }
 
       document.getElementById('q-count').innerText = questionPool.length;
       switchMap(0, 1, 1);
@@ -1487,8 +1602,14 @@
       updateUI();
 
       window.addEventListener('keydown', e => {
+        initAudio();
         if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
           if (document.activeElement.tagName !== 'INPUT') e.preventDefault();
+        }
+        // 戰鬥中按空白鍵觸發「完美格擋 QTE」！
+        if (e.key === ' ' && battleState.active && battleState.parryWindowActive) {
+          triggerParry();
+          return;
         }
         if (e.key === ' ' && !document.getElementById('swd-dialogue-overlay').classList.contains('hidden')) {
           closeDialogue();
@@ -1500,6 +1621,14 @@
       window.addEventListener('blur', clearInputState);
 
       requestAnimationFrame(gameLoop);
+    }
+
+    function triggerParry() {
+      if (!battleState.active || !battleState.parryWindowActive || battleState.parrySucceeded) return;
+      battleState.parrySucceeded = true;
+      playSFX('parry');
+      spawnHitSparks(210, 295, "#38bdf8", "#fde047", 30);
+      spawnFloatingText(210, 220, "✨ 完美格擋！", "#38bdf8", 28);
     }
 
     function isSubBossAliveOnCurrentMap() {
@@ -1581,12 +1710,12 @@
       const exp = exploredMaps[currentMapIdx];
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
-          if (Math.hypot(c - gx, r - gy) <= 3.2) exp[r][c] = true;
+          if (Math.hypot(c - gx, r - gy) <= 3.3) exp[r][c] = true;
         }
       }
     }
 
-    function startTouchMove(dx, dy) { touchMoveVec = { dx, dy }; }
+    function startTouchMove(dx, dy) { initAudio(); touchMoveVec = { dx, dy }; }
     function stopTouchMove() { touchMoveVec = { dx: 0, dy: 0 }; }
 
     function isAnyModalOpen() {
@@ -1615,6 +1744,17 @@
         if (dx > 0) hero.dir = 1;
         hero.isMoving = true;
         hero.walkFrame += 0.22;
+
+        // 產生腳下揚塵粒子
+        if (Math.random() < 0.35) {
+          footstepDusts.push({
+            x: hero.x + (Math.random() - 0.5) * 10,
+            y: hero.y + 16,
+            size: 2 + Math.random() * 3,
+            life: 16,
+            maxLife: 16
+          });
+        }
 
         tryMoveHero(dx, 0, time);
         if (!battleState.active && !isAnyModalOpen()) tryMoveHero(0, dy, time);
@@ -1653,12 +1793,10 @@
       const grid = runtimeMaps[currentMapIdx];
       const cell = grid[gy][gx];
 
-      // 當玩家踏出剛剛暫退的格子時，解除忽略鎖定
       if (hero.ignoreTileKey && hero.ignoreTileKey !== tileKey) {
         hero.ignoreTileKey = null;
       }
 
-      // 1. 觸發長老或鍛造師 NPC 對話
       if (cell === 'N' || cell === 'M') {
         if (hero.ignoreTileKey !== tileKey) {
           hero.ignoreTileKey = tileKey;
@@ -1666,7 +1804,7 @@
             cell,
             cell === 'N' ? "【大漠智者・古月聖】" : "【西域鍛造師・薇達】",
             cell === 'N'
-              ? "「少俠留步！每座迷宮的守門首領都有獨特武學，開啟寶箱也有機會直接獲得神兵利器或戰術卷軸！路過綠洲靈泉時，若體力尚足可先保留不喝，等決戰前再飲用！」"
+              ? "「少俠留步！每隻妖魔都有『🛡️護盾值』，擊碎護盾可讓妖魔暈眩並承受 1.6 倍傷害！此外在妖魔撲擊瞬間按下『空白鍵』還能施展完美格擋！」"
               : "「我的鍛造坊有五階神兵、寶甲與『超頻狂暴卷軸』！若你在迷宮寶箱開到了裝備，也可以來我這兒查看或換裝喔！」",
             cell === 'M' ? "🏪 開啟鍛造商城" : null,
             cell === 'M' ? () => openShopModal() : null,
@@ -1676,7 +1814,6 @@
         return;
       }
 
-      // 2. 傳送陣 P 與 B
       if (cell === 'P') {
         if (isSubBossAliveOnCurrentMap()) {
           if (time - lastSealWarnTime > 1500) {
@@ -1705,7 +1842,6 @@
         return;
       }
 
-      // 3. ★ 綠洲靈泉 H：允許直接經過，並彈出詢問視窗讓玩家自由選擇是否飲用！
       if (cell === 'H') {
         hero.x = nx;
         hero.y = ny;
@@ -1730,13 +1866,11 @@
         return;
       }
 
-      // 4. ★ 寶箱 C：多元掉落（神兵裝備 / 戰術卷軸大補丸 / 銀兩 / 陷阱 / 寶箱怪）
       if (cell === 'C') {
         openTreasureChest(gx, gy, nx, ny);
         return;
       }
 
-      // 5. ★ 遭遇妖魔或章節守門 BOSS（若是 BOSS 先觸發《軒轅劍》風戰前劇情！）
       if (monsterCatalog[cell]) {
         if (time < hero.invulnerableUntil) {
           hero.x = nx; hero.y = ny;
@@ -1766,18 +1900,15 @@
       hero.y = ny;
     }
 
-    // 寶箱多元平衡掉落系統
     function openTreasureChest(gx, gy, nx, ny) {
       const grid = runtimeMaps[currentMapIdx];
       const roll = Math.random();
 
       if (roll < 0.28) {
-        // 【28% 機率：直接開出神兵／護甲／法寶裝備！】
         grid[gy][gx] = '.';
         hero.x = nx; hero.y = ny;
         playSFX('coin');
 
-        // 根據當前章節決定掉落裝備階級 (卷一:1~2階, 卷二:2~3階, 卷三:3~4階, 終卷:4~5階)
         const minTier = currentMapIdx + 1;
         const maxTier = Math.min(5, currentMapIdx + 2);
         const candidates = shopEquipments.filter(e => e.tier >= minTier && e.tier <= maxTier && !player.ownedIds.includes(e.id));
@@ -1785,7 +1916,6 @@
         if (candidates.length > 0) {
           const foundEq = candidates[Math.floor(Math.random() * candidates.length)];
           player.ownedIds.push(foundEq.id);
-          // 寶箱尋獲的神兵直接幫玩家突破等級限制自動佩帶（若比身上強）
           const curSlot = player.equipped[foundEq.type];
           const isBetter = (foundEq.bonusAtk + foundEq.bonusDef + foundEq.bonusHp) >= (curSlot.bonusAtk + curSlot.bonusDef + curSlot.bonusHp);
           if (isBetter) {
@@ -1799,7 +1929,6 @@
             addLog(`🎁 【寶箱裝備大獎】開啟寶箱獲得了【${foundEq.icon} ${foundEq.name}】，已收入行囊！`, "text-yellow-300 font-black");
           }
         } else {
-          // 若該階級裝備都已擁有，給予高價值秘寶卷軸與銀兩
           const fallbackGold = 55 + currentMapIdx * 25;
           player.gold += fallbackGold;
           player.potions.scroll++;
@@ -1809,7 +1938,6 @@
         renderShop();
 
       } else if (roll < 0.56) {
-        // 【28% 機率：丹藥與戰術卷軸補給箱】
         grid[gy][gx] = '.';
         hero.x = nx; hero.y = ny;
         playSFX('coin');
@@ -1831,7 +1959,6 @@
         updateUI();
 
       } else if (roll < 0.75) {
-        // 【19% 機率：純銀兩箱】
         grid[gy][gx] = '.';
         hero.x = nx; hero.y = ny;
         playSFX('coin');
@@ -1841,7 +1968,6 @@
         addLog(`📦 開啟銀兩箱！獲得 🪙 ${bonus} 銀兩(Bytes)！`, "text-amber-300 font-bold");
 
       } else if (roll < 0.90) {
-        // 【15% 機率：機關毒針／漏電陷阱】
         grid[gy][gx] = '.';
         hero.x = nx; hero.y = ny;
         playSFX('trap');
@@ -1858,7 +1984,6 @@
         updateUI();
 
       } else {
-        // 【10% 機率：噬人偽裝寶箱怪伏擊】
         grid[gy][gx] = 'M_MIMIC';
         playSFX('trap');
         addLog("🦷 驚險萬分！這不是普通寶箱，是【噬人偽裝寶箱怪】張開血盆大口撲了過來！", "text-rose-400 font-black");
@@ -1866,7 +1991,6 @@
       }
     }
 
-    // 通用《軒轅劍》風底部對話框系統 (支援 NPC、靈泉選擇、BOSS 戰前與戰後劇情)
     function openCustomDialogue(portraitType, speakerTitle, textContent, primaryBtnLabel, primaryCallback, cancelBtnLabel = "知曉了 (空白鍵)") {
       clearInputState();
       drawDialoguePortrait(portraitType);
@@ -1902,7 +2026,7 @@
     }
 
     // =========================================================
-    // 7. 渲染 18x12 迷宮與平滑光圈戰爭迷霧
+    // 7. 渲染 HD-2D 探索迷宮 (含腳步煙塵、氣候微粒、加色光暈與景深暗角)
     // =========================================================
     function renderExplorationScene(time) {
       const meta = mapDataList[currentMapIdx];
@@ -1915,6 +2039,17 @@
         }
       }
 
+      // 繪製腳步揚塵粒子
+      for (let i = footstepDusts.length - 1; i >= 0; i--) {
+        const d = footstepDusts[i];
+        d.life--;
+        ctx.fillStyle = `rgba(214, 190, 150, ${(d.life / d.maxLife) * 0.45})`;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
+        ctx.fill();
+        if (d.life <= 0) footstepDusts.splice(i, 1);
+      }
+
       const entities = [];
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
@@ -1925,7 +2060,7 @@
             entities.push({ y: ey, draw: () => drawNPCCharacter(ctx, ex, ey, cell, 0.85) });
           } else if (monsterCatalog[cell]) {
             const isBoss = ['A', 'D', 'G', 'K'].includes(cell);
-            entities.push({ y: ey, draw: () => drawMonsterCharacter(ctx, ex, ey, cell, isBoss ? 0.95 : 0.78, time, false) });
+            entities.push({ y: ey, draw: () => drawMonsterCharacter(ctx, ex, ey, cell, isBoss ? 0.95 : 0.78, time, false, false) });
           }
         }
       }
@@ -1939,6 +2074,31 @@
       entities.sort((a, b) => a.y - b.y);
       entities.forEach(ent => ent.draw());
 
+      // HD-2D 動態環境氣候微粒 (風沙 / 綠洲螢火 / 魔宮紅蓮餘燼)
+      ctx.fillStyle = meta.weatherColor;
+      weatherParticles.forEach(wp => {
+        wp.x += wp.vx;
+        wp.y += wp.vy;
+        if (wp.x > mainCanvas.width) wp.x = 0;
+        if (wp.y < 0) wp.y = mainCanvas.height;
+        ctx.beginPath();
+        ctx.arc(wp.x, wp.y, wp.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // 加色混合火把暖光 (Additive Torch Glow)
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      const flicker = Math.sin(time * 0.012) * 8;
+      const warmGlow = ctx.createRadialGradient(hero.x, hero.y, 10, hero.x, hero.y, 145 + flicker);
+      warmGlow.addColorStop(0, "rgba(255, 180, 70, 0.22)");
+      warmGlow.addColorStop(0.6, "rgba(245, 130, 40, 0.08)");
+      warmGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = warmGlow;
+      ctx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+      ctx.restore();
+
+      // 戰爭迷霧與 HD-2D 電影級暗角 (Vignette)
       if (fogEnabled) {
         for (let r = 0; r < ROWS; r++) {
           for (let c = 0; c < COLS; c++) {
@@ -1946,24 +2106,24 @@
             const cy = r * TILE_SIZE + TILE_SIZE / 2;
             const dist = Math.hypot(cx - hero.x, cy - hero.y);
 
-            if (dist > 140) {
-              ctx.fillStyle = exp[r][c] ? "rgba(8, 7, 12, 0.65)" : "rgba(5, 4, 8, 0.96)";
+            if (dist > 145) {
+              ctx.fillStyle = exp[r][c] ? "rgba(8, 7, 12, 0.68)" : "rgba(4, 3, 7, 0.97)";
               ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             }
           }
         }
 
-        const torchGrad = ctx.createRadialGradient(hero.x, hero.y, 32, hero.x, hero.y, 170);
-        torchGrad.addColorStop(0, "rgba(255, 190, 90, 0.12)");
-        torchGrad.addColorStop(0.55, "rgba(15, 12, 10, 0.25)");
-        torchGrad.addColorStop(1, "rgba(5, 4, 8, 0.88)");
+        const torchGrad = ctx.createRadialGradient(hero.x, hero.y, 35, hero.x, hero.y, 175);
+        torchGrad.addColorStop(0, "rgba(0, 0, 0, 0)");
+        torchGrad.addColorStop(0.6, "rgba(12, 10, 9, 0.35)");
+        torchGrad.addColorStop(1, "rgba(4, 3, 7, 0.90)");
         ctx.fillStyle = torchGrad;
         ctx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
       }
     }
 
     // =========================================================
-    // 8. 戰鬥系統與自訂武學配招實作
+    // 8. 3A 戰鬥場景演出 (含護盾值、BREAK 破防、完美格擋 QTE 與特寫鏡頭)
     // =========================================================
     function openSkillDeckModal() {
       clearInputState();
@@ -2072,7 +2232,13 @@
       battleState.active = true;
       renderBattleSkillBar();
       setBattleButtonsDisabled(false);
-      battleState.monster = { ...tpl, hp: tpl.maxHp };
+      battleState.monster = {
+        ...tpl,
+        hp: tpl.maxHp,
+        shield: tpl.maxShield || 2,
+        maxShield: tpl.maxShield || 2,
+        isStunned: false
+      };
       battleState.tileX = gx;
       battleState.tileY = gy;
       battleState.turnCount = 0;
@@ -2083,7 +2249,12 @@
       player.nextBattleDefBuff = 0;
 
       battleState.wrongAnswerPenalty = false;
+      battleState.parryWindowActive = false;
+      battleState.parrySucceeded = false;
+      battleState.cameraZoom = 1;
+      battleState.cinemaBars = 0;
       battleState.particles = [];
+      battleState.shockwaves = [];
       battleState.floatingTexts = [];
       battleState.slashEffects = [];
       battleState.bannerTimer = 0;
@@ -2098,7 +2269,7 @@
 
       document.getElementById('battle-ui-overlay').classList.remove('hidden');
       playSFX(tpl.isSubBoss ? 'heavy' : 'slash');
-      addLog(`⚔️ 迎戰【${tpl.name} (Lv.${tpl.lv}｜防禦 ${tpl.def})】！${tpl.trait}`, "text-amber-300 font-bold");
+      addLog(`⚔️ 迎戰【${tpl.name} (Lv.${tpl.lv}｜🛡️護盾 ${tpl.maxShield})】！擊碎護盾可使敵方暈眩！`, "text-amber-300 font-bold");
       updateUI();
     }
 
@@ -2107,6 +2278,15 @@
       const meta = mapDataList[currentMapIdx];
 
       ctx.save();
+
+      // 動態電影鏡頭縮放 (Camera Zoom)
+      if (battleState.cameraZoom > 1.001) {
+        ctx.translate(mainCanvas.width / 2, mainCanvas.height / 2);
+        ctx.scale(battleState.cameraZoom, battleState.cameraZoom);
+        ctx.translate(-mainCanvas.width / 2, -mainCanvas.height / 2);
+        battleState.cameraZoom += (1 - battleState.cameraZoom) * 0.12;
+      }
+
       if (battleState.screenShake > 0) {
         const sx = (Math.random() - 0.5) * battleState.screenShake;
         const sy = (Math.random() - 0.5) * battleState.screenShake;
@@ -2115,65 +2295,121 @@
         if (battleState.screenShake < 0.5) battleState.screenShake = 0;
       }
 
+      // 1. 遠景古蹟天空與透視石柱
       const skyGrad = ctx.createLinearGradient(0, 0, 0, 300);
-      skyGrad.addColorStop(0, "#1c1917");
+      skyGrad.addColorStop(0, "#0c0a09");
       skyGrad.addColorStop(1, meta.wallFront);
       ctx.fillStyle = skyGrad;
       ctx.fillRect(0, 0, mainCanvas.width, 300);
 
-      ctx.fillStyle = "rgba(0,0,0,0.28)";
+      ctx.fillStyle = "rgba(0,0,0,0.35)";
       for (let i = 0; i < 6; i++) {
-        ctx.fillRect(40 + i * 130, 80, 75, 220);
+        ctx.fillRect(40 + i * 130, 75, 75, 225);
         ctx.beginPath();
-        ctx.arc(77.5 + i * 130, 80, 37.5, Math.PI, 0);
+        ctx.arc(77.5 + i * 130, 75, 37.5, Math.PI, 0);
         ctx.fill();
       }
 
+      // 地面與透視格線
       const groundGrad = ctx.createLinearGradient(0, 280, 0, mainCanvas.height);
       groundGrad.addColorStop(0, meta.floorColor2);
-      groundGrad.addColorStop(1, "#1c1917");
+      groundGrad.addColorStop(1, "#0c0a09");
       ctx.fillStyle = groundGrad;
       ctx.fillRect(0, 280, mainCanvas.width, mainCanvas.height - 280);
 
-      ctx.fillStyle = "rgba(12, 10, 9, 0.9)";
-      fillRoundRect(ctx, 395, 18, 375, 76, 10);
-      ctx.strokeStyle = m.isSubBoss ? "#f43f5e" : "#b45309";
+      // 2. 怪物資訊與「🛡️ 護盾點數 (Break Shields)」面板
+      ctx.fillStyle = "rgba(12, 10, 9, 0.92)";
+      fillRoundRect(ctx, 385, 16, 388, 86, 12);
+      ctx.strokeStyle = m.isStunned ? "#fde047" : (m.isSubBoss ? "#f43f5e" : "#b45309");
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
       ctx.fillStyle = "#fef3c7";
       ctx.font = "900 15px 'Noto Serif TC', serif";
-      ctx.fillText(`Lv.${m.lv} ${m.name} (攻:${m.atk} 防:${m.def})`, 410, 40);
-      ctx.fillStyle = "#fbbf24";
-      ctx.font = "bold 11px sans-serif";
-      ctx.fillText(m.trait, 410, 58);
+      ctx.fillText(`Lv.${m.lv} ${m.name} (攻:${m.atk} 防:${m.def})`, 402, 38);
 
+      // 繪製護盾圖示列
+      let shieldText = "";
+      for (let i = 0; i < m.maxShield; i++) {
+        shieldText += (i < m.shield) ? "🛡️ " : "◇ ";
+      }
+      ctx.fillStyle = m.isStunned ? "#fde047" : "#38bdf8";
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(m.isStunned ? "💥 【BREAK 破防暈眩中！承受 1.6 倍傷害】" : `護盾：${shieldText}`, 402, 57);
+
+      ctx.fillStyle = "#fbbf24";
+      ctx.font = "bold 10.5px sans-serif";
+      ctx.fillText(m.trait, 402, 73);
+
+      // 血條
       ctx.fillStyle = "#1c1917";
-      ctx.fillRect(410, 68, 340, 12);
+      ctx.fillRect(402, 80, 352, 12);
       const hpRatio = Math.max(0, m.hp / m.maxHp);
-      const hpGrad = ctx.createLinearGradient(410, 0, 750, 0);
+      const hpGrad = ctx.createLinearGradient(402, 0, 754, 0);
       hpGrad.addColorStop(0, "#dc2626");
       hpGrad.addColorStop(1, "#f97316");
       ctx.fillStyle = hpGrad;
-      ctx.fillRect(410, 68, 340 * hpRatio, 12);
+      ctx.fillRect(402, 80, 352 * hpRatio, 12);
 
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 10px monospace";
-      ctx.fillText(`${Math.max(0, m.hp)} / ${m.maxHp}`, 550, 78);
+      ctx.fillText(`${Math.max(0, m.hp)} / ${m.maxHp}`, 548, 90);
 
+      // 3. 主角衝刺殘影與本體繪製
       const heroX = 210 + battleState.heroOffsetX;
       const heroY = 315;
+      if (battleState.heroOffsetX > 35) {
+        ctx.save();
+        ctx.globalAlpha = 0.35;
+        drawHeroCharacter(ctx, heroX - 45, heroY, 2.35, 1, time * 0.004, true, false);
+        ctx.restore();
+      }
       drawHeroCharacter(ctx, heroX, heroY, 2.35, 1, time * 0.004, battleState.heroOffsetX > 20, battleState.heroFlash > 0);
 
+      // 完美格擋 QTE 提示光環
+      if (battleState.parryWindowActive && !battleState.parrySucceeded) {
+        ctx.save();
+        ctx.strokeStyle = "#fde047";
+        ctx.lineWidth = 4;
+        ctx.shadowColor = "#fde047";
+        ctx.shadowBlur = 15;
+        ctx.beginPath();
+        ctx.arc(heroX, heroY - 10, 48 + Math.sin(time * 0.04) * 6, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = "#fde047";
+        ctx.font = "900 14px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("⚡ 按空白鍵格擋！", heroX, heroY - 68);
+        ctx.restore();
+      }
+
+      // 4. 怪獸繪製
       const monX = 570 + battleState.monsterOffsetX;
       const monY = 295;
-      drawMonsterCharacter(ctx, monX, monY, m.key, m.isSubBoss ? 2.85 : 2.5, time, battleState.monsterFlash > 0);
+      drawMonsterCharacter(ctx, monX, monY, m.key, m.isSubBoss ? 2.85 : 2.5, time, battleState.monsterFlash > 0, m.isStunned);
 
       if (battleState.monsterFlash > 0) battleState.monsterFlash--;
       if (battleState.heroFlash > 0) battleState.heroFlash--;
       battleState.heroOffsetX *= 0.8;
       battleState.monsterOffsetX *= 0.8;
 
+      // 5. 擴散震波環 (Shockwaves)
+      for (let i = battleState.shockwaves.length - 1; i >= 0; i--) {
+        const sw = battleState.shockwaves[i];
+        sw.r += 7;
+        sw.life--;
+        ctx.save();
+        ctx.strokeStyle = sw.color;
+        ctx.lineWidth = 4 * (sw.life / sw.maxLife);
+        ctx.globalAlpha = Math.max(0, sw.life / sw.maxLife);
+        ctx.beginPath();
+        ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+        if (sw.life <= 0) battleState.shockwaves.splice(i, 1);
+      }
+
+      // 6. 刀光劍氣
       for (let i = battleState.slashEffects.length - 1; i >= 0; i--) {
         const s = battleState.slashEffects[i];
         ctx.save();
@@ -2182,15 +2418,16 @@
         ctx.strokeStyle = s.color;
         ctx.lineWidth = s.width * (s.life / s.maxLife);
         ctx.shadowColor = s.color;
-        ctx.shadowBlur = 18;
+        ctx.shadowBlur = 20;
         ctx.beginPath();
-        ctx.arc(0, 0, s.radius, -0.9, 0.9);
+        ctx.arc(0, 0, s.radius, -0.95, 0.95);
         ctx.stroke();
         ctx.restore();
         s.life--;
         if (s.life <= 0) battleState.slashEffects.splice(i, 1);
       }
 
+      // 7. 粒子火花
       for (let i = battleState.particles.length - 1; i >= 0; i--) {
         const p = battleState.particles[i];
         p.x += p.vx;
@@ -2206,6 +2443,7 @@
         if (p.life <= 0) battleState.particles.splice(i, 1);
       }
 
+      // 8. 浮動傷害數字
       for (let i = battleState.floatingTexts.length - 1; i >= 0; i--) {
         const ft = battleState.floatingTexts[i];
         ft.y += ft.vy;
@@ -2215,23 +2453,36 @@
         ctx.font = `900 ${ft.size}px 'Noto Serif TC', sans-serif`;
         ctx.fillStyle = ft.color;
         ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 4.5;
         ctx.strokeText(ft.text, ft.x, ft.y);
         ctx.fillText(ft.text, ft.x, ft.y);
         ctx.restore();
         if (ft.life <= 0) battleState.floatingTexts.splice(i, 1);
       }
 
+      // 9. 電影級黑邊與全螢幕大招閃光
+      if (battleState.cinemaBars > 0) {
+        battleState.cinemaBars--;
+        ctx.fillStyle = "rgba(0,0,0,0.85)";
+        ctx.fillRect(0, 0, mainCanvas.width, 42);
+        ctx.fillRect(0, mainCanvas.height - 42, mainCanvas.width, 42);
+      }
+      if (battleState.flashScreenAlpha > 0) {
+        ctx.fillStyle = `rgba(255, 250, 220, ${battleState.flashScreenAlpha})`;
+        ctx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+        battleState.flashScreenAlpha -= 0.08;
+      }
+
       if (battleState.bannerTimer > 0) {
         battleState.bannerTimer--;
         ctx.fillStyle = "rgba(153, 27, 27, 0.92)";
-        ctx.fillRect(196, 110, 400, 36);
+        ctx.fillRect(196, 112, 400, 36);
         ctx.strokeStyle = "#fbbf24";
-        ctx.strokeRect(196, 110, 400, 36);
+        ctx.strokeRect(196, 112, 400, 36);
         ctx.fillStyle = "#fef08a";
         ctx.font = "900 15px 'Noto Serif TC', sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText(battleState.bannerText, 396, 134);
+        ctx.fillText(battleState.bannerText, 396, 136);
         ctx.textAlign = "left";
       }
 
@@ -2239,9 +2490,10 @@
     }
 
     function spawnHitSparks(x, y, color1 = "#facc15", color2 = "#38bdf8", count = 32) {
+      battleState.shockwaves.push({ x, y, r: 10, color: color1, life: 14, maxLife: 14 });
       for (let i = 0; i < count; i++) {
         const ang = Math.random() * Math.PI * 2;
-        const spd = 2 + Math.random() * 9;
+        const spd = 2 + Math.random() * 9.5;
         battleState.particles.push({
           x, y,
           vx: Math.cos(ang) * spd,
@@ -2281,7 +2533,7 @@
     }
 
     // =========================================================
-    // 9. 戰鬥技能判定、選項洗牌與 BOSS 戰後劇情
+    // 9. 戰鬥技能判定、破盾暈眩 (Break) 與完美格擋 QTE 結算
     // =========================================================
     function fleeBattle() {
       if (battleState.turnBusy) return;
@@ -2329,7 +2581,6 @@
       openQuizModal();
     }
 
-    // 每次開題時動態打亂 A/B/C/D 選項順序，防止死背位置
     function openQuizModal() {
       clearInputState();
       const qObj = drawNextQuestion();
@@ -2389,7 +2640,7 @@
       setTimeout(() => {
         document.getElementById('quiz-modal').classList.add('hidden');
         executeHeroStrike(isCorrect);
-      }, 1250);
+      }, 1200);
     }
 
     function executeHeroStrike(isCorrect) {
@@ -2402,27 +2653,28 @@
         let sparkCol2 = "#38bdf8";
         let extraMsg = "";
 
-        const effectiveEnemyDef = Math.floor(m.def * 1.15);
+        const effectiveEnemyDef = m.isStunned ? 0 : Math.floor(m.def * 1.15);
 
         switch (sk.id) {
           case 'slash':
-            finalDmg = Math.max(2, Math.floor(getTotalAtk() * 1.0) - effectiveEnemyDef + Math.floor(Math.random() * 3));
-            if (finalDmg <= 4 && m.def >= 10) extraMsg = "（敵方護甲極厚！建議改用破魔穿雲箭或雷霆斬）";
+            finalDmg = Math.max(3, Math.floor(getTotalAtk() * 1.0) - effectiveEnemyDef + Math.floor(Math.random() * 3));
             playSFX('slash');
             break;
           case 'thunder':
-            finalDmg = Math.max(10, Math.floor(getTotalAtk() * 1.85) - effectiveEnemyDef + Math.floor(Math.random() * 6));
+            finalDmg = Math.max(12, Math.floor(getTotalAtk() * 1.85) - effectiveEnemyDef + Math.floor(Math.random() * 6));
             sparkCol1 = "#fde047"; sparkCol2 = "#f97316";
+            battleState.cameraZoom = 1.12;
+            battleState.cinemaBars = 22;
             playSFX('heavy');
             break;
           case 'pierce':
-            finalDmg = Math.max(12, Math.floor(getTotalAtk() * 1.32) + Math.floor(Math.random() * 5));
+            finalDmg = Math.max(13, Math.floor(getTotalAtk() * 1.32) + Math.floor(Math.random() * 5));
             sparkCol1 = "#22d3ee"; sparkCol2 = "#a855f7";
-            extraMsg = "（完美貫穿敵方重甲！）";
+            extraMsg = "（無視防禦＋雙倍破盾！）";
             playSFX('slash');
             break;
           case 'vamp': {
-            finalDmg = Math.max(9, Math.floor(getTotalAtk() * 1.42) - Math.floor(effectiveEnemyDef * 0.7) + Math.floor(Math.random() * 5));
+            finalDmg = Math.max(10, Math.floor(getTotalAtk() * 1.42) - Math.floor(effectiveEnemyDef * 0.7) + Math.floor(Math.random() * 5));
             const vampHeal = Math.max(6, Math.floor(finalDmg * 0.5));
             player.hp = Math.min(getMaxHp(), player.hp + vampHeal);
             sparkCol1 = "#f43f5e"; sparkCol2 = "#fb7185";
@@ -2432,11 +2684,11 @@
             break;
           }
           case 'twin': {
-            const hit1 = Math.max(5, Math.floor(getTotalAtk() * 1.15) - Math.floor(effectiveEnemyDef * 0.8) + Math.floor(Math.random() * 4));
-            const hit2 = Math.max(5, Math.floor(getTotalAtk() * 1.15) - Math.floor(effectiveEnemyDef * 0.8) + Math.floor(Math.random() * 4));
+            const hit1 = Math.max(6, Math.floor(getTotalAtk() * 1.15) - Math.floor(effectiveEnemyDef * 0.8) + Math.floor(Math.random() * 4));
+            const hit2 = Math.max(6, Math.floor(getTotalAtk() * 1.15) - Math.floor(effectiveEnemyDef * 0.8) + Math.floor(Math.random() * 4));
             finalDmg = hit1 + hit2;
             sparkCol1 = "#c084fc"; sparkCol2 = "#38bdf8";
-            extraMsg = `（雙重影分身 ${hit1} + ${hit2} 連擊！）`;
+            extraMsg = `（雙重影分身 ${hit1}+${hit2} 連擊！）`;
             battleState.slashEffects.push({
               x: 570, y: 265, radius: 75, angle: 0.5,
               color: "#c084fc", width: 9, life: 16, maxLife: 16
@@ -2445,7 +2697,7 @@
             break;
           }
           case 'shield':
-            finalDmg = Math.max(8, Math.floor(getTotalAtk() * 1.3) - effectiveEnemyDef + Math.floor(Math.random() * 4));
+            finalDmg = Math.max(9, Math.floor(getTotalAtk() * 1.3) - effectiveEnemyDef + Math.floor(Math.random() * 4));
             battleState.defBuff += 14;
             const buffBadge = document.getElementById('battle-buff-badge');
             buffBadge.classList.remove('hidden');
@@ -2455,18 +2707,41 @@
             playSFX('slash');
             break;
           case 'ultimate':
-            finalDmg = Math.max(28, Math.floor(getTotalAtk() * 2.6) + Math.floor(Math.random() * 10));
+            finalDmg = Math.max(30, Math.floor(getTotalAtk() * 2.6) + Math.floor(Math.random() * 10));
             sparkCol1 = "#fde047"; sparkCol2 = "#f43f5e";
-            extraMsg = "（萬劍齊發・無視防禦毀天滅地！）";
+            battleState.cameraZoom = 1.22;
+            battleState.cinemaBars = 35;
+            battleState.flashScreenAlpha = 0.65;
+            extraMsg = "（萬劍齊發・毀天滅地！）";
             playSFX('heavy');
             break;
+        }
+
+        // 若敵人已處於 BREAK 暈眩狀態，傷害 1.6 倍！
+        if (m.isStunned) {
+          finalDmg = Math.floor(finalDmg * 1.6);
+          extraMsg += "【BREAK 1.6倍暴擊！】";
+        }
+
+        // 削減敵方護盾判定
+        let triggeredBreakThisTurn = false;
+        if (!m.isStunned && m.shield > 0) {
+          m.shield = Math.max(0, m.shield - (sk.shieldBreak || 1));
+          if (m.shield === 0) {
+            m.isStunned = true;
+            triggeredBreakThisTurn = true;
+            playSFX('break');
+            battleState.cameraZoom = 1.18;
+            battleState.flashScreenAlpha = 0.5;
+            spawnFloatingText(570, 175, "💥 BREAK 破防擊暈！", "#38bdf8", 32);
+          }
         }
 
         battleState.heroOffsetX = 185;
         battleState.monsterOffsetX = 28;
         battleState.monsterFlash = 9;
         battleState.hitStopFrames = 4;
-        battleState.screenShake = (sk.id === 'ultimate' || sk.id === 'thunder') ? 20 : 11;
+        battleState.screenShake = (sk.id === 'ultimate' || triggeredBreakThisTurn) ? 22 : 12;
 
         battleState.slashEffects.push({
           x: 570, y: 275, radius: 68, angle: -0.4,
@@ -2483,114 +2758,144 @@
           handleVictoryOverMonster();
           return;
         }
+
+        // 若本回合剛把敵人打入 BREAK 暈眩，敵人直接跳過反擊回合！
+        if (triggeredBreakThisTurn) {
+          addLog(`💫 【${m.name}】護盾碎裂陷入暈眩，本回合無法反擊！把握機會乘勝追擊！`, "text-cyan-300 font-black");
+          setTimeout(() => setBattleButtonsDisabled(false), 600);
+          return;
+        }
       } else {
         addLog(`❌ 答題失誤露出破綻，劍招落空並引來妖魔狂暴反撲！`, "text-rose-400 font-bold");
       }
 
-      setTimeout(() => monsterCounterAttack(), 650);
+      setTimeout(() => monsterCounterAttack(), 500);
     }
 
     function monsterCounterAttack() {
       if (!battleState.active) return;
       const m = battleState.monster;
-      battleState.turnCount++;
 
-      const useSpecial = m.isSubBoss ? (battleState.turnCount % 2 === 0) : (Math.random() < 0.55);
-      let dmg = Math.max(4, m.atk - getTotalDef() + Math.floor(Math.random() * 4));
-      let logText = `👹 【${m.name}】猛撲反擊，造成 ${dmg} 點傷害！`;
+      // 若敵人上回合處於暈眩，本回合甦醒並重設護盾
+      if (m.isStunned) {
+        m.isStunned = false;
+        m.shield = m.maxShield;
+      }
 
-      if (useSpecial) {
-        battleState.bannerText = `⚠️ 敵方特技：${m.skillName}！`;
-        battleState.bannerTimer = 65;
+      // 開啟 0.45 秒「空白鍵完美格擋 QTE」視窗
+      battleState.parryWindowActive = true;
+      battleState.parrySucceeded = false;
 
-        switch (m.skillType) {
-          case 'drain_mp': {
-            const drained = Math.min(player.mp, 10);
-            player.mp -= drained;
-            logText = `🌪️ 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並捲走你 ${drained} 點靈力！`;
-            break;
-          }
-          case 'heavy_hit': {
-            dmg = Math.max(7, Math.floor(m.atk * 1.38) - getTotalDef());
-            logText = `🪲 【${m.name}】施展「${m.skillName}」！重創造成 ${dmg} 點傷害！`;
-            break;
-          }
-          case 'ignore_def': {
-            dmg = Math.max(9, m.atk - Math.floor(getTotalDef() * 0.3));
-            logText = `🟢 【${m.name}】施展「${m.skillName}」！穿透護甲造成 ${dmg} 點傷害！`;
-            break;
-          }
-          case 'steal_gold': {
-            const stolen = Math.min(player.gold, 15);
-            player.gold -= stolen;
-            logText = `🔥 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並劫走 ${stolen} 兩銀子！`;
-            break;
-          }
-          case 'multi_hit': {
-            const perHit = Math.max(3, Math.floor((m.atk - getTotalDef()) * 0.48));
-            dmg = perHit * 3;
-            logText = `🪞 【${m.name}】施展「${m.skillName}」！幻影三連擊造成 ${perHit}x3 = ${dmg} 點傷害！`;
-            break;
-          }
-          case 'vampire': {
-            const healM = Math.max(12, Math.floor(dmg * 0.75));
-            m.hp = Math.min(m.maxHp, m.hp + healM);
-            logText = `🪝 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並吸取精氣恢復 ${healM} HP！`;
-            break;
-          }
-          case 'break_def': {
-            battleState.defDebuff += 5;
-            logText = `🐴 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並震裂你的護甲(-5 DEF)！`;
-            break;
-          }
-          case 'boss_nuke': {
-            dmg = Math.max(22, Math.floor(m.atk * 1.65) - getTotalDef());
-            logText = `👑 【${m.name}】狂嘯釋放「${m.skillName}」！滅世黑雷造成 ${dmg} 點毀滅傷害！`;
-            break;
+      setTimeout(() => {
+        if (!battleState.active) return;
+        battleState.parryWindowActive = false;
+        battleState.turnCount++;
+
+        const useSpecial = m.isSubBoss ? (battleState.turnCount % 2 === 0) : (Math.random() < 0.55);
+        let dmg = Math.max(4, m.atk - getTotalDef() + Math.floor(Math.random() * 4));
+        let logText = `👹 【${m.name}】猛撲反擊，造成 ${dmg} 點傷害！`;
+
+        if (useSpecial) {
+          battleState.bannerText = `⚠️ 敵方特技：${m.skillName}！`;
+          battleState.bannerTimer = 65;
+
+          switch (m.skillType) {
+            case 'drain_mp': {
+              const drained = Math.min(player.mp, 10);
+              player.mp -= drained;
+              logText = `🌪️ 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並捲走你 ${drained} 點靈力！`;
+              break;
+            }
+            case 'heavy_hit': {
+              dmg = Math.max(7, Math.floor(m.atk * 1.38) - getTotalDef());
+              logText = `🪲 【${m.name}】施展「${m.skillName}」！重創造成 ${dmg} 點傷害！`;
+              break;
+            }
+            case 'ignore_def': {
+              dmg = Math.max(9, m.atk - Math.floor(getTotalDef() * 0.3));
+              logText = `🟢 【${m.name}】施展「${m.skillName}」！穿透護甲造成 ${dmg} 點傷害！`;
+              break;
+            }
+            case 'steal_gold': {
+              const stolen = Math.min(player.gold, 15);
+              player.gold -= stolen;
+              logText = `🔥 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並劫走 ${stolen} 兩銀子！`;
+              break;
+            }
+            case 'multi_hit': {
+              const perHit = Math.max(3, Math.floor((m.atk - getTotalDef()) * 0.48));
+              dmg = perHit * 3;
+              logText = `🪞 【${m.name}】施展「${m.skillName}」！幻影三連擊造成 ${perHit}x3 = ${dmg} 點傷害！`;
+              break;
+            }
+            case 'vampire': {
+              const healM = Math.max(12, Math.floor(dmg * 0.75));
+              m.hp = Math.min(m.maxHp, m.hp + healM);
+              logText = `🪝 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並吸取精氣恢復 ${healM} HP！`;
+              break;
+            }
+            case 'break_def': {
+              battleState.defDebuff += 5;
+              logText = `🐴 【${m.name}】施展「${m.skillName}」！造成 ${dmg} 傷害並震裂你的護甲(-5 DEF)！`;
+              break;
+            }
+            case 'boss_nuke': {
+              dmg = Math.max(22, Math.floor(m.atk * 1.65) - getTotalDef());
+              logText = `👑 【${m.name}】狂嘯釋放「${m.skillName}」！滅世黑雷造成 ${dmg} 點毀滅傷害！`;
+              break;
+            }
           }
         }
-      }
 
-      if (battleState.wrongAnswerPenalty) {
-        dmg = Math.floor(dmg * 1.25);
-        logText += `（答錯破綻加成！）`;
-        battleState.wrongAnswerPenalty = false;
-      }
+        if (battleState.wrongAnswerPenalty) {
+          dmg = Math.floor(dmg * 1.25);
+          logText += `（答錯破綻加成！）`;
+          battleState.wrongAnswerPenalty = false;
+        }
 
-      playSFX('hit');
-      battleState.monsterOffsetX = -160;
-      battleState.heroOffsetX = -24;
-      battleState.heroFlash = 8;
-      battleState.hitStopFrames = 3;
-      battleState.screenShake = useSpecial ? 16 : 9;
+        // 若玩家成功按下空白鍵觸發「完美格擋」：減免 70% 傷害並反震削減怪物 1 層護盾！
+        if (battleState.parrySucceeded) {
+          dmg = Math.max(1, Math.floor(dmg * 0.3));
+          if (m.shield > 0) m.shield = Math.max(0, m.shield - 1);
+          logText = `✨ 【完美格擋成功】你精準架開了 ${m.name} 的攻擊，僅受 ${dmg} 點輕傷並反震削弱敵方 1 層護盾！`;
+        } else {
+          playSFX('hit');
+        }
 
-      spawnHitSparks(210, 300, "#f43f5e", "#fb923c", 28);
-      spawnFloatingText(210, 235, `-${dmg}`, "#f43f5e", 28);
+        battleState.monsterOffsetX = -160;
+        battleState.heroOffsetX = -24;
+        battleState.heroFlash = 8;
+        battleState.hitStopFrames = 3;
+        battleState.screenShake = useSpecial ? 16 : 9;
 
-      player.hp = Math.max(0, player.hp - dmg);
-      addLog(logText, "text-rose-400 font-bold");
-      updateUI();
+        spawnHitSparks(210, 300, "#f43f5e", "#fb923c", 28);
+        spawnFloatingText(210, 235, `-${dmg}`, battleState.parrySucceeded ? "#38bdf8" : "#f43f5e", 28);
 
-      if (player.hp <= 0) {
-        const lostGold = Math.floor(player.gold * 0.15);
-        player.gold = Math.max(0, player.gold - lostGold);
-        addLog(`💫 命數歸零！長老施法將你救回本關起點療傷（遺落了 ${lostGold} 兩銀子）。`, "text-rose-500 font-black");
-        setTimeout(() => {
-          battleState.active = false;
-          battleState.defDebuff = 0;
-          battleState.defBuff = 0;
-          battleState.atkBuff = 0;
-          setBattleButtonsDisabled(false);
-          document.getElementById('battle-ui-overlay').classList.add('hidden');
-          player.hp = getMaxHp();
-          player.mp = getMaxMp();
-          const curMeta = mapDataList[currentMapIdx];
-          switchMap(currentMapIdx, curMeta.startX, curMeta.startY);
-          updateUI();
-        }, 950);
-      } else {
-        setTimeout(() => setBattleButtonsDisabled(false), 450);
-      }
+        player.hp = Math.max(0, player.hp - dmg);
+        addLog(logText, battleState.parrySucceeded ? "text-cyan-300 font-black" : "text-rose-400 font-bold");
+        updateUI();
+
+        if (player.hp <= 0) {
+          const lostGold = Math.floor(player.gold * 0.15);
+          player.gold = Math.max(0, player.gold - lostGold);
+          addLog(`💫 命數歸零！長老施法將你救回本關起點療傷（遺落了 ${lostGold} 兩銀子）。`, "text-rose-500 font-black");
+          setTimeout(() => {
+            battleState.active = false;
+            battleState.defDebuff = 0;
+            battleState.defBuff = 0;
+            battleState.atkBuff = 0;
+            setBattleButtonsDisabled(false);
+            document.getElementById('battle-ui-overlay').classList.add('hidden');
+            player.hp = getMaxHp();
+            player.mp = getMaxMp();
+            const curMeta = mapDataList[currentMapIdx];
+            switchMap(currentMapIdx, curMeta.startX, curMeta.startY);
+            updateUI();
+          }, 950);
+        } else {
+          setTimeout(() => setBattleButtonsDisabled(false), 400);
+        }
+      }, 450);
     }
 
     function handleVictoryOverMonster() {
@@ -2655,7 +2960,6 @@
         setBattleButtonsDisabled(false);
         document.getElementById('battle-ui-overlay').classList.add('hidden');
 
-        // ★ 若擊敗的是章節守門首領或最終魔神，觸發戰後劇情對話框！
         if (m.isSubBoss && m.defeatQuote) {
           if (m.key === 'K') {
             openCustomDialogue(
