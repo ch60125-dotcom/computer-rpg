@@ -2511,7 +2511,7 @@
       updateUI();
     }
     // =========================================================
-    // ★ 下半部開始：FF8 動態透視鏡頭、槍刃板機與極限技引擎 ★
+    // ★ 下半部開始：FF8 慢速優雅節奏版（槍刃板機 1.35 秒 + 格擋 1.2 秒） ★
     // （直接貼在「上半部」的 startCanvasBattle 結尾大括號 } 後面即可）
     // =========================================================
     function isLimitBreakReady() {
@@ -2522,10 +2522,10 @@
     function triggerParry() {
       if (!battleState.active) return;
 
-      // 1. FF8 槍刃板機判定 (我方衝刺揮砍瞬間按空白鍵！)
+      // 1. FF8 槍刃板機判定 (紅框範圍放寬為 0.54 ~ 0.86，中心 0.70，容錯率大幅提升！)
       if (battleState.gunbladeWindowActive && !battleState.gunbladeTriggered) {
-        const diff = Math.abs(battleState.gunbladeCursor - 0.72); // 0.72 為紅框中心
-        if (diff <= 0.16) {
+        const diff = Math.abs(battleState.gunbladeCursor - 0.70);
+        if (diff <= 0.18) {
           battleState.gunbladeTriggered = true;
           playSFX('heavy');
           battleState.screenShake = 20;
@@ -2535,7 +2535,7 @@
           spawnFloatingText(560, 175, "💥 GUNBLADE TRIGGER!! (1.5x)", "#fde047", 26);
         } else {
           battleState.gunbladeWindowActive = false;
-          spawnFloatingText(240, 230, "MISS TRIGGER", "#a8a29e", 18);
+          spawnFloatingText(240, 230, "太早按了！(MISS)", "#a8a29e", 18);
         }
         return;
       }
@@ -2546,7 +2546,7 @@
         battleState.limitReady = true;
         playSFX('parry');
         spawnHitSparks(230, 310, "#38bdf8", "#fde047", 32);
-        spawnFloatingText(230, 235, "✨ GUARD & LIMIT READY!", "#38bdf8", 24);
+        spawnFloatingText(230, 235, "✨ 完美格擋 & 極限技充能！", "#38bdf8", 24);
       }
     }
 
@@ -2556,26 +2556,26 @@
 
       ctx.save();
 
-      // --- 1. FF8 動態 3D 環繞運鏡 (Dynamic Sweeping Camera) ---
+      // --- 1. FF8 動態 3D 環繞運鏡 (放慢擺動頻率，視覺更舒適) ---
       let targetZoom = 1.0;
-      let camPanX = Math.sin(time * 0.0012) * 18;
-      let camPanY = Math.cos(time * 0.0016) * 8;
+      let camPanX = Math.sin(time * 0.0008) * 16;
+      let camPanY = Math.cos(time * 0.0011) * 7;
 
       if (battleState.gunbladeWindowActive || battleState.heroOffsetX > 20) {
-        targetZoom = 1.18;
-        camPanX = -55;
-        camPanY = -15;
+        targetZoom = 1.16;
+        camPanX = -50;
+        camPanY = -12;
       } else if (battleState.monsterOffsetX < -20) {
         targetZoom = 1.12;
         camPanX = 45;
         camPanY = 10;
       } else if (battleState.gfSummonTimer > 0) {
-        targetZoom = 1.22;
+        targetZoom = 1.20;
         camPanX = 0;
-        camPanY = -20;
+        camPanY = -18;
       }
 
-      battleState.cameraZoom += (targetZoom - battleState.cameraZoom) * 0.14;
+      battleState.cameraZoom += (targetZoom - battleState.cameraZoom) * 0.09;
 
       ctx.translate(mainCanvas.width / 2, mainCanvas.height / 2);
       ctx.scale(battleState.cameraZoom, battleState.cameraZoom);
@@ -2585,7 +2585,7 @@
         const sx = (Math.random() - 0.5) * battleState.screenShake;
         const sy = (Math.random() - 0.5) * battleState.screenShake;
         ctx.translate(sx, sy);
-        battleState.screenShake *= 0.82;
+        battleState.screenShake *= 0.84;
         if (battleState.screenShake < 0.5) battleState.screenShake = 0;
       }
 
@@ -2626,7 +2626,7 @@
       ctx.fillStyle = groundGrad;
       ctx.fillRect(-80, horizonY, mainCanvas.width + 160, mainCanvas.height - horizonY + 80);
 
-      // 3D 放射狀透視地板線 (FF8 擬真空間感)
+      // 3D 放射狀透視地板線
       ctx.save();
       ctx.strokeStyle = "rgba(56, 189, 248, 0.22)";
       ctx.lineWidth = 1.5;
@@ -2694,7 +2694,7 @@
       for (let i = battleState.shockwaves.length - 1; i >= 0; i--) {
         const sw = battleState.shockwaves[i];
         sw.r += sw.speed;
-        sw.alpha -= 0.045;
+        sw.alpha -= 0.04;
         if (sw.alpha <= 0) { battleState.shockwaves.splice(i, 1); continue; }
         ctx.save();
         ctx.strokeStyle = sw.color;
@@ -2752,7 +2752,7 @@
 
       ctx.restore(); // 結束 3D 攝影機變換，以下繪製固定於螢幕上的 FF8 經典 HUD！
 
-      // --- 4. FF8 經典灰藍漸層 UI 視窗 (Enemy Scan & Squall Status Window) ---
+      // --- 4. FF8 經典灰藍漸層 UI 視窗 ---
       drawFF8Window(ctx, 16, 14, 370, 78);
       ctx.fillStyle = "#fde047";
       ctx.font = "900 14px 'Noto Sans TC', sans-serif";
@@ -2809,14 +2809,14 @@
       ctx.font = "11px sans-serif";
       ctx.fillText(`🗡️ ${player.equipped.weapon.name} ｜ 🛡️ 防禦 ${getTotalDef()}`, 470, 76);
 
-      // --- 5. FF8 招牌《Renzokuken 槍刃板機時機條》UI ---
+      // --- 5. FF8 招牌《Renzokuken 槍刃板機時機條》UI (已放慢速度並加寬紅區！) ---
       if (battleState.gunbladeWindowActive) {
-        const barX = 196, barY = 365, barW = 400, barH = 32;
-        drawFF8Window(ctx, barX - 10, barY - 26, barW + 20, barH + 38);
+        const barX = 186, barY = 362, barW = 420, barH = 34;
+        drawFF8Window(ctx, barX - 12, barY - 28, barW + 24, barH + 40);
 
         ctx.fillStyle = "#fde047";
-        ctx.font = "900 13px 'Noto Sans TC', sans-serif";
-        ctx.fillText("🔥 RENZOKUKEN 連續劍板機：光標進入紅框時按【空白鍵】或點擊畫面！", barX, barY - 7);
+        ctx.font = "900 13.5px 'Noto Sans TC', sans-serif";
+        ctx.fillText("🔥 槍刃板機：當黃色光標滑入【紅色區塊】時，按下空白鍵或點擊畫面！", barX - 2, barY - 8);
 
         ctx.fillStyle = "#090d16";
         ctx.fillRect(barX, barY, barW, barH);
@@ -2824,27 +2824,36 @@
         ctx.lineWidth = 2;
         ctx.strokeRect(barX, barY, barW, barH);
 
-        const hitX = barX + barW * 0.60;
-        const hitW = barW * 0.24;
-        ctx.fillStyle = "rgba(239, 68, 68, 0.75)";
+        // 加寬版紅色最佳擊發區 (0.54 ~ 0.86，佔比 32% 更好按中！)
+        const hitX = barX + barW * 0.54;
+        const hitW = barW * 0.32;
+        ctx.fillStyle = "rgba(239, 68, 68, 0.82)";
         ctx.fillRect(hitX, barY + 2, hitW, barH - 4);
         ctx.fillStyle = "#ffffff";
-        ctx.font = "900 11px monospace";
-        ctx.fillText("TRIGGER!", hitX + 18, barY + 20);
+        ctx.font = "900 12px monospace";
+        ctx.fillText("★ TRIGGER! (按空白鍵) ★", hitX + 8, barY + 21);
 
+        // 推進金色光標
         const curX = barX + Math.min(1, battleState.gunbladeCursor) * barW;
         ctx.fillStyle = "#fde047";
-        ctx.fillRect(curX - 4, barY - 3, 8, barH + 6);
+        ctx.fillRect(curX - 5, barY - 4, 10, barH + 8);
       }
 
-      // --- 6. 敵襲完美格擋提示 ---
+      // --- 6. 敵襲完美格擋提示（含視覺倒數計時條，1.2 秒充裕反應！） ---
       if (battleState.parryWindowActive && !battleState.parrySucceeded) {
-        drawFF8Window(ctx, 210, 175, 370, 42);
+        drawFF8Window(ctx, 186, 170, 420, 56);
         ctx.fillStyle = "#fde047";
         ctx.font = "900 15px 'Noto Sans TC', sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText("⚡ 敵襲瞬間！按【空白鍵】完美格擋並充能極限技！", 395, 201);
+        ctx.fillText("⚡ 敵襲預警！按【空白鍵】或點擊畫面施展完美格擋！", 396, 195);
         ctx.textAlign = "left";
+
+        // 格擋倒數進度條
+        const remainRatio = Math.max(0, 1 - (battleState.parryProgress || 0));
+        ctx.fillStyle = "#090d16";
+        ctx.fillRect(206, 206, 380, 10);
+        ctx.fillStyle = "#38bdf8";
+        ctx.fillRect(206, 206, 380 * remainRatio, 10);
       }
 
       // --- 7. FF8 頂部經典招式名橫幅 ---
@@ -2861,15 +2870,15 @@
       if (battleState.flashScreenAlpha > 0) {
         ctx.fillStyle = `rgba(255, 255, 255, ${battleState.flashScreenAlpha})`;
         ctx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
-        battleState.flashScreenAlpha -= 0.08;
+        battleState.flashScreenAlpha -= 0.06;
       }
     }
 
     function drawFF8Window(c, x, y, w, h) {
       c.save();
       const grad = c.createLinearGradient(x, y, x, y + h);
-      grad.addColorStop(0, "rgba(38, 52, 74, 0.92)");
-      grad.addColorStop(1, "rgba(15, 23, 36, 0.94)");
+      grad.addColorStop(0, "rgba(38, 52, 74, 0.94)");
+      grad.addColorStop(1, "rgba(15, 23, 36, 0.96)");
       c.fillStyle = grad;
       c.fillRect(x, y, w, h);
 
@@ -2884,7 +2893,7 @@
     }
 
     // =========================================================
-    // 9. 戰鬥特效與答題詠唱邏輯 (含槍刃板機 & 極限技連斬)
+    // 9. 戰鬥特效與答題詠唱邏輯 (慢速優化版)
     // =========================================================
     function spawnHitSparks(x, y, c1, c2, count = 24) {
       for (let i = 0; i < count; i++) {
@@ -2896,21 +2905,21 @@
           vy: Math.sin(ang) * spd - 2,
           size: 3 + Math.random() * 3.5,
           color: i % 2 === 0 ? c1 : c2,
-          life: 24, maxLife: 24
+          life: 28, maxLife: 28
         });
       }
     }
 
     function spawnFloatingText(x, y, text, color = "#fde047", size = 24) {
-      battleState.floatingTexts.push({ x, y, text, color, size, vy: -1.6, life: 42 });
+      battleState.floatingTexts.push({ x, y, text, color, size, vy: -1.3, life: 52 });
     }
 
     function spawnSlashEffect(x, y, color = "#38bdf8", angle = -0.4) {
-      battleState.slashEffects.push({ x, y, color, angle, life: 14, maxLife: 14 });
+      battleState.slashEffects.push({ x, y, color, angle, life: 18, maxLife: 18 });
     }
 
     function spawnShockwave(x, y, color = "#fde047") {
-      battleState.shockwaves.push({ x, y, r: 10, speed: 7, alpha: 0.9, color });
+      battleState.shockwaves.push({ x, y, r: 10, speed: 6, alpha: 0.9, color });
     }
 
     function prepareAction(skillId) {
@@ -2935,7 +2944,7 @@
         spawnFloatingText(230, 240, `+${healAmt}`, "#4ade80", 26);
         addLog(`🌿 施展恢復魔法【${sk.name}】，恢復 ${healAmt} 點 HP 並淨化破甲狀態！`, "text-emerald-400 font-bold");
         updateUI();
-        setTimeout(() => executeMonsterTurn(), 650);
+        setTimeout(() => executeMonsterTurn(), 950);
         return;
       }
 
@@ -2987,13 +2996,13 @@
         player.stats.correct++;
         battleState.wrongAnswerPenalty = false;
         fb.className = "mt-4 p-3 rounded-xl border border-emerald-500/60 bg-emerald-950/80 text-emerald-200 text-xs leading-relaxed";
-        fb.innerHTML = `✅ <b>詠唱成功！準備進攻（光標進入紅區時按空白鍵觸發 FF8 槍刃暴擊！）</b><br>${qObj.exp}`;
+        fb.innerHTML = `✅ <b>詠唱成功！準備衝刺進攻（等黃色光標滑入紅框時按空白鍵觸發 1.5 倍暴擊！）</b><br>${qObj.exp}`;
         updateUI();
 
         setTimeout(() => {
           document.getElementById('quiz-modal').classList.add('hidden');
           executePlayerSkill(battleState.pendingSkillId);
-        }, 700);
+        }, 900);
       } else {
         playSFX('trap');
         battleState.wrongAnswerPenalty = true;
@@ -3011,9 +3020,10 @@
       document.getElementById('quiz-modal').classList.add('hidden');
       setBattleButtonsDisabled(true);
       addLog("⚠️ 詠唱失誤招式潰散！敵方趁隙發動 1.25 倍狂暴反擊！", "text-rose-400 font-bold");
-      setTimeout(() => executeMonsterTurn(), 350);
+      setTimeout(() => executeMonsterTurn(), 500);
     }
 
+    // ★ 放慢版 FF8 槍刃板機：1350ms (1.35秒) 充裕反應時間，且一旦按成功立即斬擊！ ★
     function executePlayerSkill(skillId) {
       setBattleButtonsDisabled(true);
       const sk = skillCatalog.find(s => s.id === skillId) || skillCatalog[0];
@@ -3024,11 +3034,11 @@
 
       player.mp = Math.max(0, player.mp - sk.mpCost);
       battleState.bannerText = isLimit ? `🔥 LIMIT BREAK ▸ 【${sk.name}・極限連斬】` : `${sk.name}`;
-      battleState.bannerTimer = 55;
+      battleState.bannerTimer = 75;
       battleState.heroOffsetX = 185;
 
       if (sk.id === 'thunder' || sk.id === 'ultimate') {
-        battleState.gfSummonTimer = 48;
+        battleState.gfSummonTimer = 65;
       }
 
       battleState.gunbladeWindowActive = true;
@@ -3036,12 +3046,14 @@
       battleState.gunbladeCursor = 0;
 
       const startTime = performance.now();
-      const duration = 620;
+      const duration = 1350; // ★ 從 620ms 放慢至 1350ms，學生可以從容看準再按！
 
       const gbTick = setInterval(() => {
         const elapsed = performance.now() - startTime;
         battleState.gunbladeCursor = elapsed / duration;
-        if (elapsed >= duration) {
+
+        // 如果已經成功擊發板機，或時間走完，立即結算揮劍傷害！
+        if (battleState.gunbladeTriggered || elapsed >= duration) {
           clearInterval(gbTick);
           battleState.gunbladeWindowActive = false;
           resolvePlayerSkillDamage(sk, m, isLimit);
@@ -3092,7 +3104,7 @@
       if (isLimit) finalDmg = Math.round(finalDmg * 1.35);
 
       m.hp = Math.max(0, m.hp - finalDmg);
-      battleState.monsterFlash = 14;
+      battleState.monsterFlash = 16;
       battleState.screenShake = (battleState.gunbladeTriggered || isLimit) ? 24 : 12;
       if (sk.id === 'ultimate' || brokeJustNow || battleState.gunbladeTriggered) {
         battleState.flashScreenAlpha = 0.6;
@@ -3104,7 +3116,7 @@
           playSFX(battleState.gunbladeTriggered || isLimit ? 'heavy' : 'slash');
           spawnSlashEffect(560 + (h - 1) * 18, 245, h % 2 === 0 ? slashCol : "#fde047", h % 2 === 0 ? -0.45 : 0.55);
           spawnHitSparks(560, 245, slashCol, "#fde047", 22);
-        }, h * 110);
+        }, h * 150);
       }
 
       spawnFloatingText(
@@ -3128,6 +3140,7 @@
       updateUI();
       renderBattleSkillBar();
 
+      // ★ 延長斬擊後的回位與喘息時間 (850ms)
       setTimeout(() => {
         battleState.heroOffsetX = 0;
         if (m.hp <= 0) {
@@ -3135,9 +3148,10 @@
         } else {
           executeMonsterTurn();
         }
-      }, 480);
+      }, 850);
     }
 
+    // ★ 放慢版敵方回合：格擋反應視窗拉長至 1200ms (1.2秒)，並附帶視覺倒數條 ★
     function executeMonsterTurn() {
       if (!battleState.active) return;
       const m = battleState.monster;
@@ -3154,74 +3168,94 @@
 
       battleState.parryWindowActive = true;
       battleState.parrySucceeded = false;
+      battleState.parryProgress = 0;
       battleState.bannerText = `${m.name} ▸ ${m.skillName}`;
-      battleState.bannerTimer = 38;
+      battleState.bannerTimer = 65;
+
+      const parryStart = performance.now();
+      const parryDuration = 1200; // ★ 從 560ms 拉長為 1200ms (1.2秒)！
+
+      const parryTick = setInterval(() => {
+        const elapsed = performance.now() - parryStart;
+        battleState.parryProgress = elapsed / parryDuration;
+
+        if (!battleState.active) {
+          clearInterval(parryTick);
+          return;
+        }
+
+        // 若已成功按下格擋或 1.2 秒預警結束，立即執行怪獸撲擊結算
+        if (battleState.parrySucceeded || elapsed >= parryDuration) {
+          clearInterval(parryTick);
+          battleState.parryWindowActive = false;
+          resolveMonsterAttack(m);
+        }
+      }, 16);
+    }
+
+    function resolveMonsterAttack(m) {
+      if (!battleState.active) return;
+      battleState.monsterOffsetX = -160;
+
+      const useSpecial = (battleState.turnCount % 2 === 0);
+      let rawAtk = m.atk * (useSpecial ? 1.22 : 1.0);
+      if (battleState.wrongAnswerPenalty) {
+        rawAtk *= 1.25;
+        battleState.wrongAnswerPenalty = false;
+      }
+
+      const pDef = (useSpecial && m.skillType === 'ignore_def') ? Math.floor(getTotalDef() * 0.5) : getTotalDef();
+      let dmg = Math.max(4, Math.round(rawAtk - pDef * 0.75));
+
+      if (battleState.parrySucceeded) {
+        dmg = Math.max(1, Math.round(dmg * 0.3));
+        m.shield = Math.max(0, m.shield - 1);
+        addLog(`🛡️ 【完美格擋成功】減免 70% 傷害、震碎敵方 1 層護盾，並觸發下回合 LIMIT BREAK 極限技！`, "text-cyan-300 font-black");
+      } else {
+        playSFX('hit');
+        battleState.screenShake = 15;
+      }
+
+      player.hp = Math.max(0, player.hp - dmg);
+      battleState.heroFlash = 12;
+      spawnHitSparks(230, 310, "#f43f5e", "#fb923c", 22);
+      spawnFloatingText(230, 255, `-${dmg}`, battleState.parrySucceeded ? "#38bdf8" : "#f43f5e", 26);
+
+      if (useSpecial && !battleState.parrySucceeded) {
+        if (m.skillType === 'drain_mp') {
+          const lostMp = Math.min(player.mp, 8);
+          player.mp -= lostMp;
+          addLog(`🌪️ ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並吸走 ${lostMp} 點靈力！`, "text-orange-300");
+        } else if (m.skillType === 'steal_gold') {
+          const stolen = Math.min(player.gold, 12);
+          player.gold -= stolen;
+          addLog(`🔥 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並趁亂奪走 ${stolen} 銀兩！`, "text-orange-300");
+        } else if (m.skillType === 'vampire') {
+          const healM = Math.round(dmg * 0.5);
+          m.hp = Math.min(m.maxHp, m.hp + healM);
+          spawnFloatingText(560, 215, `+${healM}`, "#4ade80", 22);
+          addLog(`🪝 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並吸取 ${healM} 點生命！`, "text-rose-300");
+        } else if (m.skillType === 'break_def') {
+          battleState.defDebuff += 5;
+          addLog(`🐴 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並震裂護甲 (-5 防禦)！`, "text-rose-300");
+        } else {
+          addLog(`👹 ${m.name} 施展【${m.skillName}】，對少俠造成 ${dmg} 點重創！`, "text-rose-300");
+        }
+      } else {
+        addLog(`👹 ${m.name} 發動撲擊，造成 ${dmg} 點傷害。`, "text-stone-300");
+      }
+
+      updateUI();
+      renderBattleSkillBar();
 
       setTimeout(() => {
-        if (!battleState.active) return;
-        battleState.parryWindowActive = false;
-        battleState.monsterOffsetX = -160;
-
-        const useSpecial = (battleState.turnCount % 2 === 0);
-        let rawAtk = m.atk * (useSpecial ? 1.22 : 1.0);
-        if (battleState.wrongAnswerPenalty) {
-          rawAtk *= 1.25;
-          battleState.wrongAnswerPenalty = false;
-        }
-
-        const pDef = (useSpecial && m.skillType === 'ignore_def') ? Math.floor(getTotalDef() * 0.5) : getTotalDef();
-        let dmg = Math.max(4, Math.round(rawAtk - pDef * 0.75));
-
-        if (battleState.parrySucceeded) {
-          dmg = Math.max(1, Math.round(dmg * 0.3));
-          m.shield = Math.max(0, m.shield - 1);
-          addLog(`🛡️ 【完美格擋成功】減免 70% 傷害、震碎敵方 1 層護盾，並觸發下回合 LIMIT BREAK 極限技！`, "text-cyan-300 font-black");
+        battleState.monsterOffsetX = 0;
+        if (player.hp <= 0) {
+          handlePlayerDefeat();
         } else {
-          playSFX('hit');
-          battleState.screenShake = 15;
+          setBattleButtonsDisabled(false);
         }
-
-        player.hp = Math.max(0, player.hp - dmg);
-        battleState.heroFlash = 10;
-        spawnHitSparks(230, 310, "#f43f5e", "#fb923c", 22);
-        spawnFloatingText(230, 255, `-${dmg}`, battleState.parrySucceeded ? "#38bdf8" : "#f43f5e", 26);
-
-        if (useSpecial && !battleState.parrySucceeded) {
-          if (m.skillType === 'drain_mp') {
-            const lostMp = Math.min(player.mp, 8);
-            player.mp -= lostMp;
-            addLog(`🌪️ ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並吸走 ${lostMp} 點靈力！`, "text-orange-300");
-          } else if (m.skillType === 'steal_gold') {
-            const stolen = Math.min(player.gold, 12);
-            player.gold -= stolen;
-            addLog(`🔥 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並趁亂奪走 ${stolen} 銀兩！`, "text-orange-300");
-          } else if (m.skillType === 'vampire') {
-            const healM = Math.round(dmg * 0.5);
-            m.hp = Math.min(m.maxHp, m.hp + healM);
-            spawnFloatingText(560, 215, `+${healM}`, "#4ade80", 22);
-            addLog(`🪝 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並吸取 ${healM} 點生命！`, "text-rose-300");
-          } else if (m.skillType === 'break_def') {
-            battleState.defDebuff += 5;
-            addLog(`🐴 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並震裂護甲 (-5 防禦)！`, "text-rose-300");
-          } else {
-            addLog(`👹 ${m.name} 施展【${m.skillName}】，對少俠造成 ${dmg} 點重創！`, "text-rose-300");
-          }
-        } else {
-          addLog(`👹 ${m.name} 發動撲擊，造成 ${dmg} 點傷害。`, "text-stone-300");
-        }
-
-        updateUI();
-        renderBattleSkillBar();
-
-        setTimeout(() => {
-          battleState.monsterOffsetX = 0;
-          if (player.hp <= 0) {
-            handlePlayerDefeat();
-          } else {
-            setBattleButtonsDisabled(false);
-          }
-        }, 360);
-      }, 560);
+      }, 600);
     }
 
     function handleMonsterDefeat() {
