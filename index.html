@@ -670,95 +670,202 @@
       return img;
     }
 
+// =========================================================
+    // ★ 全新重繪升級：高精細主角紙娃娃、立體怪獸、霸氣 BOSS 與鎏金寶箱 ★
+    // =========================================================
     function buildHeroPaperDollSVG(weaponId, armorId, accId, isAttack = false) {
+      // 1. 背飾法寶層 (5種華麗背後靈環與光翼)
       let accLayer = '';
       if (accId === 'c1') {
-        accLayer = `<circle cx="32" cy="48" r="10" fill="url(#emeraldGlow)" stroke="#6ee7b7" stroke-width="2"/><circle cx="128" cy="48" r="10" fill="url(#emeraldGlow)" stroke="#6ee7b7" stroke-width="2"/>`;
+        accLayer = `
+          <circle cx="80" cy="75" r="46" fill="none" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.6"/>
+          <circle cx="26" cy="52" r="11" fill="url(#emeraldGlow)" stroke="#a7f3d0" stroke-width="2"/>
+          <circle cx="134" cy="52" r="11" fill="url(#emeraldGlow)" stroke="#a7f3d0" stroke-width="2"/>
+          <circle cx="23" cy="49" r="3" fill="#ffffff"/>
+          <circle cx="131" cy="49" r="3" fill="#ffffff"/>
+        `;
       } else if (accId === 'c2') {
-        accLayer = `<circle cx="80" cy="76" r="46" fill="none" stroke="#fbbf24" stroke-width="4" stroke-dasharray="12 6" opacity="0.85"/><circle cx="80" cy="76" r="52" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.5"/>`;
+        accLayer = `
+          <circle cx="80" cy="76" r="50" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="14 6" opacity="0.9"/>
+          <circle cx="80" cy="76" r="56" fill="none" stroke="#fde047" stroke-width="2" stroke-dasharray="4 8" opacity="0.7"/>
+          <polygon points="80,12 85,22 75,22" fill="#fde047"/>
+          <polygon points="80,140 85,130 75,130" fill="#fde047"/>
+          <polygon points="16,76 26,71 26,81" fill="#fde047"/>
+          <polygon points="144,76 134,71 134,81" fill="#fde047"/>
+        `;
       } else if (accId === 'c3') {
-        accLayer = `<path d="M35,78 L6,42 L26,35 L46,66 Z M125,78 L154,42 L134,35 L114,66 Z" fill="url(#cyanWing)" stroke="#38bdf8" stroke-width="2"/>`;
+        accLayer = `
+          <g opacity="0.92">
+            <path d="M48,78 L4,32 L28,28 L56,62 Z" fill="url(#cyanWing)" stroke="#bae6fd" stroke-width="2"/>
+            <path d="M44,88 L10,64 L26,56 L52,78 Z" fill="url(#cyanWing)" stroke="#bae6fd" stroke-width="1.5"/>
+            <path d="M112,78 L156,32 L132,28 L104,62 Z" fill="url(#cyanWing)" stroke="#bae6fd" stroke-width="2"/>
+            <path d="M116,88 L150,64 L134,56 L108,78 Z" fill="url(#cyanWing)" stroke="#bae6fd" stroke-width="1.5"/>
+          </g>
+        `;
       } else if (accId === 'c4') {
-        accLayer = `<polygon points="80,10 92,32 74,32 86,52" fill="#fde047"/><circle cx="80" cy="75" r="50" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="6 8"/><circle cx="24" cy="60" r="7" fill="#38bdf8"/><circle cx="136" cy="60" r="7" fill="#38bdf8"/>`;
+        accLayer = `
+          <circle cx="80" cy="75" r="52" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="8 6"/>
+          <polygon points="80,6 90,28 76,28 86,46 68,24 80,24" fill="#fde047" stroke="#f59e0b" stroke-width="1"/>
+          <polygon points="22,42 36,54 26,56 34,70" fill="#38bdf8"/>
+          <polygon points="138,42 124,54 134,56 126,70" fill="#38bdf8"/>
+        `;
       } else if (accId === 'c5') {
         accLayer = `
-          <circle cx="80" cy="74" r="56" fill="url(#rainbowAura)" opacity="0.35"/>
-          <circle cx="80" cy="74" r="52" fill="none" stroke="#fde047" stroke-width="3.5"/>
-          <polygon points="80,8 86,22 74,22" fill="#fde047"/>
-          <polygon points="20,74 32,68 32,80" fill="#38bdf8"/>
-          <polygon points="140,74 128,68 128,80" fill="#f43f5e"/>
+          <circle cx="80" cy="74" r="60" fill="url(#rainbowAura)" opacity="0.4"/>
+          <circle cx="80" cy="74" r="54" fill="none" stroke="#fde047" stroke-width="4"/>
+          <circle cx="80" cy="74" r="47" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="10 5"/>
+          <path d="M45,74 L4,20 L34,26 L58,64 Z M115,74 L156,20 L126,26 L102,64 Z" fill="url(#goldBlade)" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="80,4 87,20 73,20" fill="#fde047" stroke="#fff" stroke-width="1"/>
         `;
       }
 
+      // 2. 護甲與披風外裝層 (6套精細立體戰袍與肩甲)
       const armorStyles = {
-        'a0': { cape: '#78350f', body1: '#854d0e', body2: '#422006', trim: '#d6d3d1', shoulder: '#78350f', crown: '' },
-        'a1': { cape: '#065f46', body1: '#059669', body2: '#064e3b', trim: '#6ee7b7', shoulder: '#10b981', crown: '' },
-        'a2': { cape: '#1e3a8a', body1: '#64748b', body2: '#334155', trim: '#38bdf8', shoulder: '#94a3b8', crown: `<rect x="54" y="25" width="52" height="6" rx="3" fill="#38bdf8" stroke="#e0f2fe" stroke-width="1.5"/>` },
-        'a3': { cape: '#7f1d1d', body1: '#27272a', body2: '#09090b', trim: '#f97316', shoulder: '#dc2626', crown: `<polygon points="52,28 42,12 62,24" fill="#f97316"/><polygon points="108,28 118,12 98,24" fill="#f97316"/>` },
-        'a4': { cape: '#0284c7', body1: '#f8fafc', body2: '#cbd5e1', trim: '#fbbf24', shoulder: '#facc15', crown: `<polygon points="62,25 80,9 98,25" fill="#facc15" stroke="#fef08a" stroke-width="1.5"/>` },
-        'a5': { cape: '#4c0519', body1: '#18181b', body2: '#09090b', trim: '#fde047', shoulder: '#facc15', crown: `<polygon points="50,26 58,8 72,20 80,4 88,20 102,8 110,26" fill="#facc15" stroke="#ffffff" stroke-width="1.5"/>` }
+        'a0': { capeOut: '#78350f', capeIn: '#451a03', body1: '#a16207', body2: '#713f12', trim: '#e7e5e4', shoulder: '#854d0e', gem: '#38bdf8', crown: '' },
+        'a1': { capeOut: '#065f46', capeIn: '#022c22', body1: '#10b981', body2: '#047857', trim: '#a7f3d0', shoulder: '#059669', gem: '#fde047', crown: '' },
+        'a2': { capeOut: '#1e3a8a', capeIn: '#172554', body1: '#94a3b8', body2: '#475569', trim: '#38bdf8', shoulder: '#cbd5e1', gem: '#38bdf8', crown: `<path d="M52,26 Q80,32 108,26 L106,32 Q80,38 54,32 Z" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>` },
+        'a3': { capeOut: '#991b1b', capeIn: '#450a0a', body1: '#3f3f46', body2: '#18181b', trim: '#fb923c', shoulder: '#dc2626', gem: '#ef4444', crown: `<polygon points="52,28 38,10 64,24" fill="#fb923c" stroke="#fef08a" stroke-width="1.2"/><polygon points="108,28 122,10 96,24" fill="#fb923c" stroke="#fef08a" stroke-width="1.2"/>` },
+        'a4': { capeOut: '#0284c7', capeIn: '#0c4a6e', body1: '#f8fafc', body2: '#cbd5e1', trim: '#facc15', shoulder: '#fde047', gem: '#06b6d4', crown: `<polygon points="58,26 70,14 80,6 90,14 102,26" fill="#facc15" stroke="#ffffff" stroke-width="1.5"/>` },
+        'a5': { capeOut: '#881337', capeIn: '#4c0519', body1: '#27272a', body2: '#09090b', trim: '#fde047', shoulder: '#facc15', gem: '#f43f5e', crown: `<polygon points="48,26 56,6 70,20 80,2 90,20 104,6 112,26" fill="url(#goldBlade)" stroke="#ffffff" stroke-width="1.5"/>` }
       };
       const st = armorStyles[armorId] || armorStyles['a0'];
 
       const armorLayer = `
-        <path d="M46,72 Q22,105 26,138 L62,130 L98,130 L134,138 Q138,105 114,72 Z" fill="${st.cape}" stroke="#000000" stroke-width="2"/>
-        <rect x="58" y="114" width="16" height="26" rx="5" fill="#1c1917" stroke="#000" stroke-width="2"/>
-        <rect x="86" y="114" width="16" height="26" rx="5" fill="#1c1917" stroke="#000" stroke-width="2"/>
-        <rect x="55" y="128" width="21" height="14" rx="4" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="1.8"/>
-        <rect x="84" y="128" width="21" height="14" rx="4" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="1.8"/>
-        <rect x="50" y="72" width="60" height="48" rx="10" fill="${st.body1}" stroke="${st.trim}" stroke-width="3"/>
-        <path d="M56,74 L80,98 L104,74" fill="${st.body2}" stroke="${st.trim}" stroke-width="2"/>
-        <rect x="48" y="102" width="64" height="9" rx="3" fill="#78350f" stroke="${st.trim}" stroke-width="1.8"/>
-        <polygon points="80,98 89,106 80,115 71,106" fill="${st.trim}" stroke="#fff" stroke-width="1.2"/>
-        <path d="M34,78 Q42,60 58,72 L54,90 Q38,88 34,78 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2.5"/>
-        <path d="M126,78 Q118,60 102,72 L106,90 Q122,88 126,78 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2.5"/>
+        <!-- 雙層立體飄逸披風 -->
+        <path d="M44,70 Q16,105 20,144 L60,134 L100,134 L140,144 Q144,105 116,70 Z" fill="${st.capeOut}" stroke="#1c1917" stroke-width="2.5"/>
+        <path d="M50,74 Q28,105 32,138 L64,130 L96,130 L128,138 Q132,105 110,74 Z" fill="${st.capeIn}" opacity="0.75"/>
+        <!-- 戰靴與護脛 -->
+        <rect x="57" y="114" width="17" height="28" rx="6" fill="#1c1917" stroke="#000" stroke-width="2"/>
+        <rect x="86" y="114" width="17" height="28" rx="6" fill="#1c1917" stroke="#000" stroke-width="2"/>
+        <path d="M54,125 L76,125 L74,142 L56,142 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2"/>
+        <path d="M84,125 L106,125 L104,142 L86,142 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2"/>
+        <!-- 胸甲與內襯戰袍 -->
+        <rect x="49" y="70" width="62" height="50" rx="11" fill="${st.body1}" stroke="${st.trim}" stroke-width="3"/>
+        <path d="M55,71 L80,100 L105,71 Z" fill="${st.body2}" stroke="${st.trim}" stroke-width="2"/>
+        <!-- 胸前V型龍紋護心鏡 -->
+        <path d="M65,76 L80,92 L95,76" fill="none" stroke="${st.trim}" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- 戰裙甲片與腰帶核心寶石 -->
+        <path d="M52,106 L46,126 L68,123 L68,106 Z" fill="${st.body2}" stroke="${st.trim}" stroke-width="1.8"/>
+        <path d="M108,106 L114,126 L92,123 L92,106 Z" fill="${st.body2}" stroke="${st.trim}" stroke-width="1.8"/>
+        <polygon points="72,106 88,106 92,128 80,134 68,128" fill="${st.capeOut}" stroke="${st.trim}" stroke-width="1.8"/>
+        <rect x="47" y="99" width="66" height="9" rx="3" fill="#451a03" stroke="${st.trim}" stroke-width="2"/>
+        <polygon points="80,94 90,103.5 80,113 70,103.5" fill="${st.gem}" stroke="#ffffff" stroke-width="1.8"/>
+        <!-- 雙層飛翼立體肩甲 -->
+        <path d="M28,76 Q38,54 58,68 L54,88 Q36,86 28,76 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2.5"/>
+        <path d="M132,76 Q122,54 102,68 L106,88 Q124,86 132,76 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2.5"/>
+        <circle cx="44" cy="74" r="4" fill="${st.gem}" stroke="#fff" stroke-width="1"/>
+        <circle cx="116" cy="74" r="4" fill="${st.gem}" stroke="#fff" stroke-width="1"/>
       `;
 
-      const weaponConfigs = {
-        'w0': { blade: '#a8a29e', edge: '#57534e', hilt: '#78350f', glow: 'none', width: 9, len: 52 },
-        'w1': { blade: '#38bdf8', edge: '#e0f2fe', hilt: '#0284c7', glow: '#38bdf8', width: 11, len: 64 },
-        'w2': { blade: '#e2e8f0', edge: '#facc15', hilt: '#d97706', glow: '#fbbf24', width: 8, len: 68 },
-        'w3': { blade: 'url(#rgbBlade)', edge: '#ffffff', hilt: '#9333ea', glow: '#ec4899', width: 13, len: 72 },
-        'w4': { blade: '#22d3ee', edge: '#ffffff', hilt: '#1e293b', glow: '#06b6d4', width: 14, len: 76 },
-        'w5': { blade: 'url(#goldBlade)', edge: '#fef08a', hilt: '#b45309', glow: '#facc15', width: 17, len: 82 }
-      };
-      const wc = weaponConfigs[weaponId] || weaponConfigs['w0'];
-      const wTransform = isAttack ? 'translate(115, 78) rotate(35)' : 'translate(122, 86) rotate(-22)';
+      // 3. 兵刃武器層 (6把獨立設計的傳說名劍)
+      const wTransform = isAttack ? 'translate(116, 78) rotate(38)' : 'translate(124, 88) rotate(-20)';
+      let weaponGraphic = '';
+      if (weaponId === 'w0') {
+        weaponGraphic = `
+          <polygon points="-5,0 -5,-44 0,-54 5,-44 5,0" fill="#a8a29e" stroke="#57534e" stroke-width="2"/>
+          <line x1="0" y1="-4" x2="0" y2="-44" stroke="#e7e5e4" stroke-width="1.5"/>
+          <rect x="-13" y="0" width="26" height="6" rx="2" fill="#78350f" stroke="#451a03" stroke-width="1.5"/>
+          <rect x="-3.5" y="6" width="7" height="15" rx="2" fill="#57534e"/>
+          <circle cx="0" cy="23" r="4.5" fill="#78350f"/>
+        `;
+      } else if (weaponId === 'w1') {
+        weaponGraphic = `
+          <rect x="-8" y="-66" width="16" height="66" rx="6" fill="#38bdf8" opacity="0.35" filter="blur(3px)"/>
+          <polygon points="-6,0 -6,-54 0,-68 6,-54 6,0" fill="#0284c7" stroke="#e0f2fe" stroke-width="2"/>
+          <line x1="0" y1="-6" x2="0" y2="-58" stroke="#ffffff" stroke-width="2.5"/>
+          <path d="M-16,0 L16,0 L12,7 L-12,7 Z" fill="#0369a1" stroke="#7dd3fc" stroke-width="2"/>
+          <circle cx="0" cy="3.5" r="3.5" fill="#fde047"/>
+          <rect x="-4" y="7" width="8" height="16" rx="2" fill="#1e293b"/>
+          <circle cx="0" cy="25" r="5" fill="#38bdf8"/>
+        `;
+      } else if (weaponId === 'w2') {
+        weaponGraphic = `
+          <polygon points="-4.5,0 -3,-60 0,-74 3,-60 4.5,0" fill="#f8fafc" stroke="#f59e0b" stroke-width="2"/>
+          <line x1="0" y1="-6" x2="0" y2="-64" stroke="#fef08a" stroke-width="2"/>
+          <path d="M-18,2 Q0,-8 18,2 Q12,9 -12,9 Z" fill="#d97706" stroke="#fef08a" stroke-width="2"/>
+          <polygon points="0,-4 5,3 0,8 -5,3" fill="#f59e0b" stroke="#fff" stroke-width="1"/>
+          <rect x="-3.5" y="8" width="7" height="17" rx="2" fill="#78350f"/>
+          <circle cx="0" cy="27" r="5" fill="#fbbf24"/>
+        `;
+      } else if (weaponId === 'w3') {
+        weaponGraphic = `
+          <rect x="-10" y="-76" width="20" height="76" rx="8" fill="#ec4899" opacity="0.38" filter="blur(4px)"/>
+          <polygon points="-7,0 -8,-58 0,-76 8,-58 7,0" fill="url(#rgbBlade)" stroke="#ffffff" stroke-width="2.2"/>
+          <path d="M0,-10 L-4,-28 L4,-45 L0,-64" stroke="#ffffff" stroke-width="2.5" fill="none"/>
+          <path d="M-20,-2 L0,5 L20,-2 L14,8 L-14,8 Z" fill="#9333ea" stroke="#fde047" stroke-width="2"/>
+          <circle cx="0" cy="3" r="4" fill="#fde047"/>
+          <rect x="-4" y="8" width="8" height="17" rx="3" fill="#3b0764" stroke="#c084fc" stroke-width="1.5"/>
+          <circle cx="0" cy="27" r="5.5" fill="#ec4899"/>
+        `;
+      } else if (weaponId === 'w4') {
+        weaponGraphic = `
+          <rect x="-11" y="-80" width="22" height="80" rx="8" fill="#06b6d4" opacity="0.45" filter="blur(4px)"/>
+          <polygon points="-8,0 -9,-64 0,-82 9,-64 8,0" fill="#22d3ee" stroke="#ffffff" stroke-width="2.5"/>
+          <polygon points="-3,0 -3,-66 0,-76 3,-66 3,0" fill="#ffffff"/>
+          <polygon points="-22,-2 -8,0 -12,9 -24,6" fill="#0284c7" stroke="#bae6fd" stroke-width="1.5"/>
+          <polygon points="22,-2 8,0 12,9 24,6" fill="#0284c7" stroke="#bae6fd" stroke-width="1.5"/>
+          <rect x="-10" y="0" width="20" height="8" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+          <rect x="-4.5" y="8" width="9" height="18" rx="2" fill="#1e293b"/>
+          <polygon points="0,32 -6,25 6,25" fill="#22d3ee"/>
+        `;
+      } else {
+        // w5: 五階・軒轅 AI 聖皇神劍
+        weaponGraphic = `
+          <rect x="-14" y="-88" width="28" height="88" rx="10" fill="#facc15" opacity="0.5" filter="blur(5px)"/>
+          <polygon points="-9,0 -11,-66 0,-88 11,-66 9,0" fill="url(#goldBlade)" stroke="#ffffff" stroke-width="2.5"/>
+          <polygon points="-3.5,-6 -3.5,-70 0,-80 3.5,-70 3.5,-6" fill="#ffffff" opacity="0.9"/>
+          <!-- 軒轅聖皇龍翼劍格 -->
+          <path d="M-26,-6 L-8,0 L-14,10 L-28,4 Z M26,-6 L8,0 L14,10 L28,4 Z" fill="#facc15" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="0,-6 9,4 0,12 -9,4" fill="#f43f5e" stroke="#fef08a" stroke-width="2"/>
+          <rect x="-4.5" y="10" width="9" height="18" rx="3" fill="#78350f" stroke="#fde047" stroke-width="2"/>
+          <circle cx="0" cy="31" r="6.5" fill="#fde047" stroke="#ffffff" stroke-width="1.5"/>
+        `;
+      }
 
       const weaponLayer = `
         <g transform="${wTransform}">
-          ${wc.glow !== 'none' ? `<rect x="${-wc.width/2 - 3}" y="${-wc.len}" width="${wc.width + 6}" height="${wc.len}" rx="5" fill="${wc.glow}" opacity="0.4" filter="blur(3px)"/>` : ''}
-          <polygon points="${-wc.width/2},0 ${-wc.width/2},${-wc.len+14} 0,${-wc.len} ${wc.width/2},${-wc.len+14} ${wc.width/2},0" fill="${wc.blade}" stroke="${wc.edge}" stroke-width="2"/>
-          <line x1="0" y1="-4" x2="0" y2="${-wc.len+10}" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
-          <path d="M-16,0 L16,0 L12,7 L-12,7 Z" fill="#fbbf24" stroke="#78350f" stroke-width="1.8"/>
-          <circle cx="0" cy="3.5" r="3.5" fill="${wc.edge}"/>
-          <rect x="-4" y="7" width="8" height="16" rx="3" fill="${wc.hilt}" stroke="#000" stroke-width="1.5"/>
-          <circle cx="0" cy="25" r="5" fill="#fbbf24"/>
+          ${weaponGraphic}
+          <!-- 飄逸紅金劍穗 -->
+          <path d="M0,26 Q12,34 8,46" stroke="#ef4444" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="8" cy="47" r="3" fill="#fde047"/>
         </g>
       `;
 
+      // 4. 精細日系動漫頭部與眼神層
       const headLayer = `
-        <circle cx="80" cy="48" r="25" fill="#ffedd5" stroke="#7c2d12" stroke-width="2"/>
-        <ellipse cx="63" cy="55" rx="4.5" ry="2.2" fill="#fda4af" opacity="0.65"/>
-        <ellipse cx="97" cy="55" rx="4.5" ry="2.2" fill="#fda4af" opacity="0.65"/>
+        <!-- 臉部輪廓與耳廓 -->
+        <circle cx="55" cy="49" r="5" fill="#fed7aa" stroke="#7c2d12" stroke-width="1.8"/>
+        <circle cx="105" cy="49" r="5" fill="#fed7aa" stroke="#7c2d12" stroke-width="1.8"/>
+        <circle cx="80" cy="48" r="25" fill="#ffedd5" stroke="#7c2d12" stroke-width="2.2"/>
+        <ellipse cx="62" cy="55" rx="4.8" ry="2.4" fill="#fb7185" opacity="0.55"/>
+        <ellipse cx="98" cy="55" rx="4.8" ry="2.4" fill="#fb7185" opacity="0.55"/>
+        <!-- 精緻動漫雙眼 (多層次星光瞳孔) -->
         <g>
-          <rect x="62" y="42" width="11" height="13" rx="5" fill="#1e1b4b"/>
-          <rect x="63.5" y="45" width="8" height="9" rx="3.5" fill="#0284c7"/>
-          <circle cx="65.5" cy="45.5" r="2.6" fill="#ffffff"/>
-          <circle cx="69.5" cy="51.5" r="1.3" fill="#ffffff"/>
-          <path d="M60,39 Q67,36 74,40" stroke="#451a03" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <rect x="61" y="41" width="12" height="14" rx="5.5" fill="#0f172a"/>
+          <rect x="62.5" y="44" width="9" height="10" rx="4" fill="#0284c7"/>
+          <ellipse cx="67" cy="51" rx="3.5" ry="2" fill="#38bdf8"/>
+          <circle cx="65" cy="45" r="2.8" fill="#ffffff"/>
+          <circle cx="70" cy="51.5" r="1.4" fill="#ffffff"/>
+          <path d="M59,38 Q67,34 75,39" stroke="#451a03" stroke-width="2.8" fill="none" stroke-linecap="round"/>
         </g>
         <g>
-          <rect x="87" y="42" width="11" height="13" rx="5" fill="#1e1b4b"/>
-          <rect x="88.5" y="45" width="8" height="9" rx="3.5" fill="#0284c7"/>
-          <circle cx="90.5" cy="45.5" r="2.6" fill="#ffffff"/>
-          <circle cx="94.5" cy="51.5" r="1.3" fill="#ffffff"/>
-          <path d="M86,40 Q93,36 100,39" stroke="#451a03" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <rect x="87" y="41" width="12" height="14" rx="5.5" fill="#0f172a"/>
+          <rect x="88.5" y="44" width="9" height="10" rx="4" fill="#0284c7"/>
+          <ellipse cx="93" cy="51" rx="3.5" ry="2" fill="#38bdf8"/>
+          <circle cx="91" cy="45" r="2.8" fill="#ffffff"/>
+          <circle cx="96" cy="51.5" r="1.4" fill="#ffffff"/>
+          <path d="M85,39 Q93,34 101,38" stroke="#451a03" stroke-width="2.8" fill="none" stroke-linecap="round"/>
         </g>
-        <path d="M76,59 Q80,62.5 84,59" stroke="#9a3412" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-        <path d="M52,46 Q48,20 80,18 Q112,20 108,46 Q104,31 95,38 L88,28 L80,39 L72,28 L65,38 Q56,31 52,46 Z" fill="url(#hairGrad)" stroke="#271202" stroke-width="2"/>
-        <path d="M54,32 Q80,36 106,32 L105,37 Q80,41 55,37 Z" fill="#0284c7" stroke="#bae6fd" stroke-width="1.2"/>
-        <circle cx="80" cy="34.5" r="4" fill="#fde047" stroke="#b45309" stroke-width="1.5"/>
+        <!-- 堅毅微笑嘴型 -->
+        <path d="M75,59 Q80,63 85,59" stroke="#9a3412" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <!-- 多層次劍俠刺蝟髮型與天使光圈高光 -->
+        <path d="M50,48 Q45,16 80,14 Q115,16 110,48 Q105,29 96,38 L89,25 L80,38 L71,25 L64,38 Q55,29 50,48 Z" fill="url(#hairGrad)" stroke="#271202" stroke-width="2.2"/>
+        <path d="M62,24 Q80,19 98,24" stroke="#fde047" stroke-width="2" fill="none" opacity="0.55" stroke-linecap="round"/>
+        <!-- 飛揚額頭護額與龍珠 -->
+        <path d="M104,33 Q124,26 132,38 Q118,40 105,37 Z" fill="#0284c7" stroke="#bae6fd" stroke-width="1.2"/>
+        <path d="M54,32 Q80,37 106,32 L105,38 Q80,43 55,38 Z" fill="#0284c7" stroke="#e0f2fe" stroke-width="1.5"/>
+        <circle cx="80" cy="35" r="4.8" fill="#fde047" stroke="#b45309" stroke-width="1.8"/>
+        <circle cx="78.5" cy="33.5" r="1.5" fill="#ffffff"/>
         ${st.crown}
       `;
 
@@ -766,8 +873,9 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
           <defs>
             <linearGradient id="hairGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#b45309"/>
-              <stop offset="100%" stop-color="#451a03"/>
+              <stop offset="0%" stop-color="#d97706"/>
+              <stop offset="50%" stop-color="#92400e"/>
+              <stop offset="100%" stop-color="#3b1402"/>
             </linearGradient>
             <linearGradient id="rgbBlade" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#f43f5e"/>
@@ -776,16 +884,18 @@
             </linearGradient>
             <linearGradient id="goldBlade" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#ffffff"/>
-              <stop offset="40%" stop-color="#fde047"/>
-              <stop offset="100%" stop-color="#d97706"/>
+              <stop offset="35%" stop-color="#fde047"/>
+              <stop offset="100%" stop-color="#b45309"/>
             </linearGradient>
             <radialGradient id="emeraldGlow">
               <stop offset="0%" stop-color="#ffffff"/>
-              <stop offset="100%" stop-color="#10b981"/>
+              <stop offset="60%" stop-color="#34d399"/>
+              <stop offset="100%" stop-color="#065f46"/>
             </radialGradient>
             <linearGradient id="cyanWing" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#e0f2fe"/>
-              <stop offset="100%" stop-color="#0284c7"/>
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="40%" stop-color="#38bdf8"/>
+              <stop offset="100%" stop-color="#0369a1"/>
             </linearGradient>
             <radialGradient id="rainbowAura">
               <stop offset="0%" stop-color="#fde047"/>
@@ -801,100 +911,275 @@
       `;
     }
 
+    // ★ 全新重繪：12 隻迷宮怪物與章節守門 BOSS 高精細 SVG 立繪庫 ★
     function buildMonsterDetailedSVG(key) {
       const monsterSVGs = {
+        // 1. 砂岩灰塵魔像 (裂紋符文巨石魔像 + 懸浮能量雙拳)
         '1': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <defs><radialGradient id="g1"><stop offset="0%" stop-color="#a8a29e"/><stop offset="100%" stop-color="#44403c"/></radialGradient></defs>
-          <ellipse cx="80" cy="138" rx="38" ry="10" fill="rgba(0,0,0,0.45)"/>
-          <polygon points="48,50 80,26 112,50 120,96 80,118 40,96" fill="url(#g1)" stroke="#d6d3d1" stroke-width="3"/>
-          <polygon points="18,65 36,52 42,84 22,92" fill="#57534e" stroke="#fbbf24" stroke-width="2"/>
-          <polygon points="142,65 124,52 118,84 138,92" fill="#57534e" stroke="#fbbf24" stroke-width="2"/>
-          <polygon points="56,64 72,70 60,76" fill="#fde047"/><polygon points="104,64 88,70 100,76" fill="#fde047"/>
-          <path d="M64,94 L74,88 L86,94 L96,88" stroke="#f97316" stroke-width="3.5" fill="none"/>
+          <defs>
+            <radialGradient id="rockG" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#d6d3d1"/>
+              <stop offset="55%" stop-color="#78716c"/>
+              <stop offset="100%" stop-color="#292524"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="80" cy="142" rx="44" ry="11" fill="rgba(0,0,0,0.5)"/>
+          <!-- 岩石身軀與肩部水晶 -->
+          <polygon points="52,32 36,12 66,24" fill="#f59e0b" stroke="#fef08a" stroke-width="2"/>
+          <polygon points="108,32 124,12 94,24" fill="#f59e0b" stroke="#fef08a" stroke-width="2"/>
+          <polygon points="42,46 80,22 118,46 126,98 80,124 34,98" fill="url(#rockG)" stroke="#e7e5e4" stroke-width="3"/>
+          <!-- 發光大地符文裂紋 -->
+          <path d="M80,26 L80,52 L64,66 M80,52 L96,66 M52,96 L80,108 L108,96" stroke="#fde047" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- 懸浮重拳 -->
+          <polygon points="10,64 32,48 38,84 14,94" fill="url(#rockG)" stroke="#fbbf24" stroke-width="2.5"/>
+          <polygon points="150,64 128,48 122,84 146,94" fill="url(#rockG)" stroke="#fbbf24" stroke-width="2.5"/>
+          <!-- 熾熱雙眼与熔岩口 -->
+          <polygon points="52,62 74,70 56,78" fill="#ef4444" stroke="#fde047" stroke-width="1.5"/>
+          <polygon points="108,62 86,70 104,78" fill="#ef4444" stroke="#fde047" stroke-width="1.5"/>
+          <polygon points="60,92 70,85 80,93 90,85 100,92 92,102 68,102" fill="#451a03" stroke="#f97316" stroke-width="2"/>
         </svg>`,
+
+        // 2. 甲殼吞鍵蟲 (重裝金屬獨角仙 + 背負發光機械鍵帽)
         '2': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#84cc16"/><stop offset="100%" stop-color="#365314"/></linearGradient></defs>
-          <ellipse cx="85" cy="90" rx="44" ry="32" fill="url(#g2)" stroke="#ecfccb" stroke-width="3"/>
-          <rect x="72" y="68" width="28" height="22" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
-          <text x="77" y="84" fill="#38bdf8" font-size="13" font-weight="900">ESC</text>
-          <circle cx="46" cy="92" r="24" fill="#4d7c0f" stroke="#bef264" stroke-width="2.5"/>
-          <path d="M28,82 Q8,65 16,52 Q28,64 38,74 Z M28,102 Q8,118 16,130 Q28,118 38,108 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
-          <circle cx="38" cy="84" r="6" fill="#ef4444"/><circle cx="36" cy="82" r="2" fill="#fff"/>
+          <defs>
+            <linearGradient id="shellG" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#a3e635"/>
+              <stop offset="50%" stop-color="#4d7c0f"/>
+              <stop offset="100%" stop-color="#1a2e05"/>
+            </linearGradient>
+          </defs>
+          <!-- 6隻裝甲節肢腳 -->
+          <path d="M56,112 L42,136 M80,115 L80,140 M106,112 L120,136" stroke="#365314" stroke-width="6" stroke-linecap="round"/>
+          <!-- 金屬甲殼與立體機械鍵帽 -->
+          <ellipse cx="88" cy="88" rx="48" ry="35" fill="url(#shellG)" stroke="#d9f99d" stroke-width="3"/>
+          <rect x="68" y="54" width="38" height="28" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+          <rect x="72" y="57" width="30" height="20" rx="4" fill="#1e293b"/>
+          <text x="75" y="72" fill="#38bdf8" font-size="13" font-family="monospace" font-weight="900">ESC</text>
+          <!-- 頭部與巨型鋸齒雙顎 -->
+          <circle cx="44" cy="90" r="24" fill="#365314" stroke="#bef264" stroke-width="2.5"/>
+          <path d="M26,78 Q2,56 14,42 Q30,56 40,70 Z" fill="#fde047" stroke="#ca8a04" stroke-width="2.5"/>
+          <path d="M26,102 Q2,124 14,138 Q30,124 40,110 Z" fill="#fde047" stroke="#ca8a04" stroke-width="2.5"/>
+          <circle cx="36" cy="82" r="7" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
+          <circle cx="34" cy="80" r="2.5" fill="#ffffff"/>
         </svg>`,
+
+        // 3. 符文亂碼妖 (幽冥翡翠數據死靈巫師 + 懸浮亂碼魔典)
         '3': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <defs><radialGradient id="g3"><stop offset="0%" stop-color="#6ee7b7"/><stop offset="100%" stop-color="#064e3b"/></radialGradient></defs>
-          <path d="M36,132 Q30,36 80,26 Q130,36 124,132 Q104,118 80,134 Q56,118 36,132 Z" fill="url(#g3)" stroke="#a7f3d0" stroke-width="3"/>
-          <circle cx="64" cy="68" r="8" fill="#022c22"/><circle cx="64" cy="68" r="4" fill="#fde047"/>
-          <circle cx="96" cy="68" r="8" fill="#022c22"/><circle cx="96" cy="68" r="4" fill="#fde047"/>
-          <path d="M62,92 Q80,106 98,92" stroke="#022c22" stroke-width="4" fill="none"/>
-          <text x="48" y="50" fill="#a7f3d0" font-size="14" font-weight="900">0101?!</text>
+          <defs>
+            <radialGradient id="ghostG" cx="50%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#a7f3d0"/>
+              <stop offset="50%" stop-color="#10b981"/>
+              <stop offset="100%" stop-color="#022c22"/>
+            </radialGradient>
+          </defs>
+          <circle cx="80" cy="78" r="56" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6 8" opacity="0.6"/>
+          <path d="M32,138 Q24,30 80,20 Q136,30 128,138 Q108,118 94,136 Q80,118 66,136 Q52,118 32,138 Z" fill="url(#ghostG)" stroke="#d1fae5" stroke-width="3"/>
+          <!-- 深淵兜帽臉龐 -->
+          <ellipse cx="80" cy="68" rx="28" ry="22" fill="#022c22" stroke="#6ee7b7" stroke-width="2"/>
+          <circle cx="68" cy="66" r="6" fill="#fde047"/><circle cx="68" cy="66" r="2.5" fill="#ffffff"/>
+          <circle cx="92" cy="66" r="6" fill="#fde047"/><circle cx="92" cy="66" r="2.5" fill="#ffffff"/>
+          <path d="M64,82 L72,77 L80,83 L88,77 L96,82" stroke="#34d399" stroke-width="2.5" fill="none"/>
+          <!-- 環繞二進位亂碼符文 -->
+          <rect x="16" y="42" width="32" height="18" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+          <text x="20" y="55" fill="#fde047" font-size="11" font-family="monospace" font-weight="900">0101</text>
+          <rect x="112" y="42" width="32" height="18" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+          <text x="116" y="55" fill="#fde047" font-size="11" font-family="monospace" font-weight="900">#?@!</text>
         </svg>`,
+
+        // 4. 赤焰竊盜魔 (雙翼熔岩惡魔 + 黃金三叉戟)
         '4': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <path d="M70,72 L14,34 L28,88 L56,94 Z M90,72 L146,34 L132,88 L104,94 Z" fill="#881337" stroke="#f43f5e" stroke-width="2.5"/>
-          <circle cx="80" cy="84" r="30" fill="#be123c" stroke="#fda4af" stroke-width="3"/>
-          <path d="M58,60 L40,24 L70,52 Z M102,60 L120,24 L90,52 Z" fill="#facc15" stroke="#ca8a04" stroke-width="2"/>
-          <polygon points="62,76 76,82 64,88" fill="#fef08a"/><polygon points="98,76 84,82 96,88" fill="#fef08a"/>
-          <path d="M66,98 L73,104 L80,98 L87,104 L94,98" stroke="#fff" stroke-width="3" fill="none"/>
+          <defs>
+            <radialGradient id="impG" cx="40%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#fb7185"/>
+              <stop offset="55%" stop-color="#e11d48"/>
+              <stop offset="100%" stop-color="#4c0519"/>
+            </radialGradient>
+          </defs>
+          <!-- 惡魔蝠翼 -->
+          <path d="M68,74 L8,26 L20,66 L10,92 L54,96 Z M92,74 L152,26 L140,66 L150,92 L106,96 Z" fill="#881337" stroke="#fda4af" stroke-width="2.5"/>
+          <!-- 惡魔彎角與身軀 -->
+          <path d="M56,56 Q32,20 48,14 Q62,32 70,50 Z M104,56 Q128,20 112,14 Q98,32 90,50 Z" fill="#facc15" stroke="#ca8a04" stroke-width="2.5"/>
+          <circle cx="80" cy="84" r="32" fill="url(#impG)" stroke="#fecdd3" stroke-width="3"/>
+          <polygon points="58,74 75,82 60,88" fill="#fef08a"/>
+          <polygon points="102,74 85,82 100,88" fill="#fef08a"/>
+          <path d="M62,98 L71,105 L80,98 L89,105 L98,98" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <!-- 黃金火焰三叉戟 -->
+          <line x1="132" y1="36" x2="122" y2="138" stroke="#f59e0b" stroke-width="4.5"/>
+          <path d="M120,48 L132,22 L144,48 M132,22 L132,52" stroke="#fde047" stroke-width="3" fill="none"/>
         </svg>`,
+
+        // 5. 幻影魔鏡靈 (太古紫金八卦魔鏡 + 彈窗雙重魔眼)
         '5': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <polygon points="80,14 132,44 132,116 80,146 28,116 28,44" fill="#581c87" stroke="#fbbf24" stroke-width="5"/>
-          <circle cx="80" cy="80" r="38" fill="#3b0764" stroke="#c084fc" stroke-width="3"/>
-          <polygon points="60,68 74,76 62,82" fill="#fde047"/><polygon points="100,68 86,76 98,82" fill="#fde047"/>
-          <text x="58" y="105" fill="#f43f5e" font-size="15" font-weight="900">POP-UP!</text>
+          <defs>
+            <radialGradient id="mirrorG">
+              <stop offset="0%" stop-color="#c084fc"/>
+              <stop offset="60%" stop-color="#581c87"/>
+              <stop offset="100%" stop-color="#1e1b4b"/>
+            </radialGradient>
+          </defs>
+          <!-- 懸浮符文玉珠 -->
+          <circle cx="18" cy="48" r="8" fill="#fde047" stroke="#f59e0b" stroke-width="2"/>
+          <circle cx="142" cy="48" r="8" fill="#fde047" stroke="#f59e0b" stroke-width="2"/>
+          <polygon points="80,10 136,42 136,118 80,150 24,118 24,42" fill="#4c1d95" stroke="#facc15" stroke-width="5"/>
+          <polygon points="80,20 126,48 126,112 80,140 34,112 34,48" fill="url(#mirrorG)" stroke="#e9d5ff" stroke-width="2.5"/>
+          <!-- 魔鏡裂痕與妖瞳 -->
+          <polygon points="56,64 75,74 58,82" fill="#fde047"/>
+          <polygon points="104,64 85,74 102,82" fill="#fde047"/>
+          <circle cx="80" cy="50" r="7" fill="#f43f5e" stroke="#fff" stroke-width="1.5"/>
+          <rect x="48" y="92" width="64" height="20" rx="4" fill="#090d16" stroke="#f43f5e" stroke-width="2"/>
+          <text x="53" y="106" fill="#fde047" font-size="13" font-weight="900">POP-UP!</text>
         </svg>`,
+
+        // 6. 深淵釣魚妖 (深海發光誘餌燈籠鮟鱇魚怪)
         '6': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <path d="M75,45 Q75,12 115,22 L115,36" stroke="#38bdf8" stroke-width="4" fill="none"/>
-          <rect x="102" y="34" width="26" height="18" rx="3" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
-          <ellipse cx="78" cy="95" rx="44" ry="34" fill="#1e3a8a" stroke="#60a5fa" stroke-width="3"/>
-          <path d="M46,98 L110,98 L98,122 L58,122 Z" fill="#450a0a"/>
-          <polygon points="54,98 60,108 66,98 72,108 78,98 84,108 90,98 96,108 102,98" fill="#ffffff"/>
-          <circle cx="62" cy="78" r="7" fill="#ef4444"/><circle cx="60" cy="76" r="2.5" fill="#fff"/>
+          <defs>
+            <radialGradient id="fishG" cx="40%" cy="40%" r="65%">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="55%" stop-color="#1d4ed8"/>
+              <stop offset="100%" stop-color="#172554"/>
+            </radialGradient>
+          </defs>
+          <!-- 背鰭與尾鰭 -->
+          <polygon points="116,88 152,62 144,96 154,124 116,106" fill="#0284c7" stroke="#7dd3fc" stroke-width="2.5"/>
+          <!-- 發光釣竿與假信件誘餌 -->
+          <path d="M68,48 Q62,8 118,18 L118,34" stroke="#38bdf8" stroke-width="4" fill="none"/>
+          <circle cx="118" cy="42" r="18" fill="rgba(253,224,71,0.35)"/>
+          <rect x="102" y="32" width="32" height="20" rx="3" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+          <path d="M102,32 L118,44 L134,32" stroke="#b45309" stroke-width="2" fill="none"/>
+          <!-- 魚身與森白利齒巨口 -->
+          <ellipse cx="74" cy="96" rx="46" ry="36" fill="url(#fishG)" stroke="#93c5fd" stroke-width="3"/>
+          <path d="M36,96 L106,96 L96,124 L48,124 Z" fill="#450a0a" stroke="#f87171" stroke-width="1.5"/>
+          <polygon points="44,96 51,110 58,96 65,110 72,96 79,110 86,96 93,110 100,96" fill="#ffffff"/>
+          <circle cx="54" cy="76" r="8" fill="#ef4444" stroke="#fde047" stroke-width="2"/>
+          <circle cx="52" cy="74" r="2.5" fill="#ffffff"/>
         </svg>`,
+
+        // 7. 青銅木馬巨兵 (古代青銅機關半人馬重裝武士)
         '7': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <polygon points="44,136 44,64 72,24 116,38 108,68 80,68 92,136" fill="#44403c" stroke="#f97316" stroke-width="4"/>
-          <circle cx="68" cy="96" r="14" fill="#dc2626" stroke="#fde047" stroke-width="3"/>
-          <polygon points="74,40 94,45 80,54" fill="#ef4444"/>
-          <rect x="112" y="28" width="8" height="105" fill="#d97706"/>
-          <polygon points="120,24 148,42 120,62" fill="#38bdf8"/>
+          <defs>
+            <linearGradient id="bronzeG" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#a8a29e"/>
+              <stop offset="50%" stop-color="#57534e"/>
+              <stop offset="100%" stop-color="#1c1917"/>
+            </linearGradient>
+          </defs>
+          <!-- 機關馬身與裝甲戰軀 -->
+          <polygon points="36,140 36,62 68,20 112,34 104,68 78,68 94,140" fill="url(#bronzeG)" stroke="#f59e0b" stroke-width="3.5"/>
+          <!-- 胸口發光齒輪爐心 -->
+          <circle cx="64" cy="94" r="15" fill="#7f1d1d" stroke="#fde047" stroke-width="3"/>
+          <circle cx="64" cy="94" r="7" fill="#ef4444"/>
+          <polygon points="70,36 94,42 76,52" fill="#ef4444" stroke="#fde047" stroke-width="1"/>
+          <!-- 左手青銅戰盾、右手雷電戰戟 -->
+          <polygon points="16,66 42,56 42,102 28,116 16,102" fill="#b45309" stroke="#fde047" stroke-width="2.5"/>
+          <rect x="118" y="18" width="7" height="122" fill="#d97706" stroke="#451a03" stroke-width="1.5"/>
+          <polygon points="125,16 156,36 142,50 125,62" fill="#38bdf8" stroke="#e0f2fe" stroke-width="2"/>
         </svg>`,
+
+        // M_MIMIC. 噬人偽裝寶箱怪 (鐵鍊狂暴寶箱怪 + 猩紅魔眼與巨舌)
         'M_MIMIC': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <rect x="26" y="42" width="108" height="84" rx="10" fill="#78350f" stroke="#facc15" stroke-width="5"/>
-          <rect x="34" y="68" width="92" height="38" fill="#450a0a"/>
-          <polygon points="40,68 48,84 56,68 64,84 72,68 80,84 88,68 96,84 104,68 112,84 120,68" fill="#ffffff"/>
-          <path d="M70,88 Q80,128 98,118" stroke="#ec4899" stroke-width="12" fill="none" stroke-linecap="round"/>
-          <circle cx="58" cy="54" r="7" fill="#ef4444"/><circle cx="102" cy="54" r="7" fill="#ef4444"/>
+          <ellipse cx="80" cy="142" rx="48" ry="10" fill="rgba(0,0,0,0.55)"/>
+          <path d="M22,72 Q80,22 138,72 Z" fill="#92400e" stroke="#facc15" stroke-width="4"/>
+          <rect x="24" y="70" width="112" height="62" rx="8" fill="#78350f" stroke="#facc15" stroke-width="4"/>
+          <rect x="32" y="66" width="96" height="44" fill="#450a0a"/>
+          <!-- 上下交錯森白獠牙 -->
+          <polygon points="36,66 45,86 54,66 63,86 72,66 81,86 90,66 99,86 108,66 117,86 124,66" fill="#ffffff"/>
+          <polygon points="40,110 49,94 58,110 67,94 76,110 85,94 94,110 103,94 112,110 120,94" fill="#fde047"/>
+          <!-- 狂暴長舌 -->
+          <path d="M72,90 Q82,138 112,124" stroke="#ec4899" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <circle cx="56" cy="54" r="8" fill="#ef4444" stroke="#fff" stroke-width="2"/>
+          <circle cx="104" cy="54" r="8" fill="#ef4444" stroke="#fff" stroke-width="2"/>
         </svg>`,
+
+        // A. 卷一首領・千年鍵垢巨魔 (霸氣熔岩黑金裝甲 + 背後大漠威壓法陣)
         'A': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <circle cx="80" cy="84" r="56" fill="rgba(245,158,11,0.22)"/>
-          <polygon points="34,42 18,14 54,32" fill="#facc15"/><polygon points="126,42 142,14 106,32" fill="#facc15"/>
-          <rect x="36" y="36" width="88" height="88" rx="18" fill="#57534e" stroke="#fbbf24" stroke-width="4.5"/>
-          <polygon points="52,64 74,72 56,80" fill="#ef4444"/><polygon points="108,64 86,72 104,80" fill="#ef4444"/>
-          <rect x="52" y="94" width="56" height="16" rx="4" fill="#1c1917" stroke="#fde047" stroke-width="2"/>
+          <circle cx="80" cy="82" r="64" fill="rgba(245,158,11,0.22)"/>
+          <circle cx="80" cy="82" r="58" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
+          <!-- 巨型黃金雙角與黑曜石肩甲 -->
+          <polygon points="36,44 10,8 58,30" fill="#facc15" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="124,44 150,8 102,30" fill="#facc15" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="10,60 36,42 38,94 14,88" fill="#44403c" stroke="#f59e0b" stroke-width="3"/>
+          <polygon points="150,60 124,42 122,94 146,88" fill="#44403c" stroke="#f59e0b" stroke-width="3"/>
+          <!-- 巨魔主體與鑲嵌鍵帽裝甲 -->
+          <rect x="34" y="34" width="92" height="94" rx="18" fill="#292524" stroke="#fbbf24" stroke-width="4.5"/>
+          <rect x="46" y="42" width="20" height="14" rx="3" fill="#44403c" stroke="#a8a29e" stroke-width="1.5"/>
+          <rect x="94" y="42" width="20" height="14" rx="3" fill="#44403c" stroke="#a8a29e" stroke-width="1.5"/>
+          <!-- 熾紅魔眼與熔岩巨口 -->
+          <polygon points="48,64 74,74 52,82" fill="#ef4444" stroke="#fde047" stroke-width="1.5"/>
+          <polygon points="112,64 86,74 108,82" fill="#ef4444" stroke="#fde047" stroke-width="1.5"/>
+          <rect x="48" y="92" width="64" height="22" rx="5" fill="#450a0a" stroke="#f97316" stroke-width="2.5"/>
+          <polygon points="54,92 62,104 70,92 78,104 86,92 94,104 102,92" fill="#fde047"/>
         </svg>`,
+
+        // D. 卷二首領・格式化鐮刀死神 (幽冥紫金法袍 + 雙手寒冰雷射巨鐮)
         'D': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <path d="M126,18 Q42,8 22,56 Q68,36 118,48 Z" fill="#22d3ee" stroke="#e0f2fe" stroke-width="2.5"/>
-          <line x1="122" y1="20" x2="104" y2="144" stroke="#fbbf24" stroke-width="6"/>
-          <path d="M40,138 L54,44 L80,26 L106,44 L120,138 Z" fill="#1e1b4b" stroke="#a855f7" stroke-width="3.5"/>
-          <circle cx="68" cy="60" r="6" fill="#22d3ee"/><circle cx="92" cy="60" r="6" fill="#22d3ee"/>
+          <circle cx="80" cy="82" r="60" fill="rgba(168,85,247,0.2)"/>
+          <circle cx="80" cy="82" r="54" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-dasharray="10 6"/>
+          <!-- 超大新月雷射死神鐮刀 -->
+          <path d="M134,14 Q30,-4 8,62 Q64,34 124,48 Z" fill="#22d3ee" stroke="#ffffff" stroke-width="3"/>
+          <line x1="128" y1="16" x2="102" y2="148" stroke="#facc15" stroke-width="6.5" stroke-linecap="round"/>
+          <!-- 死神皇冠與戰袍 -->
+          <polygon points="56,32 68,14 80,26 92,14 104,32" fill="#facc15" stroke="#fef08a" stroke-width="1.5"/>
+          <path d="M34,142 L48,42 L80,24 L112,42 L126,142 L98,128 L80,142 L62,128 Z" fill="#1e1b4b" stroke="#c084fc" stroke-width="3.5"/>
+          <!-- 骷髏面甲與藍焰魂眼 -->
+          <circle cx="80" cy="62" r="20" fill="#090d16" stroke="#a855f7" stroke-width="2"/>
+          <circle cx="70" cy="60" r="6" fill="#22d3ee"/><circle cx="70" cy="60" r="2.5" fill="#ffffff"/>
+          <circle cx="90" cy="60" r="6" fill="#22d3ee"/><circle cx="90" cy="60" r="2.5" fill="#ffffff"/>
         </svg>`,
+
+        // G. 卷三首領・深淵駭客傀儡師 (六芒星傀儡十字架 + 假面魔導師)
         'G': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <circle cx="80" cy="82" r="54" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-dasharray="8 6"/>
-          <path d="M36,136 L50,46 L80,30 L110,46 L124,136 Z" fill="#3b0764" stroke="#fbbf24" stroke-width="4"/>
-          <circle cx="80" cy="66" r="22" fill="#f8fafc" stroke="#9333ea" stroke-width="2.5"/>
-          <polygon points="68,62 77,66 70,71" fill="#dc2626"/><polygon points="92,62 83,66 90,71" fill="#dc2626"/>
+          <circle cx="80" cy="82" r="58" fill="none" stroke="#e879f9" stroke-width="3" stroke-dasharray="8 5"/>
+          <!-- 頂部黃金傀儡操控十字架與能量絲線 -->
+          <rect x="24" y="14" width="112" height="8" rx="4" fill="#facc15" stroke="#78350f" stroke-width="2"/>
+          <line x1="36" y1="22" x2="46" y2="88" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3 3"/>
+          <line x1="124" y1="22" x2="114" y2="88" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3 3"/>
+          <!-- 華麗魔導披風與假面 -->
+          <path d="M30,138 L46,44 L80,28 L114,44 L130,138 Z" fill="#3b0764" stroke="#facc15" stroke-width="4"/>
+          <circle cx="80" cy="64" r="23" fill="#f8fafc" stroke="#9333ea" stroke-width="3"/>
+          <path d="M80,41 L80,87" stroke="#c084fc" stroke-width="2"/>
+          <polygon points="64,58 76,64 66,70" fill="#e11d48"/>
+          <polygon points="96,58 84,64 94,70" fill="#0284c7"/>
+          <path d="M68,76 Q80,84 92,76" stroke="#9333ea" stroke-width="3" fill="none"/>
         </svg>`,
+
+        // K. 終極魔神・暗黑勒索魔神 (六翼墮天使黑金鎧甲 + 萬年加密鎖頭核心 + 雙手滅世雷球)
         'K': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <path d="M60,74 L4,22 L18,82 L48,96 Z M100,74 L156,22 L142,82 L112,96 Z" fill="#4c0519" stroke="#f43f5e" stroke-width="3"/>
-          <polygon points="46,42 56,12 72,30 80,6 88,30 104,12 114,42" fill="#facc15" stroke="#fef08a" stroke-width="2.5"/>
-          <rect x="42" y="42" width="76" height="84" rx="16" fill="#18181b" stroke="#f43f5e" stroke-width="4"/>
-          <polygon points="56,64 76,72 60,78" fill="#22d3ee"/><polygon points="104,64 84,72 100,78" fill="#22d3ee"/>
-          <circle cx="80" cy="98" r="14" fill="#facc15" stroke="#78350f" stroke-width="2.5"/>
-          <rect x="77" y="95" width="6" height="10" fill="#18181b"/>
+          <defs>
+            <radialGradient id="bossCore">
+              <stop offset="0%" stop-color="#fde047"/>
+              <stop offset="60%" stop-color="#e11d48"/>
+              <stop offset="100%" stop-color="#4c0519"/>
+            </radialGradient>
+          </defs>
+          <!-- 終極魔神毀滅光環 -->
+          <circle cx="80" cy="80" r="68" fill="url(#bossCore)" opacity="0.28"/>
+          <circle cx="80" cy="80" r="62" fill="none" stroke="#f43f5e" stroke-width="3" stroke-dasharray="14 6"/>
+          <!-- 霸氣六翼黑金魔翅 -->
+          <path d="M56,64 L2,12 L14,54 L50,74 Z M52,80 L0,62 L12,96 L48,96 Z M48,96 L8,118 L26,142 L54,112 Z" fill="#4c0519" stroke="#fb7185" stroke-width="2.5"/>
+          <path d="M104,64 L158,12 L146,54 L110,74 Z M108,80 L160,62 L148,96 L112,96 Z M112,96 L152,118 L134,142 L106,112 Z" fill="#4c0519" stroke="#fb7185" stroke-width="2.5"/>
+          <!-- 雙手懸浮暗紅滅世雷球 -->
+          <circle cx="20" cy="82" r="12" fill="#e11d48" stroke="#fde047" stroke-width="2.5"/>
+          <circle cx="140" cy="82" r="12" fill="#e11d48" stroke="#fde047" stroke-width="2.5"/>
+          <!-- 帝王黑金皇冠與重裝魔神鎧 -->
+          <polygon points="44,40 54,6 70,28 80,2 90,28 106,6 116,40" fill="#facc15" stroke="#ffffff" stroke-width="2.5"/>
+          <rect x="40" y="40" width="80" height="90" rx="16" fill="#09090b" stroke="#facc15" stroke-width="4.5"/>
+          <!-- 四眼魔瞳 -->
+          <polygon points="52,56 72,62 56,66" fill="#fde047"/>
+          <polygon points="108,56 88,62 104,66" fill="#fde047"/>
+          <polygon points="50,68 76,76 56,82" fill="#22d3ee"/>
+          <polygon points="110,68 84,76 104,82" fill="#22d3ee"/>
+          <!-- 胸口交叉黃金鎖鍊與勒索加密巨鎖 -->
+          <line x1="42" y1="78" x2="118" y2="122" stroke="#f59e0b" stroke-width="4"/>
+          <line x1="118" y1="78" x2="42" y2="122" stroke="#f59e0b" stroke-width="4"/>
+          <circle cx="80" cy="100" r="16" fill="#facc15" stroke="#78350f" stroke-width="3"/>
+          <circle cx="80" cy="97" r="4" fill="#09090b"/>
+          <rect x="77.5" y="97" width="5" height="10" fill="#09090b"/>
         </svg>`
       };
       return monsterSVGs[key] || monsterSVGs['1'];
     }
 
+    // 刷新主角紙娃娃快取與所有預覽視窗
     function refreshHeroPaperDollSprites() {
       const wId = player.equipped.weapon.id || 'w0';
       const aId = player.equipped.armor.id || 'a0';
@@ -927,798 +1212,6 @@
       ['1','2','3','4','5','6','7','M_MIMIC','A','D','G','K'].forEach(k => {
         spriteCache.monsters[k] = svgToImage(buildMonsterDetailedSVG(k));
       });
-    }
-
-    // =========================================================
-    // 1. 雙聲道 Web Audio 合成器
-    // =========================================================
-    let audioCtx = null;
-    let soundEnabled = true;
-    let bgmEnabled = true;
-    let bgmInterval = null;
-    let bgmStep = 0;
-
-    const exploreMelody = [293.66, 329.63, 392.00, 440.00, 523.25, 440.00, 392.00, 329.63];
-    const battleMelody  = [146.83, 146.83, 220.00, 146.83, 261.63, 246.94, 220.00, 196.00];
-
-    function initAudio() {
-      if (!audioCtx) {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (AudioContext) audioCtx = new AudioContext();
-      }
-      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-      if (bgmEnabled && !bgmInterval) startBGM();
-    }
-
-    function startBGM() {
-      if (bgmInterval) clearInterval(bgmInterval);
-      bgmInterval = setInterval(() => {
-        if (!bgmEnabled || !audioCtx || audioCtx.state !== 'running') return;
-        if (!document.getElementById('title-screen').classList.contains('hidden')) return;
-        try {
-          const now = audioCtx.currentTime;
-          const notes = battleState.active ? battleMelody : exploreMelody;
-          const freq = notes[bgmStep % notes.length];
-          bgmStep++;
-
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = battleState.active ? 'sawtooth' : 'triangle';
-          osc.frequency.setValueAtTime(freq, now);
-
-          gain.gain.setValueAtTime(battleState.active ? 0.032 : 0.025, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + (battleState.active ? 0.22 : 0.42));
-
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + (battleState.active ? 0.23 : 0.45));
-        } catch (e) {}
-      }, 320);
-    }
-
-    function toggleBGM() {
-      bgmEnabled = !bgmEnabled;
-      document.getElementById('bgm-btn').innerText = bgmEnabled ? "🎵 音樂：開" : "🎵 音樂：關";
-      if (bgmEnabled) initAudio();
-    }
-
-    function toggleAudio() {
-      soundEnabled = !soundEnabled;
-      document.getElementById('sfx-btn').innerText = soundEnabled ? "🔊 音效：開" : "🔇 音效：關";
-    }
-
-    function playSFX(type) {
-      if (!soundEnabled) return;
-      try {
-        initAudio();
-        if (!audioCtx) return;
-
-        const now = audioCtx.currentTime;
-        if (type === 'slash') {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(680, now);
-          osc.frequency.exponentialRampToValueAtTime(90, now + 0.16);
-          gain.gain.setValueAtTime(0.26, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.17);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.17);
-        } else if (type === 'heavy' || type === 'break') {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'square';
-          osc.frequency.setValueAtTime(type === 'break' ? 420 : 280, now);
-          osc.frequency.exponentialRampToValueAtTime(32, now + 0.38);
-          gain.gain.setValueAtTime(0.35, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.4);
-        } else if (type === 'parry') {
-          [880, 1318.5, 1760].forEach((f, idx) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(f, now + idx * 0.03);
-            gain.gain.setValueAtTime(0.22, now + idx * 0.03);
-            gain.gain.exponentialRampToValueAtTime(0.008, now + 0.35);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(now + idx * 0.03);
-            osc.stop(now + 0.36);
-          });
-        } else if (type === 'hit') {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(140, now);
-          osc.frequency.exponentialRampToValueAtTime(38, now + 0.18);
-          gain.gain.setValueAtTime(0.32, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.19);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.19);
-        } else if (type === 'trap') {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(190, now);
-          osc.frequency.setValueAtTime(110, now + 0.1);
-          gain.gain.setValueAtTime(0.3, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.28);
-        } else if (type === 'coin') {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(587.33, now);
-          osc.frequency.setValueAtTime(880, now + 0.08);
-          gain.gain.setValueAtTime(0.18, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.28);
-        }
-      } catch (e) {}
-    }
-
-    // =========================================================
-    // 2. 45 題「選項長度完全平衡」題庫
-    // =========================================================
-    const defaultQuestions = [
-      { cat: "鍵盤操作", q: "在編輯文件或畫圖時，不小心做錯了一步，按哪個快捷鍵可以「復原」上一步？", opts: ["Ctrl + Z", "Ctrl + C", "Ctrl + V", "Ctrl + S"], ans: 0, exp: "Ctrl + Z 是後悔藥，可以復原剛剛做錯的動作！" },
-      { cat: "鍵盤操作", q: "想要把選取起來的文字「複製」到剪貼簿，應該按哪一個快捷鍵？", opts: ["Ctrl + X", "Ctrl + C", "Ctrl + A", "Ctrl + P"], ans: 1, exp: "Copy（複製）的第一個字母是 C，所以是 Ctrl + C。" },
-      { cat: "鍵盤操作", q: "複製完文字後，想要在別的地方「貼上」，應該按哪一個快捷鍵？", opts: ["Ctrl + C", "Ctrl + V", "Ctrl + Z", "Ctrl + F"], ans: 1, exp: "V 的形狀很像把東西倒進去的漏斗，Ctrl + V 就是貼上！" },
-      { cat: "鍵盤操作", q: "想要把選取的文字「剪下」（移走並複製），應該按哪一個快捷鍵？", opts: ["Ctrl + X", "Ctrl + C", "Ctrl + D", "Ctrl + B"], ans: 0, exp: "X 的形狀就像一把剪刀，所以 Ctrl + X 代表剪下！" },
-      { cat: "鍵盤操作", q: "在很長的文章或網頁裡，想要快速「尋找某個關鍵字」，可以按哪個快捷鍵？", opts: ["Ctrl + F", "Ctrl + Z", "Ctrl + N", "Ctrl + P"], ans: 0, exp: "Find（尋找）的第一個字母是 F，按 Ctrl + F 就能搜尋關鍵字！" },
-      { cat: "鍵盤操作", q: "想要一次把整篇文章或資料夾裡的所有檔案「全選」，應該按哪個快捷鍵？", opts: ["Ctrl + S", "Ctrl + A", "Ctrl + E", "Ctrl + W"], ans: 1, exp: "All（全部）的第一個字母是 A，Ctrl + A 就是全選！" },
-      { cat: "鍵盤操作", q: "在文書軟體中打字想要「換到下一行」，應該按下鍵盤上的哪一個按鍵？", opts: ["Space 空白鍵", "Enter 輸入鍵", "Shift 上檔鍵", "Esc 取消鍵"], ans: 1, exp: "Enter 鍵在文書處理中用來換到下一行，或代表確認執行。" },
-      { cat: "鍵盤操作", q: "英文打字時，如果發現打出來的全部都是大寫，是因為按到了哪個燈號鍵？", opts: ["Num Lock 數字鎖", "Caps Lock 大寫鎖", "Scroll Lock 捲動鎖", "Insert 插入鎖定鍵"], ans: 1, exp: "Caps Lock 亮起時會鎖定英文大寫，再按一下即可切換回小寫。" },
-      { cat: "鍵盤操作", q: "標準中文打字時，雙手食指放在鍵盤中央定位，會摸到哪兩個有「小凸起」的按鍵？", opts: ["A 鍵與 S 鍵", "F 鍵與 J 鍵", "G 鍵與 H 鍵", "D 鍵與 K 鍵"], ans: 1, exp: "英文字母 F（注音ㄑ）與 J（注音ㄨ）上面有小凸線，幫助食指盲打定位！" },
-      { cat: "鍵盤操作", q: "想要打出鍵盤按鍵「上半部」的符號（如：！、＠、？），必須按住哪個鍵不放？", opts: ["Ctrl 控制鍵", "Shift 上檔鍵", "Alt 轉換鍵", "Tab 定位鍵"], ans: 1, exp: "按住 Shift（上檔鍵）再按符號鍵，就能打出上方的符號。" },
-      { cat: "鍵盤操作", q: "打字時想要刪除游標「左邊（前面）」剛剛打錯的字，應該按哪一個按鍵？", opts: ["Backspace 倒退鍵", "Delete 刪除鍵", "Insert 插入鍵", "Home 首頁鍵"], ans: 0, exp: "Backspace（← 倒退鍵）刪除游標左邊的字；Delete 則刪除游標右邊的字。" },
-      { cat: "鍵盤操作", q: "鍵盤最右側的「九宮格數字區」若按不出數字，應該先檢查哪顆燈號鍵有沒有亮？", opts: ["Num Lock 數字鎖", "Caps Lock 大寫鎖", "Shift 上檔切換鍵", "Ctrl 系統控制鍵"], ans: 0, exp: "Num Lock 燈號熄滅時九宮格會變成方向鍵，按一下點亮就能打數字了。" },
-      { cat: "視窗操作", q: "在電腦桌面上，想要針對某個檔案叫出「功能選單」（如重新命名），要怎麼操作滑鼠？", opts: ["按一下滑鼠左鍵", "按一下滑鼠右鍵", "向下轉動滑鼠滾輪", "同時按住左右雙鍵"], ans: 1, exp: "滑鼠左鍵是選取與執行，右鍵則是呼叫出輔助功能選單。" },
-      { cat: "視窗操作", q: "瀏覽網頁時，如果畫面卡住或想更新最新內容，按哪一個功能鍵可以「重新整理」？", opts: ["F1 說明鍵", "F5 重整鍵", "F11 全螢幕鍵", "F12 開發者鍵"], ans: 1, exp: "F5 是網頁瀏覽器最常用的「重新整理 (Refresh)」快捷鍵！" },
-      { cat: "視窗操作", q: "在視窗右上角的三個按鈕「－、□、✕」中，點擊「－」代表什麼視窗功能？", opts: ["將程式檔案永久刪除", "將視窗縮到下方工作列", "將視窗放大至全螢幕", "直接關閉並退出程式"], ans: 1, exp: "「－」是最小化（縮到工作列），「□」是最大化，「✕」則是關閉視窗。" },
-      { cat: "視窗操作", q: "想要把桌面上的檔案「移動放進」資料夾裡面，最標準的滑鼠操作方式為何？", opts: ["按住左鍵拖曳至資料夾放開", "對著檔案連續快速點兩下右鍵", "按住滾輪將檔案推向螢幕上方", "點選檔案後按下鍵盤 Esc 鍵"], ans: 0, exp: "按住左鍵移動再放開稱為「拖曳 (Drag and Drop)」，常用於移動檔案或拉積木。" },
-      { cat: "硬體知識", q: "下列哪一個電腦零件被稱為「電腦的大腦」，負責所有的邏輯運算與指揮？", opts: ["CPU 中央處理器", "RAM 隨機記憶體", "SSD 固態硬碟機", "PSU 電源供應器"], ans: 0, exp: "CPU（中央處理器）就像人類的大腦，負責計算與控制電腦運作。" },
-      { cat: "硬體知識", q: "哪一個電腦零件負責「暫存執行中的程式」，而且只要關機斷電資料就會清空？", opts: ["RAM 隨機存取記憶體", "SSD 高速固態硬碟", "HDD 傳統磁錄硬碟", "USB 外接隨身硬碟"], ans: 0, exp: "RAM（記憶體）像書桌，速度快但斷電會清空；SSD/HDD 像書櫃，關機仍會保存檔案。" },
-      { cat: "硬體知識", q: "我們要把自己的聲音「錄進電腦裡」，需要用到下列哪一種「輸入設備」？", opts: ["立體聲喇叭", "彩色印表機", "收音麥克風", "液晶顯示器"], ans: 2, exp: "麥克風負責把外部聲音傳進電腦，屬於輸入設備；喇叭則是輸出設備。" },
-      { cat: "硬體知識", q: "下列哪一組設備全部屬於「輸出設備」，能把電腦處理好的結果呈現出來？", opts: ["鍵盤與光學滑鼠", "螢幕與彩色印表機", "麥克風與掃描器", "網路攝影機與手寫板"], ans: 1, exp: "螢幕顯示畫面、印表機印出紙張，都是把電腦訊號輸出給我們看的設備。" },
-      { cat: "硬體知識", q: "電腦播放影片時突然完全沒聲音，第一步先做哪一項檢查最合理？", opts: ["用力拍打螢幕邊框三次", "檢查系統音量與耳機插孔", "立刻將硬碟格式化重灌", "把鍵盤與滑鼠插頭拔掉"], ans: 1, exp: "遇到沒聲音時，應先檢查右下角音量是否靜音，以及耳機/喇叭線是否鬆脫。" },
-      { cat: "硬體知識", q: "比較電腦儲存容量的大小單位時，下列哪一個排列順序是「由小到大」正確的？", opts: ["KB < MB < GB < TB", "TB < GB < MB < KB", "GB < KB < TB < MB", "MB < KB < GB < TB"], ans: 0, exp: "容量由小到大依序為 KB、MB、GB、TB（1 TB 約等於 1024 GB）。" },
-      { cat: "檔案管理", q: "辛苦做好了一份簡報或小畫家作品，按哪個快捷鍵可以快速「儲存檔案」？", opts: ["Ctrl + S", "Ctrl + D", "Ctrl + W", "Ctrl + Q"], ans: 0, exp: "Save（儲存）的第一個字母是 S，常按 Ctrl + S 才不會因當機心血白費！" },
-      { cat: "檔案管理", q: "看到一個檔案名稱叫做「校慶運動會.jpg」，請問 `.jpg` 代表什麼類型的檔案？", opts: ["錄音音樂檔", "靜態圖片檔", "高畫質影片檔", "系統執行檔"], ans: 1, exp: ".jpg 與 .png 都是最常見的圖片檔案格式喔！" },
-      { cat: "檔案管理", q: "下列哪一組副檔名代表的全部都是「聲音或音樂檔案」？", opts: [".mp3 與 .wav", ".jpg 與 .png", ".txt 與 .pdf", ".exe 與 .msi"], ans: 0, exp: ".mp3 與 .wav 是常見的聲音檔；.jpg 是圖片檔，.exe 是程式執行檔。" },
-      { cat: "檔案管理", q: "如果不小心把桌面的檔案按 Delete 刪掉了，只要還沒永久清空，可以去哪裡救回來？", opts: ["桌面上的資源回收筒", "附屬應用程式小算盤", "系統網路連線設定處", "螢幕保護裝置設定區"], ans: 0, exp: "一般刪除的檔案會先暫存在「資源回收筒」，點右鍵選「還原」就能救回原位。" },
-      { cat: "檔案管理", q: "整理電腦裡的報告檔案時，下列哪一種「檔案命名習慣」最方便未來搜尋？", opts: ["全部依序取名為 1、2、3", "隨意敲擊鍵盤取名 asdfg", "標註清楚主題與日期姓名", "保留未命名的新增資料夾"], ans: 2, exp: "清楚標示主題、姓名或日期（如：自然報告_王小明），未來找檔案才一目了然！" },
-      { cat: "檔案管理", q: "想要把整個資料夾好幾個檔案「打包壓縮」成單一檔案傳送，常會轉成什麼格式？", opts: [".zip 壓縮檔", ".mp3 音訊檔", ".jpg 影像檔", ".txt 文字檔"], ans: 0, exp: ".zip 與 .7z 是常見的壓縮檔格式，能將多個檔案打包並減少體積。" },
-      { cat: "檔案管理", q: "把作業存放在「雲端硬碟 (如 Google Drive)」最主要的核心優點是什麼？", opts: ["沒連網路也能下載別人的電腦", "跨裝置連網登入即可存取檔案", "可以讓家裡的電腦螢幕變更大", "能夠自動幫電腦清理機殼灰塵"], ans: 1, exp: "雲端硬碟將檔案保存在遠端伺服器，換電腦只要連網登入帳號就能繼續編輯！" },
-      { cat: "資安防護", q: "設定個人帳號的「密碼」時，下列哪一種密碼組合最安全、最不容易被猜中？", opts: ["連續數字 12345678", "自己的西元出生年月日", "大小寫英文混合數字與符號", "全部使用相同的英文字母"], ans: 2, exp: "混合大小寫字母、數字與符號（如 Tw#9527Go）的密碼強度最高！" },
-      { cat: "資安防護", q: "在學校電腦教室上完課，離開座位前最重要的「資訊安全動作」是什麼？", opts: ["把滑鼠塞進抽屜深處藏好", "登出個人帳號並關閉瀏覽器", "直接拔除主機後方的電源線", "將電腦螢幕的亮度調到最暗"], ans: 1, exp: "公用電腦務必登出帳號，否則下一位使用者能直接存取你的信箱與雲端硬碟！" },
-      { cat: "資安防護", q: "網頁突然跳出視窗：「恭喜抽中最新手機！請輸入父母信用卡號領獎」，應如何處理？", opts: ["立刻去拿父母的信用卡輸入", "屬於網路釣魚詐騙應直接關閉", "趕緊轉發連結給全班同學填寫", "先輸入家裡地址與電話再觀望"], ans: 1, exp: "要求輸入密碼或信用卡的陌生中獎訊息都是釣魚詐騙（Phishing），應立即關閉！" },
-      { cat: "資安防護", q: "收到陌生人寄來的電子郵件，裡面附帶一個「免費寶石外掛.exe」檔案，該怎麼做？", opts: ["立刻雙擊下載並安裝使用", "切勿開啟以免感染木馬病毒", "先關閉防毒軟體再點開執行", "複製十份到隨身碟分送同學"], ans: 1, exp: ".exe 是程式執行檔，來路不明的外掛或郵件附件極容易夾帶木馬或勒索病毒！" },
-      { cat: "資安防護", q: "為了防範「勒索病毒」鎖死檔案，專家提倡的「3-2-1 備份原則」核心觀念為何？", opts: ["每天固定把電腦重灌三次以上", "重要資料需在異地或雲端多備份", "把所有檔案名稱都改成英文數字", "同時在電腦安裝三套免費防毒"], ans: 1, exp: "準備 3 份資料、2 種不同媒介、1 份異地/雲端保存，中毒也能隨時還原！" },
-      { cat: "資安防護", q: "登入網站時除了輸入密碼，還需輸入手機收到的動態驗證碼，這稱為什麼機制？", opts: ["雙重驗證 (2FA 兩步驟驗證)", "磁碟重組與系統最佳化機制", "無痕瀏覽與快取清除機制", "螢幕保護與自動休眠機制"], ans: 0, exp: "雙重驗證 (2FA) 就像幫帳號加上第二把鎖，就算密碼外洩駭客也無法登入！" },
-      { cat: "程式邏輯", q: "在 Scratch 程式設計中，點擊舞台上方的哪一個圖示代表「開始執行程式」？", opts: ["紅色八角形圖示", "綠色旗子圖示", "藍色小貓圖示", "黃色閃電圖示"], ans: 1, exp: "「當綠旗被點擊時」是 Scratch 最常用的程式啟動事件積木！" },
-      { cat: "程式邏輯", q: "在 Scratch 的舞台座標系統中，正中央中心點的座標 (X, Y) 數值是多少？", opts: ["(X: 100, Y: 100)", "(X: 0, Y: 0)", "(X: 240, Y: 180)", "(X: -100, Y: -100)"], ans: 1, exp: "Scratch 舞台正中央的座標是 (X: 0, Y: 0)，X 控制左右，Y 控制上下。" },
-      { cat: "程式邏輯", q: "希望 Scratch 角色「一直重複來回走動直到停止」，應把移動積木放進哪個積木裡？", opts: ["重複無限次積木", "等待一秒鐘積木", "廣播訊息積木", "分身刪除積木"], ans: 0, exp: "「重複無限次」屬於迴圈 (Loop) 結構，會讓內部的積木周而復始地不斷執行。" },
-      { cat: "程式邏輯", q: "程式中寫道：「如果碰到邊緣就反彈，否則繼續前進」，這屬於哪種運算思維結構？", opts: ["條件判斷（選擇結構）", "變數宣告（儲存結構）", "畫筆圖章（繪圖結構）", "清單排序（陣列結構）"], ans: 0, exp: "「如果...那麼...否則... (If...Then...Else)」是用來做決策的條件判斷結構！" },
-      { cat: "程式邏輯", q: "在 Scratch 遊戲中，想設計一個「計分板」記錄目前得分，應該建立什麼功能？", opts: ["建立一個「變數」存放分數", "更換十張不同的舞台背景圖", "將角色造型切換為向量模式", "把音效的音量調整到最大值"], ans: 0, exp: "「變數 (Variable)」就像存放數值的盒子，最適合用來記錄得分、血量或倒數時間。" },
-      { cat: "AI與素養", q: "使用生成式 AI 聊天機器人查詢報告資料時，我們應該抱持哪一種正確態度？", opts: ["AI 產生的內容絕對正確無須檢查", "AI 可能產生錯誤幻覺需查證事實", "可將個人身分證與密碼交給 AI", "直接複製 AI 的回答當作自己作業"], ans: 1, exp: "生成式 AI 有時會捏造不存在的資訊（AI 幻覺），重要事實一定要多方查證！" },
-      { cat: "AI與素養", q: "用 Teachable Machine 訓練 AI 辨識「剪刀石頭布」時，怎麼做能提高辨識準確度？", opts: ["每種手勢只拍一張模糊照片即可", "提供多角度且光線充足的手勢照片", "把鏡頭完全遮住拍攝全黑的畫面", "故意將石頭的照片貼上布的標籤"], ans: 1, exp: "機器學習需要充足且多元的高品質訓練樣本，AI 模型的辨識率才會高！" },
-      { cat: "AI與素養", q: "做專題簡報時想使用網路上別人拍攝的風景照，下列哪一種做法最尊重著作權？", opts: ["直接下載並宣稱是自己拍的作品", "選用創用 CC 授權素材並標註出處", "用修圖軟體把原作者浮水印塗掉", "只要不印出來就完全沒有版權問題"], ans: 1, exp: "尊重智慧財產權，應優先選用合法「創用 CC」授權素材並依規定標明作者出處。" },
-      { cat: "AI與素養", q: "在班級群組看到同學出糗的搞笑照片，下列哪一種行為符合良好的「網路禮儀」？", opts: ["未經同意轉傳到各大公開社團", "在留言區瘋狂洗版嘲笑該同學", "尊重同學隱私不散布並友善留言", "把照片改圖做成迷因貼圖到處傳"], ans: 2, exp: "網路世界與真實世界相同，應保護他人隱私、維持友善禮貌，拒絕網路霸凌。" },
-      { cat: "AI與素養", q: "瀏覽網站時看到網址開頭為「https://」且有「小鎖頭」圖示，代表什麼意義？", opts: ["代表該網站伺服器已經故障關閉", "代表網站傳輸資料有經過加密保護", "代表進入該網站每分鐘都要付費", "代表這台電腦已經感染勒索病毒"], ans: 1, exp: "HTTPS 的 S 代表 Secure（安全），表示瀏覽器與網站間的資料傳輸有加密保護。" }
-    ];
-
-    let questionPool = [...defaultQuestions];
-    let shuffledQuizDeck = [];
-
-    function drawNextQuestion() {
-      if (shuffledQuizDeck.length === 0) {
-        shuffledQuizDeck = [...questionPool];
-        for (let i = shuffledQuizDeck.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [shuffledQuizDeck[i], shuffledQuizDeck[j]] = [shuffledQuizDeck[j], shuffledQuizDeck[i]];
-        }
-      }
-      return shuffledQuizDeck.pop();
-    }
-
-    // =========================================================
-    // 3. 主角 8 大武學奧義
-    // =========================================================
-    const skillCatalog = [
-      {
-        id: 'slash', name: "🗡️ 疾風劍氣", unlockLv: 1, mpCost: 0, shieldBreak: 1, type: "attack",
-        shortDesc: "0靈｜100%傷｜破盾1",
-        fullDesc: "不消耗靈力的基本劍招，可削減敵方 1 層護盾。",
-        borderClass: "border-amber-500/70 from-stone-700 to-stone-900", textClass: "text-amber-200"
-      },
-      {
-        id: 'heal', name: "🌿 迴風沐雨訣", unlockLv: 1, mpCost: 14, shieldBreak: 0, type: "heal",
-        shortDesc: "14靈｜免答題 +42%命",
-        fullDesc: "不需答題直接運功療傷，恢復 42% 最大命(HP)並清除破甲狀態。",
-        borderClass: "border-emerald-400 from-emerald-800 to-emerald-950", textClass: "text-emerald-200"
-      },
-      {
-        id: 'thunder', name: "⚡ 九天雷霆斬", unlockLv: 1, mpCost: 12, shieldBreak: 1, type: "attack",
-        shortDesc: "12靈｜185%爆擊｜破盾1",
-        fullDesc: "引動九天狂雷灌注劍身，造成 185% 雷電爆擊傷害並削減 1 層護盾！",
-        borderClass: "border-yellow-400 from-amber-700 to-amber-950", textClass: "text-yellow-200"
-      },
-      {
-        id: 'pierce', name: "💠 破魔穿雲箭", unlockLv: 2, mpCost: 10, shieldBreak: 2, type: "attack",
-        shortDesc: "10靈｜無視防禦｜破盾2",
-        fullDesc: "【Lv.2 領悟】無視敵方 100% 防禦力，並一口氣擊碎 2 層護盾！對付重甲首領必備！",
-        borderClass: "border-cyan-400 from-sky-800 to-slate-950", textClass: "text-cyan-200"
-      },
-      {
-        id: 'vamp', name: "✂️ Ctrl+X 奪命剪", unlockLv: 3, mpCost: 14, shieldBreak: 1, type: "attack",
-        shortDesc: "14靈｜140%吸血｜破盾1",
-        fullDesc: "【Lv.3 領悟】造成 140% 傷害並將 50% 傷害轉為自身生命，同時削減 1 層護盾！",
-        borderClass: "border-rose-400 from-rose-900 to-stone-950", textClass: "text-rose-200"
-      },
-      {
-        id: 'twin', name: "👥 Ctrl+C 雙重影斬", unlockLv: 4, mpCost: 16, shieldBreak: 2, type: "attack",
-        shortDesc: "16靈｜二連斬｜破盾2",
-        fullDesc: "【Lv.4 領悟】複製劍氣分身連續斬擊 2 下（共 230% 威力），並擊碎 2 層護盾！",
-        borderClass: "border-purple-400 from-purple-900 to-stone-950", textClass: "text-purple-200"
-      },
-      {
-        id: 'shield', name: "🛡️ F5 重整金鐘罩", unlockLv: 5, mpCost: 12, shieldBreak: 1, type: "attack",
-        shortDesc: "12靈｜+14防禦｜破盾1",
-        fullDesc: "【Lv.5 領悟】造成 130% 傷害並在本場戰鬥提升 +14 防禦，削減 1 層護盾！",
-        borderClass: "border-teal-400 from-teal-900 to-stone-950", textClass: "text-teal-200"
-      },
-      {
-        id: 'ultimate', name: "🌟 AI 神算萬劍訣", unlockLv: 7, mpCost: 26, shieldBreak: 3, type: "attack",
-        shortDesc: "26靈｜260%神招｜破盾3",
-        fullDesc: "【Lv.7 終極奧義】萬柄數據光劍齊發，無視防禦造成 260% 毀滅傷害並瞬間擊碎 3 層護盾！",
-        borderClass: "border-amber-300 from-yellow-600 via-red-800 to-stone-950", textClass: "text-yellow-100"
-      }
-    ];
-
-    // =========================================================
-    // 4. 怪物圖鑑與 18x12 絲路大漠古蹟迷宮
-    // =========================================================
-    const TILE_SIZE = 44;
-    const COLS = 18;
-    const ROWS = 12;
-
-    const monsterCatalog = {
-      '1': { key: '1', name: "砂岩灰塵魔像", lv: 1, maxHp: 58, atk: 12, def: 4, maxShield: 2, exp: 16, gold: 16, trait: "特技：風沙迷眼 (吸取 8 點靈力)", skillName: "🌪️ 大漠風沙障", skillType: "drain_mp" },
-      '2': { key: '2', name: "甲殼吞鍵蟲", lv: 2, maxHp: 82, atk: 16, def: 11, maxShield: 2, exp: 24, gold: 22, trait: "【重甲】普攻難傷・建議用破魔穿雲箭", skillName: "🪲 破鍵裂甲咬", skillType: "heavy_hit" },
-      '3': { key: '3', name: "符文亂碼妖", lv: 3, maxHp: 128, atk: 23, def: 12, maxShield: 2, exp: 38, gold: 34, trait: "特技：未存檔詛咒 (無視 50% 防禦)", skillName: "🟢 亂碼蝕骨咒", skillType: "ignore_def" },
-      '4': { key: '4', name: "赤焰竊盜魔", lv: 4, maxHp: 168, atk: 30, def: 16, maxShield: 3, exp: 52, gold: 46, trait: "特技：探囊取物 (竊取銀兩 Bytes)", skillName: "🔥 劫火掠財爪", skillType: "steal_gold" },
-      '5': { key: '5', name: "幻影魔鏡靈", lv: 5, maxHp: 225, atk: 38, def: 22, maxShield: 3, exp: 75, gold: 65, trait: "特技：幻象三連擊 (連續 3 段傷害)", skillName: "🪞 彈窗幻影連斬", skillType: "multi_hit" },
-      '6': { key: '6', name: "深淵釣魚妖", lv: 6, maxHp: 285, atk: 46, def: 28, maxShield: 3, exp: 105, gold: 88, trait: "特技：噬魂金鉤 (吸取生命恢復自身)", skillName: "🪝 詭信噬魂鉤", skillType: "vampire" },
-      '7': { key: '7', name: "青銅木馬巨兵", lv: 7, maxHp: 370, atk: 56, def: 38, maxShield: 4, exp: 145, gold: 120, trait: "【重甲】破城重踏 (降低勇者防禦)", skillName: "🐴 木馬破甲踐踏", skillType: "break_def" },
-      'M_MIMIC': { key: 'M_MIMIC', name: "📦 噬人偽裝寶箱怪", lv: 5, maxHp: 190, atk: 34, def: 16, maxShield: 3, exp: 65, gold: 95, trait: "陷阱突襲：狂暴撕咬 (高賞金怪獸)", skillName: "🦷 寶箱巨顎吞噬", skillType: "heavy_hit" },
-
-      'A': {
-        key: 'A', isSubBoss: true, name: "👹 卷一首領・千年鍵垢巨魔", lv: 3, maxHp: 205, atk: 24, def: 13, maxShield: 3, exp: 75, gold: 90,
-        trait: "【守門首領】3層護盾・萬年黏滯震擊", skillName: "🪨 萬年鍵垢泰山壓頂", skillType: "heavy_hit",
-        introQuote: "「吼哈哈哈！本座乃歷屆學生邊用電腦邊吃餅乾、累積千年的鍵盤污垢與機殼灰塵所化！我的灰塵重甲連疾風劍氣都砍不穿，乖乖讓你的電腦過熱當機吧！」",
-        defeatQuote: "「嗚哇！想不到你竟懂得擊碎本座護盾並用正確硬體保養觀念除垢……通往綠洲石窟的太極傳送陣已經解開了！」"
-      },
-      'D': {
-        key: 'D', isSubBoss: true, name: "💀 卷二首領・格式化鐮刀死神", lv: 5, maxHp: 350, atk: 39, def: 22, maxShield: 4, exp: 140, gold: 150,
-        trait: "【守門首領】4層護盾・磁區抹除斬", skillName: "🌙 強制格式化死神鐮", skillType: "ignore_def",
-        introQuote: "「桀桀桀……踏入這座檔案石窟的人，作業跟報告都別想保住！本死神最愛不按 Ctrl+S 存檔、又亂改副檔名的糊塗蛋！接我一招強制格式化吧！」",
-        defeatQuote: "「可惡……你竟然熟記所有快捷鍵與雲端備份心法！我的格式化鐮刀斬不斷你的檔案……前往樓蘭幻境的封印解除！」"
-      },
-      'G': {
-        key: 'G', isSubBoss: true, name: "🎭 卷三首領・深淵駭客傀儡師", lv: 7, maxHp: 510, atk: 54, def: 32, maxShield: 4, exp: 220, gold: 220,
-        trait: "【守門首領】4層護盾・殭屍網路吸血陣", skillName: "🕸️ 暗網傀儡噬魂陣", skillType: "vampire",
-        introQuote: "「呵呵，恭喜你抽中最新款手機！只要踏入我的釣魚假網址、或是下課忘記登出公用電腦，你的帳號就會成為我的提線傀儡！乖乖交出你的個資與密碼吧！」",
-        defeatQuote: "「怎麼可能？！連雙重驗證與 HTTPS 加密防線都守護著你……暗網魔宮的大門已經敞開，但勒索魔神絕不會放過你！」"
-      },
-      'K': {
-        key: 'K', isSubBoss: true, name: "👑 終極魔神・暗黑勒索魔神", lv: 10, maxHp: 820, atk: 75, def: 45, maxShield: 5, exp: 450, gold: 500,
-        trait: "【終極魔神】5層護盾・天地加密滅世雷", skillName: "⚡ 終極勒索滅世雷", skillType: "boss_nuke",
-        introQuote: "「渺小的古月鍵俠，歡迎來到暗網魔宮王座！本魔神已將整座校園網路的檔案全部加密鎖死，若不交出贖金，所有珍貴照片與心血結晶都將灰飛煙滅！顫抖吧！」",
-        defeatQuote: "「不可能！！你竟然擁有『3-2-1 異地雲端備份』與無懈可擊的資安智慧，本魔神的加密鎖在你的備份面前毫無用處……數位世界的和平，就交給你守護了！」"
-      }
-    };
-
-    const mapDataList = [
-      {
-        badge: "卷一", name: "大漠古鎮・千迴書院迷宮",
-        subBossName: "千年鍵垢巨魔", weatherColor: "rgba(251, 191, 36, 0.45)",
-        startX: 1, startY: 1, returnX: 15, returnY: 9,
-        floorColor1: "#c7ab80", floorColor2: "#b89b6e", wallTop: "#7d6447", wallFront: "#4f3e2b",
-        grid: [
-          "##################",
-          "#..N.....1..#...C#",
-          "#..J.#.####.#.##.#",
-          "#L...#.#C.#...#..#",
-          "###..#.#..#####.1#",
-          "#H...#....2.....##",
-          "#.####.######.#..#",
-          "#.#C.....#..#.#2.#",
-          "#.#.####.#..#.##.#",
-          "#...1..#.#C...#A.#",
-          "#M..JJ...######.P#",
-          "##################"
-        ]
-      },
-      {
-        badge: "卷二", name: "迷霧綠洲・九曲石窟迷宮",
-        subBossName: "格式化鐮刀死神", weatherColor: "rgba(52, 211, 153, 0.5)",
-        startX: 1, startY: 5, returnX: 14, returnY: 10,
-        floorColor1: "#8b967e", floorColor2: "#7c876f", wallTop: "#4b5746", wallFront: "#2f382c",
-        grid: [
-          "##################",
-          "#C..T..#...3..#C.#",
-          "#..TTT.#.####.#..#",
-          "#..3...#.#C.#..4.#",
-          "#..#####.#..####.#",
-          "B......H....4....#",
-          "#..#####.######.##",
-          "#.#C...T.#....#..#",
-          "#.#..TTT.#.##.#4.#",
-          "#...3....#.#C.#D.#",
-          "#M..L.JJ...##...P#",
-          "##################"
-        ]
-      },
-      {
-        badge: "卷三", name: "樓蘭幻境・暗流迴廊迷宮",
-        subBossName: "深淵駭客傀儡師", weatherColor: "rgba(192, 132, 252, 0.5)",
-        startX: 1, startY: 5, returnX: 14, returnY: 10,
-        floorColor1: "#a68c70", floorColor2: "#967c60", wallTop: "#5e4738", wallFront: "#3b2b21",
-        grid: [
-          "##################",
-          "#C..W..#...5..#C.#",
-          "#..WWW.#.####.#..#",
-          "#..5...#.#C.#..6.#",
-          "#..#####.#..####.#",
-          "B......H....6....#",
-          "#..#####.######.##",
-          "#.#C...W.#....#..#",
-          "#.#..WWW.#.##.#6.#",
-          "#...5....#.#C.#G.#",
-          "#M....WW...##...P#",
-          "##################"
-        ]
-      },
-      {
-        badge: "終卷", name: "暗網魔宮・深淵王座迷宮",
-        subBossName: "暗黑勒索魔神", weatherColor: "rgba(244, 63, 94, 0.6)",
-        startX: 1, startY: 5, returnX: 14, returnY: 10,
-        floorColor1: "#3d2f3a", floorColor2: "#30242e", wallTop: "#261824", wallFront: "#140b13",
-        grid: [
-          "##################",
-          "#C..J..#...7..#C.#",
-          "#..JJJ.#.####.#..#",
-          "#..7...#.#C.#..7.#",
-          "#..#####.#..####.#",
-          "B......H....7....#",
-          "#..#####.######.##",
-          "#.#C...J.#....#..#",
-          "#.#..JJJ.#.##.#7.#",
-          "#...7....#.#C.#..#",
-          "#M....JJ...##..K.#",
-          "##################"
-        ]
-      }
-    ];
-
-    let runtimeMaps = [];
-    let exploredMaps = [];
-    let currentMapIdx = 0;
-    let highestUnlockedMap = 0;
-    let fogEnabled = true;
-    let lastSealWarnTime = 0;
-    let currentShopTab = 'weapon';
-
-    let weatherParticles = [];
-    let footstepDusts = [];
-
-    let hero = {
-      x: 1 * TILE_SIZE + TILE_SIZE / 2,
-      y: 1 * TILE_SIZE + TILE_SIZE / 2,
-      radius: 11,
-      speed: 3.1,
-      dir: 1,
-      walkFrame: 0,
-      isMoving: false,
-      invulnerableUntil: 0,
-      ignoreTileKey: null
-    };
-
-    const keysDown = {};
-    let touchMoveVec = { dx: 0, dy: 0 };
-
-    function clearInputState() {
-      for (const k in keysDown) keysDown[k] = false;
-      touchMoveVec = { dx: 0, dy: 0 };
-      hero.isMoving = false;
-    }
-
-    const shopConsumables = [
-      { id: "hp", name: "綠色乖乖金創藥", icon: "🏺", price: 22, desc: "恢復 65 點 命(HP)，居家旅行必備良藥。" },
-      { id: "mp", name: "行動電源聚靈丹", icon: "⚡", price: 26, desc: "恢復 40 點 靈(MP)，補充施展奧義所需真氣。" },
-      { id: "superHp", name: "伺服器重組大補丸", icon: "🍱", price: 55, desc: "恢復 160 點 命(HP)，並直接解除戰鬥破甲狀態！" },
-      { id: "scrollAtk", name: "CPU 超頻狂暴卷軸", icon: "📜", price: 48, desc: "點擊使用後，在當前或下一場戰鬥提升 +18 武力(ATK)！" },
-      { id: "scrollDef", name: "硬體防火牆鐵壁符", icon: "🛡️", price: 45, desc: "點擊使用後，在當前或下一場戰鬥提升 +15 防禦(DEF)！" },
-      { id: "tomePerm", name: "上古資安演算法秘卷", icon: "📘", price: 240, desc: "【永久提升】研讀後直接永久增加 +4 武力與 +3 防禦（可重複研讀）！" }
-    ];
-
-    const shopEquipments = [
-      { id: "w1", tier: 1, type: "weapon", reqLv: 2, name: "一階・機械青軸快劍", icon: "🗡️", bonusAtk: 9, bonusDef: 0, bonusHp: 0, bonusMp: 10, price: 65, desc: "【需 Lv.2｜外觀改變】青藍光刃快劍，+9 武力、+10 靈力。" },
-      { id: "w2", tier: 2, type: "weapon", reqLv: 3, name: "二階・茶軸靜音刺劍", icon: "⚔️", bonusAtk: 19, bonusDef: 3, bonusHp: 0, bonusMp: 15, price: 155, desc: "【需 Lv.3｜外觀改變】鑲嵌琥珀寶石銀白細劍，+19 武力、+3 防禦。" },
-      { id: "w3", tier: 3, type: "weapon", reqLv: 5, name: "三階・RGB 流光龍泉劍", icon: "⚡", bonusAtk: 32, bonusDef: 5, bonusHp: 20, bonusMp: 25, price: 310, desc: "【需 Lv.5｜外觀改變】七彩霓虹漸層光刃，+32 武力、+5 防禦。" },
-      { id: "w4", tier: 4, type: "weapon", reqLv: 7, name: "四階・光纖雷射破魔劍", icon: "💠", bonusAtk: 48, bonusDef: 8, bonusHp: 40, bonusMp: 35, price: 520, desc: "【需 Lv.7｜外觀改變】高能電漿雷射巨劍，+48 武力、+8 防禦。" },
-      { id: "w5", tier: 5, type: "weapon", reqLv: 9, name: "五階・軒轅 AI 聖皇神劍", icon: "🔱", bonusAtk: 70, bonusDef: 15, bonusHp: 80, bonusMp: 60, price: 820, desc: "【需 Lv.9｜終極神兵外觀】黃金烈日聖皇劍！+70 武力、+15 防禦！" },
-
-      { id: "a1", tier: 1, type: "armor", reqLv: 2, name: "一階・防毒軟體布衣", icon: "🛡️", bonusAtk: 0, bonusDef: 7, bonusHp: 20, bonusMp: 0, price: 60, desc: "【需 Lv.2｜外觀改變】翠綠劍客勁裝與銀護肩，+7 防禦、+20 命。" },
-      { id: "a2", tier: 2, type: "armor", reqLv: 3, name: "二階・雙重驗證鎖子甲", icon: "🥋", bonusAtk: 2, bonusDef: 15, bonusHp: 45, bonusMp: 10, price: 145, desc: "【需 Lv.3｜外觀改變】銀白鎖子甲與藍光頭箍，+15 防禦、+45 命。" },
-      { id: "a3", tier: 3, type: "armor", reqLv: 5, name: "三階・玄武硬體防火鎧", icon: "🧱", bonusAtk: 5, bonusDef: 25, bonusHp: 80, bonusMp: 20, price: 290, desc: "【需 Lv.5｜外觀改變】黑鐵熔岩重甲與赤紅雙角，+25 防禦、+80 命。" },
-      { id: "a4", tier: 4, type: "armor", reqLv: 7, name: "四階・SSL 加密金剛戰甲", icon: "🔐", bonusAtk: 8, bonusDef: 38, bonusHp: 130, bonusMp: 35, price: 490, desc: "【需 Lv.7｜外觀改變】聖白黃金騎士鎧甲，+38 防禦、+130 命。" },
-      { id: "a5", tier: 5, type: "armor", reqLv: 9, name: "五階・零信任無瑕聖皇袍", icon: "👑", bonusAtk: 15, bonusDef: 56, bonusHp: 220, bonusMp: 60, price: 780, desc: "【需 Lv.9｜終極帝王戰袍】黑金皇冠聖皇戰袍！+56 防禦、+220 命！" },
-
-      { id: "c1", tier: 1, type: "acc", reqLv: 2, name: "一階・16GB 雙通道玉佩", icon: "📿", bonusAtk: 2, bonusDef: 2, bonusHp: 35, bonusMp: 25, price: 65, desc: "【需 Lv.2｜背飾改變】身旁環繞雙枚翡翠靈珠，+35 命、+25 靈。" },
-      { id: "c2", tier: 2, type: "acc", reqLv: 3, name: "二階・1TB 固態乾坤袋", icon: "💿", bonusAtk: 5, bonusDef: 4, bonusHp: 75, bonusMp: 45, price: 150, desc: "【需 Lv.3｜背飾改變】背後浮現黃金乾坤法輪，+75 命、+45 靈。" },
-      { id: "c3", tier: 3, type: "acc", reqLv: 5, name: "三階・Wi-Fi 7 順風耳輪", icon: "📡", bonusAtk: 10, bonusDef: 8, bonusHp: 120, bonusMp: 75, price: 300, desc: "【需 Lv.5｜背飾改變】展開青色光速能量羽翼，+120 命、+75 靈。" },
-      { id: "c4", tier: 4, type: "acc", reqLv: 7, name: "四階・UPS 不斷電聚靈塔", icon: "🔋", bonusAtk: 15, bonusDef: 12, bonusHp: 180, bonusMp: 110, price: 500, desc: "【需 Lv.7｜背飾改變】雷霆電光法陣護體，+180 命、+110 靈。" },
-      { id: "c5", tier: 5, type: "acc", reqLv: 9, name: "五階・3-2-1 異地雲端輪迴鏡", icon: "🪞", bonusAtk: 25, bonusDef: 20, bonusHp: 280, bonusMp: 160, price: 790, desc: "【需 Lv.9｜終極神鏡背飾】七彩輪迴神鏡背光！+280 命、+160 靈！" }
-    ];
-
-    const titles = ["初階劍童", "鍵盤遊俠", "除錯劍客", "防毒護法", "御劍宗師", "資安掌門", "軒轅鍵聖"];
-
-    let player = {
-      lv: 1, exp: 0, nextExp: 35,
-      hp: 110, baseMaxHp: 110,
-      mp: 60, baseMaxMp: 60,
-      baseAtk: 16, baseDef: 5,
-      gold: 40,
-      potions: { hp: 2, mp: 1, superHp: 0, scroll: 0 },
-      nextBattleAtkBuff: 0,
-      nextBattleDefBuff: 0,
-      stats: { correct: 0, kills: 0 },
-      hasUploaded: false,
-      equippedSkills: ['slash', 'thunder', 'heal'],
-      equipped: {
-        weapon: { id: "w0", name: "生鏽薄膜短劍", icon: "🗡️", bonusAtk: 0, bonusDef: 0, bonusHp: 0, bonusMp: 0 },
-        armor: { id: "a0", name: "粗布防塵衣", icon: "🥋", bonusAtk: 0, bonusDef: 0, bonusHp: 0, bonusMp: 0 },
-        acc: { id: "c0", name: "老舊軟碟片", icon: "📿", bonusAtk: 0, bonusDef: 0, bonusHp: 0, bonusMp: 0 }
-      },
-      ownedIds: []
-    };
-
-    function saveGameProgress() {
-      try {
-        const data = {
-          player,
-          currentMapIdx,
-          highestUnlockedMap,
-          heroX: hero.x,
-          heroY: hero.y,
-          runtimeMaps,
-          exploredMaps
-        };
-        localStorage.setItem(SAVE_STORAGE_KEY, JSON.stringify(data));
-      } catch (e) {}
-    }
-
-    function checkExistingSave() {
-      try {
-        const raw = localStorage.getItem(SAVE_STORAGE_KEY);
-        if (!raw) return null;
-        return JSON.parse(raw);
-      } catch (e) {
-        return null;
-      }
-    }
-
-    function startGame(loadFromSave) {
-      initAudio();
-      if (loadFromSave) {
-        const saved = checkExistingSave();
-        if (saved && saved.player) {
-          player = saved.player;
-          currentMapIdx = saved.currentMapIdx || 0;
-          highestUnlockedMap = saved.highestUnlockedMap || 0;
-          if (saved.runtimeMaps && saved.runtimeMaps.length === mapDataList.length) {
-            runtimeMaps = saved.runtimeMaps;
-            exploredMaps = saved.exploredMaps;
-          }
-          hero.x = saved.heroX || (1 * TILE_SIZE + TILE_SIZE / 2);
-          hero.y = saved.heroY || (1 * TILE_SIZE + TILE_SIZE / 2);
-          const meta = mapDataList[currentMapIdx];
-          document.getElementById('map-badge').innerText = meta.badge;
-          document.getElementById('map-title').innerText = meta.name;
-          refreshHeroPaperDollSprites();
-          updateSubBossBadge();
-          updateUI();
-          renderShop();
-          renderBattleSkillBar();
-          addLog(`📂 成功讀取修行紀錄！歡迎回到【${meta.name}】！`, "text-emerald-400 font-black");
-        }
-      } else {
-        localStorage.removeItem(SAVE_STORAGE_KEY);
-        runtimeMaps = mapDataList.map(m => m.grid.map(r => r.split('')));
-        exploredMaps = mapDataList.map(() => Array.from({ length: ROWS }, () => Array(COLS).fill(false)));
-        switchMap(0, 1, 1);
-        refreshHeroPaperDollSprites();
-        saveGameProgress();
-      }
-      document.getElementById('title-screen').classList.add('hidden');
-    }
-
-    function getEquipSum(prop) {
-      return (player.equipped.weapon[prop] || 0) +
-             (player.equipped.armor[prop] || 0) +
-             (player.equipped.acc[prop] || 0);
-    }
-
-    function getMaxHp() { return player.baseMaxHp + getEquipSum('bonusHp'); }
-    function getMaxMp() { return player.baseMaxMp + getEquipSum('bonusMp'); }
-    function getTotalAtk() { return player.baseAtk + getEquipSum('bonusAtk') + battleState.atkBuff; }
-    function getTotalDef() { return Math.max(0, player.baseDef + getEquipSum('bonusDef') + battleState.defBuff - battleState.defDebuff); }
-
-    let battleState = {
-      active: false,
-      turnBusy: false,
-      monster: null,
-      tileX: 0,
-      tileY: 0,
-      pendingSkillId: null,
-      currentQuiz: null,
-      shuffledOpts: [],
-      turnCount: 0,
-      defDebuff: 0,
-      defBuff: 0,
-      atkBuff: 0,
-      wrongAnswerPenalty: false,
-      parryWindowActive: false,
-      parrySucceeded: false,
-      gunbladeWindowActive: false,
-      gunbladeTriggered: false,
-      gunbladeCursor: 0,
-      limitReady: false,
-      gfSummonTimer: 0,
-      cameraZoom: 1,
-      cinemaBars: 0,
-      flashScreenAlpha: 0,
-      heroOffsetX: 0,
-      monsterOffsetX: 0,
-      monsterFlash: 0,
-      heroFlash: 0,
-      screenShake: 0,
-      hitStopFrames: 0,
-      particles: [],
-      shockwaves: [],
-      floatingTexts: [],
-      slashEffects: [],
-      bannerText: "",
-      bannerTimer: 0
-    };
-
-    // =========================================================
-    // 5. Canvas 呼叫高精細 SVG 紙娃娃與怪獸貼圖引擎
-    // =========================================================
-    const mainCanvas = document.getElementById('main-canvas');
-    const ctx = mainCanvas.getContext('2d');
-
-    function fillRoundRect(c, x, y, w, h, r) {
-      c.beginPath();
-      c.moveTo(x + r, y);
-      c.arcTo(x + w, y, x + w, y + h, r);
-      c.arcTo(x + w, y + h, x, y + h, r);
-      c.arcTo(x, y + h, x, y, r);
-      c.arcTo(x, y, x + w, y, r);
-      c.closePath();
-      c.fill();
-    }
-
-    function drawHeroCharacter(c, x, y, scale = 1, facing = 1, walkStep = 0, isAttacking = false, flashWhite = false) {
-      c.save();
-      c.translate(x, y);
-      c.scale(facing * scale, scale);
-
-      const bob = Math.abs(Math.sin(walkStep)) * 3;
-      const tilt = Math.sin(walkStep) * 0.06;
-
-      c.fillStyle = "rgba(0,0,0,0.5)";
-      c.beginPath();
-      c.ellipse(0, 21, 15, 5.5, 0, 0, Math.PI * 2);
-      c.fill();
-
-      c.translate(0, -bob);
-      c.rotate(tilt);
-
-      if (flashWhite) {
-        c.filter = "brightness(3) contrast(2)";
-      }
-
-      const img = isAttacking ? spriteCache.heroAttack : spriteCache.heroIdle;
-      if (img && img.complete) {
-        c.drawImage(img, -32, -36, 64, 64);
-      }
-      c.restore();
-    }
-
-    function drawNPCCharacter(c, x, y, type, scale = 0.85) {
-      c.save();
-      c.translate(x, y);
-      c.scale(scale, scale);
-
-      c.fillStyle = "rgba(0,0,0,0.5)";
-      c.beginPath();
-      c.ellipse(0, 22, 15, 6, 0, 0, Math.PI * 2);
-      c.fill();
-
-      if (type === 'N') {
-        c.fillStyle = "#d6d3d1";
-        fillRoundRect(c, -11, -7, 22, 26, 5);
-        c.fillStyle = "#78350f";
-        c.fillRect(-11, -5, 22, 8);
-        c.fillStyle = "#fdba74";
-        c.beginPath();
-        c.arc(0, -16, 10, 0, Math.PI * 2);
-        c.fill();
-        c.fillStyle = "#f5f5f4";
-        c.beginPath();
-        c.moveTo(-8, -13);
-        c.quadraticCurveTo(0, 5, 8, -13);
-        c.fill();
-        c.fillStyle = "#e7e5e4";
-        c.beginPath();
-        c.ellipse(0, -23, 13, 7, 0, 0, Math.PI * 2);
-        c.fill();
-      } else {
-        c.fillStyle = "#991b1b";
-        fillRoundRect(c, -11, -7, 22, 26, 5);
-        c.fillStyle = "#f59e0b";
-        c.fillRect(-6, -7, 12, 24);
-        c.fillStyle = "#fdba74";
-        c.beginPath();
-        c.arc(0, -16, 10, 0, Math.PI * 2);
-        c.fill();
-        c.fillStyle = "#fef3c7";
-        c.beginPath();
-        c.ellipse(0, -22, 12, 6, 0, 0, Math.PI * 2);
-        c.fill();
-      }
-      c.restore();
-    }
-
-    function drawMonsterCharacter(c, x, y, key, scale = 0.85, time = 0, flashWhite = false, isStunned = false) {
-      c.save();
-      c.translate(x, y);
-      c.scale(scale, scale);
-
-      const floatY = isStunned ? 4 : Math.sin(time * 0.005) * 4;
-      c.fillStyle = "rgba(0,0,0,0.55)";
-      c.beginPath();
-      c.ellipse(0, 24, 19, 6.5, 0, 0, Math.PI * 2);
-      c.fill();
-
-      c.translate(0, floatY);
-
-      if (flashWhite) {
-        c.filter = "brightness(3.5) contrast(2)";
-      }
-
-      const img = spriteCache.monsters[key];
-      if (img && img.complete) {
-        c.drawImage(img, -34, -36, 68, 68);
-      }
-
-      if (isStunned) {
-        for (let s = 0; s < 3; s++) {
-          const sa = time * 0.008 + (s * Math.PI * 2) / 3;
-          c.fillStyle = "#fde047";
-          c.beginPath();
-          c.arc(Math.cos(sa) * 18, -32 + Math.sin(sa) * 5, 4, 0, Math.PI * 2);
-          c.fill();
-        }
-      }
-
-      c.restore();
-    }
-
-    function drawEnvironmentTile(c, cell, gx, gy, mapMeta, time) {
-      const px = gx * TILE_SIZE;
-      const py = gy * TILE_SIZE;
-
-      c.fillStyle = (gx + gy) % 2 === 0 ? mapMeta.floorColor1 : mapMeta.floorColor2;
-      c.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-      c.strokeStyle = "rgba(0,0,0,0.12)";
-      c.strokeRect(px, py, TILE_SIZE, TILE_SIZE);
-
-      if ((gx * 11 + gy * 7) % 4 === 0) {
-        c.fillStyle = "rgba(255,255,255,0.06)";
-        c.fillRect(px + 4, py + 4, TILE_SIZE - 8, 2);
-        c.fillStyle = "rgba(0,0,0,0.12)";
-        c.fillRect(px + 14, py + 24, 5, 3);
-      }
-
-      if (cell === '#') {
-        c.fillStyle = "rgba(0,0,0,0.45)";
-        c.fillRect(px, py + TILE_SIZE - 5, TILE_SIZE, 7);
-        c.fillStyle = mapMeta.wallFront;
-        c.fillRect(px, py + 12, TILE_SIZE, TILE_SIZE - 12);
-        c.fillStyle = mapMeta.wallTop;
-        c.fillRect(px, py, TILE_SIZE, 14);
-        c.fillStyle = "rgba(255,235,190,0.16)";
-        c.fillRect(px, py + 12, TILE_SIZE, 2);
-
-        if ((gx + gy) % 3 === 0) {
-          c.fillStyle = "rgba(0,0,0,0.42)";
-          c.beginPath();
-          c.arc(px + 22, py + 24, 8, Math.PI, 0);
-          c.lineTo(px + 30, py + 38);
-          c.lineTo(px + 14, py + 38);
-          c.closePath();
-          c.fill();
-        }
-      } else if (cell === 'L') {
-        c.fillStyle = "rgba(0,0,0,0.4)";
-        c.beginPath(); c.ellipse(px + 22, py + 37, 16, 6, 0, 0, Math.PI * 2); c.fill();
-        c.fillStyle = "#b45309";
-        fillRoundRect(c, px + 10, py + 18, 24, 13, 5);
-        c.beginPath(); c.arc(px + 16, py + 16, 6, 0, Math.PI * 2); c.arc(px + 26, py + 16, 6, 0, Math.PI * 2); c.fill();
-        c.fillStyle = "#3f6212";
-        fillRoundRect(c, px + 15, py + 14, 12, 9, 2);
-        c.fillStyle = "#92400e";
-        c.fillRect(px + 7, py + 10, 5, 14);
-        fillRoundRect(c, px + 4, py + 8, 9, 6, 2);
-        c.fillRect(px + 12, py + 29, 3, 9);
-        c.fillRect(px + 29, py + 29, 3, 9);
-      } else if (cell === 'J') {
-        c.fillStyle = "#9a3412";
-        c.beginPath(); c.arc(px + 15, py + 22, 8.5, 0, Math.PI * 2); c.fill();
-        c.fillStyle = "#7c2d12";
-        c.beginPath(); c.arc(px + 30, py + 24, 8, 0, Math.PI * 2); c.fill();
-        c.fillStyle = "#b45309";
-        c.beginPath(); c.arc(px + 22, py + 31, 9, 0, Math.PI * 2); c.fill();
-      } else if (cell === 'T') {
-        c.fillStyle = "rgba(0,0,0,0.35)";
-        c.beginPath(); c.ellipse(px + 22, py + 38, 13, 5, 0, 0, Math.PI * 2); c.fill();
-        c.fillStyle = "#78350f";
-        c.fillRect(px + 19, py + 16, 6, 22);
-        c.fillStyle = "#15803d";
-        c.beginPath(); c.arc(px + 22, py + 15, 13, 0, Math.PI * 2); c.fill();
-      } else if (cell === 'W') {
-        c.fillStyle = "#0369a1";
-        fillRoundRect(c, px + 2, py + 2, TILE_SIZE - 4, TILE_SIZE - 4, 6);
-      } else if (cell === 'H') {
-        c.fillStyle = "#44403c";
-        c.beginPath(); c.arc(px + 22, py + 22, 17, 0, Math.PI * 2); c.fill();
-        c.fillStyle = "#10b981";
-        c.beginPath(); c.arc(px + 22, py + 22, 12, 0, Math.PI * 2); c.fill();
-      } else if (cell === 'C') {
-        c.fillStyle = "#78350f";
-        fillRoundRect(c, px + 9, py + 13, 26, 18, 3);
-        c.strokeStyle = "#fbbf24"; c.lineWidth = 2; c.stroke();
-        c.fillStyle = "#facc15";
-        c.fillRect(px + 19, py + 20, 6, 5);
-      } else if (cell === 'P' || cell === 'B') {
-        c.save();
-        c.translate(px + 22, py + 22);
-        c.rotate(time * 0.003);
-        c.strokeStyle = cell === 'P' ? "#38bdf8" : "#c084fc";
-        c.lineWidth = 3;
-        c.beginPath(); c.arc(0, 0, 15, 0, Math.PI * 1.5); c.stroke();
-        c.beginPath(); c.arc(0, 0, 9, Math.PI * 0.5, Math.PI * 2); c.stroke();
-        c.restore();
-      }
     }
 
     function drawMinimapRadar() {
