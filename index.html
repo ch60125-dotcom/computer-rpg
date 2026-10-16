@@ -243,7 +243,7 @@
         <!-- 單行精簡戰報 (點擊可打開角色行囊看完整紀錄) -->
         <div onclick="openHeroBagModal()" class="cursor-pointer flex-1 min-w-[240px] bg-stone-950/90 border border-stone-800 rounded-xl px-3 py-1.5">
           <div id="battle-log" class="h-5 overflow-hidden text-xs font-mono">
-            <div class="text-amber-300 truncate">> 【系統】大畫面劇場模式已啟動！點擊上方圖示可開啟角色行囊、鍛造換裝與配招！</div>
+            <div class="text-amber-300 truncate">> 【系統】高精細立繪與大畫面劇場模式已啟動！點擊上方圖示可開啟角色行囊、鍛造換裝與配招！</div>
           </div>
         </div>
 
@@ -655,7 +655,7 @@
     }
 
     // =========================================================
-    // ★ 核心美術升級：多層次 SVG 向量紙娃娃與怪獸立繪快取引擎 ★
+    // ★ 全新重繪升級：高精細主角紙娃娃、立體怪獸、霸氣 BOSS 與鎏金寶箱 ★
     // =========================================================
     const spriteCache = {
       heroIdle: null,
@@ -671,94 +671,198 @@
     }
 
     function buildHeroPaperDollSVG(weaponId, armorId, accId, isAttack = false) {
+      // 1. 背飾法寶層 (5種華麗背後靈環與光翼)
       let accLayer = '';
       if (accId === 'c1') {
-        accLayer = `<circle cx="32" cy="48" r="10" fill="url(#emeraldGlow)" stroke="#6ee7b7" stroke-width="2"/><circle cx="128" cy="48" r="10" fill="url(#emeraldGlow)" stroke="#6ee7b7" stroke-width="2"/>`;
+        accLayer = `
+          <circle cx="80" cy="75" r="46" fill="none" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.6"/>
+          <circle cx="26" cy="52" r="11" fill="url(#emeraldGlow)" stroke="#a7f3d0" stroke-width="2"/>
+          <circle cx="134" cy="52" r="11" fill="url(#emeraldGlow)" stroke="#a7f3d0" stroke-width="2"/>
+          <circle cx="23" cy="49" r="3" fill="#ffffff"/>
+          <circle cx="131" cy="49" r="3" fill="#ffffff"/>
+        `;
       } else if (accId === 'c2') {
-        accLayer = `<circle cx="80" cy="76" r="46" fill="none" stroke="#fbbf24" stroke-width="4" stroke-dasharray="12 6" opacity="0.85"/><circle cx="80" cy="76" r="52" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.5"/>`;
+        accLayer = `
+          <circle cx="80" cy="76" r="50" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="14 6" opacity="0.9"/>
+          <circle cx="80" cy="76" r="56" fill="none" stroke="#fde047" stroke-width="2" stroke-dasharray="4 8" opacity="0.7"/>
+          <polygon points="80,12 85,22 75,22" fill="#fde047"/>
+          <polygon points="80,140 85,130 75,130" fill="#fde047"/>
+          <polygon points="16,76 26,71 26,81" fill="#fde047"/>
+          <polygon points="144,76 134,71 134,81" fill="#fde047"/>
+        `;
       } else if (accId === 'c3') {
-        accLayer = `<path d="M35,78 L6,42 L26,35 L46,66 Z M125,78 L154,42 L134,35 L114,66 Z" fill="url(#cyanWing)" stroke="#38bdf8" stroke-width="2"/>`;
+        accLayer = `
+          <g opacity="0.92">
+            <path d="M48,78 L4,32 L28,28 L56,62 Z" fill="url(#cyanWing)" stroke="#bae6fd" stroke-width="2"/>
+            <path d="M44,88 L10,64 L26,56 L52,78 Z" fill="url(#cyanWing)" stroke="#bae6fd" stroke-width="1.5"/>
+            <path d="M112,78 L156,32 L132,28 L104,62 Z" fill="url(#cyanWing)" stroke="#bae6fd" stroke-width="2"/>
+            <path d="M116,88 L150,64 L134,56 L108,78 Z" fill="url(#cyanWing)" stroke="#bae6fd" stroke-width="1.5"/>
+          </g>
+        `;
       } else if (accId === 'c4') {
-        accLayer = `<polygon points="80,10 92,32 74,32 86,52" fill="#fde047"/><circle cx="80" cy="75" r="50" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="6 8"/><circle cx="24" cy="60" r="7" fill="#38bdf8"/><circle cx="136" cy="60" r="7" fill="#38bdf8"/>`;
+        accLayer = `
+          <circle cx="80" cy="75" r="52" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="8 6"/>
+          <polygon points="80,6 90,28 76,28 86,46 68,24 80,24" fill="#fde047" stroke="#f59e0b" stroke-width="1"/>
+          <polygon points="22,42 36,54 26,56 34,70" fill="#38bdf8"/>
+          <polygon points="138,42 124,54 134,56 126,70" fill="#38bdf8"/>
+        `;
       } else if (accId === 'c5') {
         accLayer = `
-          <circle cx="80" cy="74" r="56" fill="url(#rainbowAura)" opacity="0.35"/>
-          <circle cx="80" cy="74" r="52" fill="none" stroke="#fde047" stroke-width="3.5"/>
-          <polygon points="80,8 86,22 74,22" fill="#fde047"/>
-          <polygon points="20,74 32,68 32,80" fill="#38bdf8"/>
-          <polygon points="140,74 128,68 128,80" fill="#f43f5e"/>
+          <circle cx="80" cy="74" r="60" fill="url(#rainbowAura)" opacity="0.4"/>
+          <circle cx="80" cy="74" r="54" fill="none" stroke="#fde047" stroke-width="4"/>
+          <circle cx="80" cy="74" r="47" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="10 5"/>
+          <path d="M45,74 L4,20 L34,26 L58,64 Z M115,74 L156,20 L126,26 L102,64 Z" fill="url(#goldBlade)" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="80,4 87,20 73,20" fill="#fde047" stroke="#fff" stroke-width="1"/>
         `;
       }
 
+      // 2. 護甲與披風外裝層 (6套精細立體戰袍與肩甲)
       const armorStyles = {
-        'a0': { cape: '#78350f', body1: '#854d0e', body2: '#422006', trim: '#d6d3d1', shoulder: '#78350f', crown: '' },
-        'a1': { cape: '#065f46', body1: '#059669', body2: '#064e3b', trim: '#6ee7b7', shoulder: '#10b981', crown: '' },
-        'a2': { cape: '#1e3a8a', body1: '#64748b', body2: '#334155', trim: '#38bdf8', shoulder: '#94a3b8', crown: `<rect x="54" y="25" width="52" height="6" rx="3" fill="#38bdf8" stroke="#e0f2fe" stroke-width="1.5"/>` },
-        'a3': { cape: '#7f1d1d', body1: '#27272a', body2: '#09090b', trim: '#f97316', shoulder: '#dc2626', crown: `<polygon points="52,28 42,12 62,24" fill="#f97316"/><polygon points="108,28 118,12 98,24" fill="#f97316"/>` },
-        'a4': { cape: '#0284c7', body1: '#f8fafc', body2: '#cbd5e1', trim: '#fbbf24', shoulder: '#facc15', crown: `<polygon points="62,25 80,9 98,25" fill="#facc15" stroke="#fef08a" stroke-width="1.5"/>` },
-        'a5': { cape: '#4c0519', body1: '#18181b', body2: '#09090b', trim: '#fde047', shoulder: '#facc15', crown: `<polygon points="50,26 58,8 72,20 80,4 88,20 102,8 110,26" fill="#facc15" stroke="#ffffff" stroke-width="1.5"/>` }
+        'a0': { capeOut: '#78350f', capeIn: '#451a03', body1: '#a16207', body2: '#713f12', trim: '#e7e5e4', shoulder: '#854d0e', gem: '#38bdf8', crown: '' },
+        'a1': { capeOut: '#065f46', capeIn: '#022c22', body1: '#10b981', body2: '#047857', trim: '#a7f3d0', shoulder: '#059669', gem: '#fde047', crown: '' },
+        'a2': { capeOut: '#1e3a8a', capeIn: '#172554', body1: '#94a3b8', body2: '#475569', trim: '#38bdf8', shoulder: '#cbd5e1', gem: '#38bdf8', crown: `<path d="M52,26 Q80,32 108,26 L106,32 Q80,38 54,32 Z" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>` },
+        'a3': { capeOut: '#991b1b', capeIn: '#450a0a', body1: '#3f3f46', body2: '#18181b', trim: '#fb923c', shoulder: '#dc2626', gem: '#ef4444', crown: `<polygon points="52,28 38,10 64,24" fill="#fb923c" stroke="#fef08a" stroke-width="1.2"/><polygon points="108,28 122,10 96,24" fill="#fb923c" stroke="#fef08a" stroke-width="1.2"/>` },
+        'a4': { capeOut: '#0284c7', capeIn: '#0c4a6e', body1: '#f8fafc', body2: '#cbd5e1', trim: '#facc15', shoulder: '#fde047', gem: '#06b6d4', crown: `<polygon points="58,26 70,14 80,6 90,14 102,26" fill="#facc15" stroke="#ffffff" stroke-width="1.5"/>` },
+        'a5': { capeOut: '#881337', capeIn: '#4c0519', body1: '#27272a', body2: '#09090b', trim: '#fde047', shoulder: '#facc15', gem: '#f43f5e', crown: `<polygon points="48,26 56,6 70,20 80,2 90,20 104,6 112,26" fill="url(#goldBlade)" stroke="#ffffff" stroke-width="1.5"/>` }
       };
       const st = armorStyles[armorId] || armorStyles['a0'];
 
       const armorLayer = `
-        <path d="M46,72 Q22,105 26,138 L62,130 L98,130 L134,138 Q138,105 114,72 Z" fill="${st.cape}" stroke="#000000" stroke-width="2"/>
-        <rect x="58" y="114" width="16" height="26" rx="5" fill="#1c1917" stroke="#000" stroke-width="2"/>
-        <rect x="86" y="114" width="16" height="26" rx="5" fill="#1c1917" stroke="#000" stroke-width="2"/>
-        <rect x="55" y="128" width="21" height="14" rx="4" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="1.8"/>
-        <rect x="84" y="128" width="21" height="14" rx="4" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="1.8"/>
-        <rect x="50" y="72" width="60" height="48" rx="10" fill="${st.body1}" stroke="${st.trim}" stroke-width="3"/>
-        <path d="M56,74 L80,98 L104,74" fill="${st.body2}" stroke="${st.trim}" stroke-width="2"/>
-        <rect x="48" y="102" width="64" height="9" rx="3" fill="#78350f" stroke="${st.trim}" stroke-width="1.8"/>
-        <polygon points="80,98 89,106 80,115 71,106" fill="${st.trim}" stroke="#fff" stroke-width="1.2"/>
-        <path d="M34,78 Q42,60 58,72 L54,90 Q38,88 34,78 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2.5"/>
-        <path d="M126,78 Q118,60 102,72 L106,90 Q122,88 126,78 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2.5"/>
+        <!-- 雙層立體飄逸披風 -->
+        <path d="M44,70 Q16,105 20,144 L60,134 L100,134 L140,144 Q144,105 116,70 Z" fill="${st.capeOut}" stroke="#1c1917" stroke-width="2.5"/>
+        <path d="M50,74 Q28,105 32,138 L64,130 L96,130 L128,138 Q132,105 110,74 Z" fill="${st.capeIn}" opacity="0.75"/>
+        <!-- 戰靴與護脛 -->
+        <rect x="57" y="114" width="17" height="28" rx="6" fill="#1c1917" stroke="#000" stroke-width="2"/>
+        <rect x="86" y="114" width="17" height="28" rx="6" fill="#1c1917" stroke="#000" stroke-width="2"/>
+        <path d="M54,125 L76,125 L74,142 L56,142 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2"/>
+        <path d="M84,125 L106,125 L104,142 L86,142 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2"/>
+        <!-- 胸甲與內襯戰袍 -->
+        <rect x="49" y="70" width="62" height="50" rx="11" fill="${st.body1}" stroke="${st.trim}" stroke-width="3"/>
+        <path d="M55,71 L80,100 L105,71 Z" fill="${st.body2}" stroke="${st.trim}" stroke-width="2"/>
+        <!-- 胸前V型龍紋護心鏡 -->
+        <path d="M65,76 L80,92 L95,76" fill="none" stroke="${st.trim}" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- 戰裙甲片與腰帶核心寶石 -->
+        <path d="M52,106 L46,126 L68,123 L68,106 Z" fill="${st.body2}" stroke="${st.trim}" stroke-width="1.8"/>
+        <path d="M108,106 L114,126 L92,123 L92,106 Z" fill="${st.body2}" stroke="${st.trim}" stroke-width="1.8"/>
+        <polygon points="72,106 88,106 92,128 80,134 68,128" fill="${st.capeOut}" stroke="${st.trim}" stroke-width="1.8"/>
+        <rect x="47" y="99" width="66" height="9" rx="3" fill="#451a03" stroke="${st.trim}" stroke-width="2"/>
+        <polygon points="80,94 90,103.5 80,113 70,103.5" fill="${st.gem}" stroke="#ffffff" stroke-width="1.8"/>
+        <!-- 雙層飛翼立體肩甲 -->
+        <path d="M28,76 Q38,54 58,68 L54,88 Q36,86 28,76 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2.5"/>
+        <path d="M132,76 Q122,54 102,68 L106,88 Q124,86 132,76 Z" fill="${st.shoulder}" stroke="${st.trim}" stroke-width="2.5"/>
+        <circle cx="44" cy="74" r="4" fill="${st.gem}" stroke="#fff" stroke-width="1"/>
+        <circle cx="116" cy="74" r="4" fill="${st.gem}" stroke="#fff" stroke-width="1"/>
       `;
 
-      const weaponConfigs = {
-        'w0': { blade: '#a8a29e', edge: '#57534e', hilt: '#78350f', glow: 'none', width: 9, len: 52 },
-        'w1': { blade: '#38bdf8', edge: '#e0f2fe', hilt: '#0284c7', glow: '#38bdf8', width: 11, len: 64 },
-        'w2': { blade: '#e2e8f0', edge: '#facc15', hilt: '#d97706', glow: '#fbbf24', width: 8, len: 68 },
-        'w3': { blade: 'url(#rgbBlade)', edge: '#ffffff', hilt: '#9333ea', glow: '#ec4899', width: 13, len: 72 },
-        'w4': { blade: '#22d3ee', edge: '#ffffff', hilt: '#1e293b', glow: '#06b6d4', width: 14, len: 76 },
-        'w5': { blade: 'url(#goldBlade)', edge: '#fef08a', hilt: '#b45309', glow: '#facc15', width: 17, len: 82 }
-      };
-      const wc = weaponConfigs[weaponId] || weaponConfigs['w0'];
-      const wTransform = isAttack ? 'translate(115, 78) rotate(35)' : 'translate(122, 86) rotate(-22)';
+      // 3. 兵刃武器層 (6把獨立設計的傳說名劍)
+      const wTransform = isAttack ? 'translate(116, 78) rotate(38)' : 'translate(124, 88) rotate(-20)';
+      let weaponGraphic = '';
+      if (weaponId === 'w0') {
+        weaponGraphic = `
+          <polygon points="-5,0 -5,-44 0,-54 5,-44 5,0" fill="#a8a29e" stroke="#57534e" stroke-width="2"/>
+          <line x1="0" y1="-4" x2="0" y2="-44" stroke="#e7e5e4" stroke-width="1.5"/>
+          <rect x="-13" y="0" width="26" height="6" rx="2" fill="#78350f" stroke="#451a03" stroke-width="1.5"/>
+          <rect x="-3.5" y="6" width="7" height="15" rx="2" fill="#57534e"/>
+          <circle cx="0" cy="23" r="4.5" fill="#78350f"/>
+        `;
+      } else if (weaponId === 'w1') {
+        weaponGraphic = `
+          <rect x="-8" y="-66" width="16" height="66" rx="6" fill="#38bdf8" opacity="0.35" filter="blur(3px)"/>
+          <polygon points="-6,0 -6,-54 0,-68 6,-54 6,0" fill="#0284c7" stroke="#e0f2fe" stroke-width="2"/>
+          <line x1="0" y1="-6" x2="0" y2="-58" stroke="#ffffff" stroke-width="2.5"/>
+          <path d="M-16,0 L16,0 L12,7 L-12,7 Z" fill="#0369a1" stroke="#7dd3fc" stroke-width="2"/>
+          <circle cx="0" cy="3.5" r="3.5" fill="#fde047"/>
+          <rect x="-4" y="7" width="8" height="16" rx="2" fill="#1e293b"/>
+          <circle cx="0" cy="25" r="5" fill="#38bdf8"/>
+        `;
+      } else if (weaponId === 'w2') {
+        weaponGraphic = `
+          <polygon points="-4.5,0 -3,-60 0,-74 3,-60 4.5,0" fill="#f8fafc" stroke="#f59e0b" stroke-width="2"/>
+          <line x1="0" y1="-6" x2="0" y2="-64" stroke="#fef08a" stroke-width="2"/>
+          <path d="M-18,2 Q0,-8 18,2 Q12,9 -12,9 Z" fill="#d97706" stroke="#fef08a" stroke-width="2"/>
+          <polygon points="0,-4 5,3 0,8 -5,3" fill="#f59e0b" stroke="#fff" stroke-width="1"/>
+          <rect x="-3.5" y="8" width="7" height="17" rx="2" fill="#78350f"/>
+          <circle cx="0" cy="27" r="5" fill="#fbbf24"/>
+        `;
+      } else if (weaponId === 'w3') {
+        weaponGraphic = `
+          <rect x="-10" y="-76" width="20" height="76" rx="8" fill="#ec4899" opacity="0.38" filter="blur(4px)"/>
+          <polygon points="-7,0 -8,-58 0,-76 8,-58 7,0" fill="url(#rgbBlade)" stroke="#ffffff" stroke-width="2.2"/>
+          <path d="M0,-10 L-4,-28 L4,-45 L0,-64" stroke="#ffffff" stroke-width="2.5" fill="none"/>
+          <path d="M-20,-2 L0,5 L20,-2 L14,8 L-14,8 Z" fill="#9333ea" stroke="#fde047" stroke-width="2"/>
+          <circle cx="0" cy="3" r="4" fill="#fde047"/>
+          <rect x="-4" y="8" width="8" height="17" rx="3" fill="#3b0764" stroke="#c084fc" stroke-width="1.5"/>
+          <circle cx="0" cy="27" r="5.5" fill="#ec4899"/>
+        `;
+      } else if (weaponId === 'w4') {
+        weaponGraphic = `
+          <rect x="-11" y="-80" width="22" height="80" rx="8" fill="#06b6d4" opacity="0.45" filter="blur(4px)"/>
+          <polygon points="-8,0 -9,-64 0,-82 9,-64 8,0" fill="#22d3ee" stroke="#ffffff" stroke-width="2.5"/>
+          <polygon points="-3,0 -3,-66 0,-76 3,-66 3,0" fill="#ffffff"/>
+          <polygon points="-22,-2 -8,0 -12,9 -24,6" fill="#0284c7" stroke="#bae6fd" stroke-width="1.5"/>
+          <polygon points="22,-2 8,0 12,9 24,6" fill="#0284c7" stroke="#bae6fd" stroke-width="1.5"/>
+          <rect x="-10" y="0" width="20" height="8" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+          <rect x="-4.5" y="8" width="9" height="18" rx="2" fill="#1e293b"/>
+          <polygon points="0,32 -6,25 6,25" fill="#22d3ee"/>
+        `;
+      } else {
+        // w5: 五階・軒轅 AI 聖皇神劍
+        weaponGraphic = `
+          <rect x="-14" y="-88" width="28" height="88" rx="10" fill="#facc15" opacity="0.5" filter="blur(5px)"/>
+          <polygon points="-9,0 -11,-66 0,-88 11,-66 9,0" fill="url(#goldBlade)" stroke="#ffffff" stroke-width="2.5"/>
+          <polygon points="-3.5,-6 -3.5,-70 0,-80 3.5,-70 3.5,-6" fill="#ffffff" opacity="0.9"/>
+          <!-- 軒轅聖皇龍翼劍格 -->
+          <path d="M-26,-6 L-8,0 L-14,10 L-28,4 Z M26,-6 L8,0 L14,10 L28,4 Z" fill="#facc15" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="0,-6 9,4 0,12 -9,4" fill="#f43f5e" stroke="#fef08a" stroke-width="2"/>
+          <rect x="-4.5" y="10" width="9" height="18" rx="3" fill="#78350f" stroke="#fde047" stroke-width="2"/>
+          <circle cx="0" cy="31" r="6.5" fill="#fde047" stroke="#ffffff" stroke-width="1.5"/>
+        `;
+      }
 
       const weaponLayer = `
         <g transform="${wTransform}">
-          ${wc.glow !== 'none' ? `<rect x="${-wc.width/2 - 3}" y="${-wc.len}" width="${wc.width + 6}" height="${wc.len}" rx="5" fill="${wc.glow}" opacity="0.4" filter="blur(3px)"/>` : ''}
-          <polygon points="${-wc.width/2},0 ${-wc.width/2},${-wc.len+14} 0,${-wc.len} ${wc.width/2},${-wc.len+14} ${wc.width/2},0" fill="${wc.blade}" stroke="${wc.edge}" stroke-width="2"/>
-          <line x1="0" y1="-4" x2="0" y2="${-wc.len+10}" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
-          <path d="M-16,0 L16,0 L12,7 L-12,7 Z" fill="#fbbf24" stroke="#78350f" stroke-width="1.8"/>
-          <circle cx="0" cy="3.5" r="3.5" fill="${wc.edge}"/>
-          <rect x="-4" y="7" width="8" height="16" rx="3" fill="${wc.hilt}" stroke="#000" stroke-width="1.5"/>
-          <circle cx="0" cy="25" r="5" fill="#fbbf24"/>
+          ${weaponGraphic}
+          <!-- 飄逸紅金劍穗 -->
+          <path d="M0,26 Q12,34 8,46" stroke="#ef4444" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="8" cy="47" r="3" fill="#fde047"/>
         </g>
       `;
 
+      // 4. 精細日系動漫頭部與眼神層
       const headLayer = `
-        <circle cx="80" cy="48" r="25" fill="#ffedd5" stroke="#7c2d12" stroke-width="2"/>
-        <ellipse cx="63" cy="55" rx="4.5" ry="2.2" fill="#fda4af" opacity="0.65"/>
-        <ellipse cx="97" cy="55" rx="4.5" ry="2.2" fill="#fda4af" opacity="0.65"/>
+        <!-- 臉部輪廓與耳廓 -->
+        <circle cx="55" cy="49" r="5" fill="#fed7aa" stroke="#7c2d12" stroke-width="1.8"/>
+        <circle cx="105" cy="49" r="5" fill="#fed7aa" stroke="#7c2d12" stroke-width="1.8"/>
+        <circle cx="80" cy="48" r="25" fill="#ffedd5" stroke="#7c2d12" stroke-width="2.2"/>
+        <ellipse cx="62" cy="55" rx="4.8" ry="2.4" fill="#fb7185" opacity="0.55"/>
+        <ellipse cx="98" cy="55" rx="4.8" ry="2.4" fill="#fb7185" opacity="0.55"/>
+        <!-- 精緻動漫雙眼 (多層次星光瞳孔) -->
         <g>
-          <rect x="62" y="42" width="11" height="13" rx="5" fill="#1e1b4b"/>
-          <rect x="63.5" y="45" width="8" height="9" rx="3.5" fill="#0284c7"/>
-          <circle cx="65.5" cy="45.5" r="2.6" fill="#ffffff"/>
-          <circle cx="69.5" cy="51.5" r="1.3" fill="#ffffff"/>
-          <path d="M60,39 Q67,36 74,40" stroke="#451a03" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <rect x="61" y="41" width="12" height="14" rx="5.5" fill="#0f172a"/>
+          <rect x="62.5" y="44" width="9" height="10" rx="4" fill="#0284c7"/>
+          <ellipse cx="67" cy="51" rx="3.5" ry="2" fill="#38bdf8"/>
+          <circle cx="65" cy="45" r="2.8" fill="#ffffff"/>
+          <circle cx="70" cy="51.5" r="1.4" fill="#ffffff"/>
+          <path d="M59,38 Q67,34 75,39" stroke="#451a03" stroke-width="2.8" fill="none" stroke-linecap="round"/>
         </g>
         <g>
-          <rect x="87" y="42" width="11" height="13" rx="5" fill="#1e1b4b"/>
-          <rect x="88.5" y="45" width="8" height="9" rx="3.5" fill="#0284c7"/>
-          <circle cx="90.5" cy="45.5" r="2.6" fill="#ffffff"/>
-          <circle cx="94.5" cy="51.5" r="1.3" fill="#ffffff"/>
-          <path d="M86,40 Q93,36 100,39" stroke="#451a03" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <rect x="87" y="41" width="12" height="14" rx="5.5" fill="#0f172a"/>
+          <rect x="88.5" y="44" width="9" height="10" rx="4" fill="#0284c7"/>
+          <ellipse cx="93" cy="51" rx="3.5" ry="2" fill="#38bdf8"/>
+          <circle cx="91" cy="45" r="2.8" fill="#ffffff"/>
+          <circle cx="96" cy="51.5" r="1.4" fill="#ffffff"/>
+          <path d="M85,39 Q93,34 101,38" stroke="#451a03" stroke-width="2.8" fill="none" stroke-linecap="round"/>
         </g>
-        <path d="M76,59 Q80,62.5 84,59" stroke="#9a3412" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-        <path d="M52,46 Q48,20 80,18 Q112,20 108,46 Q104,31 95,38 L88,28 L80,39 L72,28 L65,38 Q56,31 52,46 Z" fill="url(#hairGrad)" stroke="#271202" stroke-width="2"/>
-        <path d="M54,32 Q80,36 106,32 L105,37 Q80,41 55,37 Z" fill="#0284c7" stroke="#bae6fd" stroke-width="1.2"/>
-        <circle cx="80" cy="34.5" r="4" fill="#fde047" stroke="#b45309" stroke-width="1.5"/>
+        <!-- 堅毅微笑嘴型 -->
+        <path d="M75,59 Q80,63 85,59" stroke="#9a3412" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <!-- 多層次劍俠刺蝟髮型與天使光圈高光 -->
+        <path d="M50,48 Q45,16 80,14 Q115,16 110,48 Q105,29 96,38 L89,25 L80,38 L71,25 L64,38 Q55,29 50,48 Z" fill="url(#hairGrad)" stroke="#271202" stroke-width="2.2"/>
+        <path d="M62,24 Q80,19 98,24" stroke="#fde047" stroke-width="2" fill="none" opacity="0.55" stroke-linecap="round"/>
+        <!-- 飛揚額頭護額與龍珠 -->
+        <path d="M104,33 Q124,26 132,38 Q118,40 105,37 Z" fill="#0284c7" stroke="#bae6fd" stroke-width="1.2"/>
+        <path d="M54,32 Q80,37 106,32 L105,38 Q80,43 55,38 Z" fill="#0284c7" stroke="#e0f2fe" stroke-width="1.5"/>
+        <circle cx="80" cy="35" r="4.8" fill="#fde047" stroke="#b45309" stroke-width="1.8"/>
+        <circle cx="78.5" cy="33.5" r="1.5" fill="#ffffff"/>
         ${st.crown}
       `;
 
@@ -766,8 +870,9 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
           <defs>
             <linearGradient id="hairGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#b45309"/>
-              <stop offset="100%" stop-color="#451a03"/>
+              <stop offset="0%" stop-color="#d97706"/>
+              <stop offset="50%" stop-color="#92400e"/>
+              <stop offset="100%" stop-color="#3b1402"/>
             </linearGradient>
             <linearGradient id="rgbBlade" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#f43f5e"/>
@@ -776,16 +881,18 @@
             </linearGradient>
             <linearGradient id="goldBlade" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#ffffff"/>
-              <stop offset="40%" stop-color="#fde047"/>
-              <stop offset="100%" stop-color="#d97706"/>
+              <stop offset="35%" stop-color="#fde047"/>
+              <stop offset="100%" stop-color="#b45309"/>
             </linearGradient>
             <radialGradient id="emeraldGlow">
               <stop offset="0%" stop-color="#ffffff"/>
-              <stop offset="100%" stop-color="#10b981"/>
+              <stop offset="60%" stop-color="#34d399"/>
+              <stop offset="100%" stop-color="#065f46"/>
             </radialGradient>
             <linearGradient id="cyanWing" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#e0f2fe"/>
-              <stop offset="100%" stop-color="#0284c7"/>
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="40%" stop-color="#38bdf8"/>
+              <stop offset="100%" stop-color="#0369a1"/>
             </linearGradient>
             <radialGradient id="rainbowAura">
               <stop offset="0%" stop-color="#fde047"/>
@@ -801,95 +908,233 @@
       `;
     }
 
+    // ★ 全新重繪：12 隻迷宮怪物與章節守門 BOSS 高精細 SVG 立繪庫 ★
     function buildMonsterDetailedSVG(key) {
       const monsterSVGs = {
+        // 1. 砂岩灰塵魔像 (裂紋符文巨石魔像 + 懸浮能量雙拳)
         '1': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <defs><radialGradient id="g1"><stop offset="0%" stop-color="#a8a29e"/><stop offset="100%" stop-color="#44403c"/></radialGradient></defs>
-          <ellipse cx="80" cy="138" rx="38" ry="10" fill="rgba(0,0,0,0.45)"/>
-          <polygon points="48,50 80,26 112,50 120,96 80,118 40,96" fill="url(#g1)" stroke="#d6d3d1" stroke-width="3"/>
-          <polygon points="18,65 36,52 42,84 22,92" fill="#57534e" stroke="#fbbf24" stroke-width="2"/>
-          <polygon points="142,65 124,52 118,84 138,92" fill="#57534e" stroke="#fbbf24" stroke-width="2"/>
-          <polygon points="56,64 72,70 60,76" fill="#fde047"/><polygon points="104,64 88,70 100,76" fill="#fde047"/>
-          <path d="M64,94 L74,88 L86,94 L96,88" stroke="#f97316" stroke-width="3.5" fill="none"/>
+          <defs>
+            <radialGradient id="rockG" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#d6d3d1"/>
+              <stop offset="55%" stop-color="#78716c"/>
+              <stop offset="100%" stop-color="#292524"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="80" cy="142" rx="44" ry="11" fill="rgba(0,0,0,0.5)"/>
+          <polygon points="52,32 36,12 66,24" fill="#f59e0b" stroke="#fef08a" stroke-width="2"/>
+          <polygon points="108,32 124,12 94,24" fill="#f59e0b" stroke="#fef08a" stroke-width="2"/>
+          <polygon points="42,46 80,22 118,46 126,98 80,124 34,98" fill="url(#rockG)" stroke="#e7e5e4" stroke-width="3"/>
+          <path d="M80,26 L80,52 L64,66 M80,52 L96,66 M52,96 L80,108 L108,96" stroke="#fde047" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <polygon points="10,64 32,48 38,84 14,94" fill="url(#rockG)" stroke="#fbbf24" stroke-width="2.5"/>
+          <polygon points="150,64 128,48 122,84 146,94" fill="url(#rockG)" stroke="#fbbf24" stroke-width="2.5"/>
+          <polygon points="52,62 74,70 56,78" fill="#ef4444" stroke="#fde047" stroke-width="1.5"/>
+          <polygon points="108,62 86,70 104,78" fill="#ef4444" stroke="#fde047" stroke-width="1.5"/>
+          <polygon points="60,92 70,85 80,93 90,85 100,92 92,102 68,102" fill="#451a03" stroke="#f97316" stroke-width="2"/>
         </svg>`,
+
+        // 2. 甲殼吞鍵蟲 (重裝金屬獨角仙 + 背負發光機械鍵帽)
         '2': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#84cc16"/><stop offset="100%" stop-color="#365314"/></linearGradient></defs>
-          <ellipse cx="85" cy="90" rx="44" ry="32" fill="url(#g2)" stroke="#ecfccb" stroke-width="3"/>
-          <rect x="72" y="68" width="28" height="22" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
-          <text x="77" y="84" fill="#38bdf8" font-size="13" font-weight="900">ESC</text>
-          <circle cx="46" cy="92" r="24" fill="#4d7c0f" stroke="#bef264" stroke-width="2.5"/>
-          <path d="M28,82 Q8,65 16,52 Q28,64 38,74 Z M28,102 Q8,118 16,130 Q28,118 38,108 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
-          <circle cx="38" cy="84" r="6" fill="#ef4444"/><circle cx="36" cy="82" r="2" fill="#fff"/>
+          <defs>
+            <linearGradient id="shellG" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#a3e635"/>
+              <stop offset="50%" stop-color="#4d7c0f"/>
+              <stop offset="100%" stop-color="#1a2e05"/>
+            </linearGradient>
+          </defs>
+          <path d="M56,112 L42,136 M80,115 L80,140 M106,112 L120,136" stroke="#365314" stroke-width="6" stroke-linecap="round"/>
+          <ellipse cx="88" cy="88" rx="48" ry="35" fill="url(#shellG)" stroke="#d9f99d" stroke-width="3"/>
+          <rect x="68" y="54" width="38" height="28" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+          <rect x="72" y="57" width="30" height="20" rx="4" fill="#1e293b"/>
+          <text x="75" y="72" fill="#38bdf8" font-size="13" font-family="monospace" font-weight="900">ESC</text>
+          <circle cx="44" cy="90" r="24" fill="#365314" stroke="#bef264" stroke-width="2.5"/>
+          <path d="M26,78 Q2,56 14,42 Q30,56 40,70 Z" fill="#fde047" stroke="#ca8a04" stroke-width="2.5"/>
+          <path d="M26,102 Q2,124 14,138 Q30,124 40,110 Z" fill="#fde047" stroke="#ca8a04" stroke-width="2.5"/>
+          <circle cx="36" cy="82" r="7" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>
+          <circle cx="34" cy="80" r="2.5" fill="#ffffff"/>
         </svg>`,
+
+        // 3. 符文亂碼妖 (幽冥翡翠數據死靈巫師 + 懸浮亂碼魔典)
         '3': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <defs><radialGradient id="g3"><stop offset="0%" stop-color="#6ee7b7"/><stop offset="100%" stop-color="#064e3b"/></radialGradient></defs>
-          <path d="M36,132 Q30,36 80,26 Q130,36 124,132 Q104,118 80,134 Q56,118 36,132 Z" fill="url(#g3)" stroke="#a7f3d0" stroke-width="3"/>
-          <circle cx="64" cy="68" r="8" fill="#022c22"/><circle cx="64" cy="68" r="4" fill="#fde047"/>
-          <circle cx="96" cy="68" r="8" fill="#022c22"/><circle cx="96" cy="68" r="4" fill="#fde047"/>
-          <path d="M62,92 Q80,106 98,92" stroke="#022c22" stroke-width="4" fill="none"/>
-          <text x="48" y="50" fill="#a7f3d0" font-size="14" font-weight="900">0101?!</text>
+          <defs>
+            <radialGradient id="ghostG" cx="50%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#a7f3d0"/>
+              <stop offset="50%" stop-color="#10b981"/>
+              <stop offset="100%" stop-color="#022c22"/>
+            </radialGradient>
+          </defs>
+          <circle cx="80" cy="78" r="56" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6 8" opacity="0.6"/>
+          <path d="M32,138 Q24,30 80,20 Q136,30 128,138 Q108,118 94,136 Q80,118 66,136 Q52,118 32,138 Z" fill="url(#ghostG)" stroke="#d1fae5" stroke-width="3"/>
+          <ellipse cx="80" cy="68" rx="28" ry="22" fill="#022c22" stroke="#6ee7b7" stroke-width="2"/>
+          <circle cx="68" cy="66" r="6" fill="#fde047"/><circle cx="68" cy="66" r="2.5" fill="#ffffff"/>
+          <circle cx="92" cy="66" r="6" fill="#fde047"/><circle cx="92" cy="66" r="2.5" fill="#ffffff"/>
+          <path d="M64,82 L72,77 L80,83 L88,77 L96,82" stroke="#34d399" stroke-width="2.5" fill="none"/>
+          <rect x="16" y="42" width="32" height="18" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+          <text x="20" y="55" fill="#fde047" font-size="11" font-family="monospace" font-weight="900">0101</text>
+          <rect x="112" y="42" width="32" height="18" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+          <text x="116" y="55" fill="#fde047" font-size="11" font-family="monospace" font-weight="900">#?@!</text>
         </svg>`,
+
+        // 4. 赤焰竊盜魔 (雙翼熔岩惡魔 + 黃金三叉戟)
         '4': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <path d="M70,72 L14,34 L28,88 L56,94 Z M90,72 L146,34 L132,88 L104,94 Z" fill="#881337" stroke="#f43f5e" stroke-width="2.5"/>
-          <circle cx="80" cy="84" r="30" fill="#be123c" stroke="#fda4af" stroke-width="3"/>
-          <path d="M58,60 L40,24 L70,52 Z M102,60 L120,24 L90,52 Z" fill="#facc15" stroke="#ca8a04" stroke-width="2"/>
-          <polygon points="62,76 76,82 64,88" fill="#fef08a"/><polygon points="98,76 84,82 96,88" fill="#fef08a"/>
-          <path d="M66,98 L73,104 L80,98 L87,104 L94,98" stroke="#fff" stroke-width="3" fill="none"/>
+          <defs>
+            <radialGradient id="impG" cx="40%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#fb7185"/>
+              <stop offset="55%" stop-color="#e11d48"/>
+              <stop offset="100%" stop-color="#4c0519"/>
+            </radialGradient>
+          </defs>
+          <path d="M68,74 L8,26 L20,66 L10,92 L54,96 Z M92,74 L152,26 L140,66 L150,92 L106,96 Z" fill="#881337" stroke="#fda4af" stroke-width="2.5"/>
+          <path d="M56,56 Q32,20 48,14 Q62,32 70,50 Z M104,56 Q128,20 112,14 Q98,32 90,50 Z" fill="#facc15" stroke="#ca8a04" stroke-width="2.5"/>
+          <circle cx="80" cy="84" r="32" fill="url(#impG)" stroke="#fecdd3" stroke-width="3"/>
+          <polygon points="58,74 75,82 60,88" fill="#fef08a"/>
+          <polygon points="102,74 85,82 100,88" fill="#fef08a"/>
+          <path d="M62,98 L71,105 L80,98 L89,105 L98,98" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <line x1="132" y1="36" x2="122" y2="138" stroke="#f59e0b" stroke-width="4.5"/>
+          <path d="M120,48 L132,22 L144,48 M132,22 L132,52" stroke="#fde047" stroke-width="3" fill="none"/>
         </svg>`,
+
+        // 5. 幻影魔鏡靈 (太古紫金八卦魔鏡 + 彈窗雙重魔眼)
         '5': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <polygon points="80,14 132,44 132,116 80,146 28,116 28,44" fill="#581c87" stroke="#fbbf24" stroke-width="5"/>
-          <circle cx="80" cy="80" r="38" fill="#3b0764" stroke="#c084fc" stroke-width="3"/>
-          <polygon points="60,68 74,76 62,82" fill="#fde047"/><polygon points="100,68 86,76 98,82" fill="#fde047"/>
-          <text x="58" y="105" fill="#f43f5e" font-size="15" font-weight="900">POP-UP!</text>
+          <defs>
+            <radialGradient id="mirrorG">
+              <stop offset="0%" stop-color="#c084fc"/>
+              <stop offset="60%" stop-color="#581c87"/>
+              <stop offset="100%" stop-color="#1e1b4b"/>
+            </radialGradient>
+          </defs>
+          <circle cx="18" cy="48" r="8" fill="#fde047" stroke="#f59e0b" stroke-width="2"/>
+          <circle cx="142" cy="48" r="8" fill="#fde047" stroke="#f59e0b" stroke-width="2"/>
+          <polygon points="80,10 136,42 136,118 80,150 24,118 24,42" fill="#4c1d95" stroke="#facc15" stroke-width="5"/>
+          <polygon points="80,20 126,48 126,112 80,140 34,112 34,48" fill="url(#mirrorG)" stroke="#e9d5ff" stroke-width="2.5"/>
+          <polygon points="56,64 75,74 58,82" fill="#fde047"/>
+          <polygon points="104,64 85,74 102,82" fill="#fde047"/>
+          <circle cx="80" cy="50" r="7" fill="#f43f5e" stroke="#fff" stroke-width="1.5"/>
+          <rect x="48" y="92" width="64" height="20" rx="4" fill="#090d16" stroke="#f43f5e" stroke-width="2"/>
+          <text x="53" y="106" fill="#fde047" font-size="13" font-weight="900">POP-UP!</text>
         </svg>`,
+
+        // 6. 深淵釣魚妖 (深海發光誘餌燈籠鮟鱇魚怪)
         '6': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <path d="M75,45 Q75,12 115,22 L115,36" stroke="#38bdf8" stroke-width="4" fill="none"/>
-          <rect x="102" y="34" width="26" height="18" rx="3" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
-          <ellipse cx="78" cy="95" rx="44" ry="34" fill="#1e3a8a" stroke="#60a5fa" stroke-width="3"/>
-          <path d="M46,98 L110,98 L98,122 L58,122 Z" fill="#450a0a"/>
-          <polygon points="54,98 60,108 66,98 72,108 78,98 84,108 90,98 96,108 102,98" fill="#ffffff"/>
-          <circle cx="62" cy="78" r="7" fill="#ef4444"/><circle cx="60" cy="76" r="2.5" fill="#fff"/>
+          <defs>
+            <radialGradient id="fishG" cx="40%" cy="40%" r="65%">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="55%" stop-color="#1d4ed8"/>
+              <stop offset="100%" stop-color="#172554"/>
+            </radialGradient>
+          </defs>
+          <polygon points="116,88 152,62 144,96 154,124 116,106" fill="#0284c7" stroke="#7dd3fc" stroke-width="2.5"/>
+          <path d="M68,48 Q62,8 118,18 L118,34" stroke="#38bdf8" stroke-width="4" fill="none"/>
+          <circle cx="118" cy="42" r="18" fill="rgba(253,224,71,0.35)"/>
+          <rect x="102" y="32" width="32" height="20" rx="3" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+          <path d="M102,32 L118,44 L134,32" stroke="#b45309" stroke-width="2" fill="none"/>
+          <ellipse cx="74" cy="96" rx="46" ry="36" fill="url(#fishG)" stroke="#93c5fd" stroke-width="3"/>
+          <path d="M36,96 L106,96 L96,124 L48,124 Z" fill="#450a0a" stroke="#f87171" stroke-width="1.5"/>
+          <polygon points="44,96 51,110 58,96 65,110 72,96 79,110 86,96 93,110 100,96" fill="#ffffff"/>
+          <circle cx="54" cy="76" r="8" fill="#ef4444" stroke="#fde047" stroke-width="2"/>
+          <circle cx="52" cy="74" r="2.5" fill="#ffffff"/>
         </svg>`,
+
+        // 7. 青銅木馬巨兵 (古代青銅機關半人馬重裝武士)
         '7': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <polygon points="44,136 44,64 72,24 116,38 108,68 80,68 92,136" fill="#44403c" stroke="#f97316" stroke-width="4"/>
-          <circle cx="68" cy="96" r="14" fill="#dc2626" stroke="#fde047" stroke-width="3"/>
-          <polygon points="74,40 94,45 80,54" fill="#ef4444"/>
-          <rect x="112" y="28" width="8" height="105" fill="#d97706"/>
-          <polygon points="120,24 148,42 120,62" fill="#38bdf8"/>
+          <defs>
+            <linearGradient id="bronzeG" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#a8a29e"/>
+              <stop offset="50%" stop-color="#57534e"/>
+              <stop offset="100%" stop-color="#1c1917"/>
+            </linearGradient>
+          </defs>
+          <polygon points="36,140 36,62 68,20 112,34 104,68 78,68 94,140" fill="url(#bronzeG)" stroke="#f59e0b" stroke-width="3.5"/>
+          <circle cx="64" cy="94" r="15" fill="#7f1d1d" stroke="#fde047" stroke-width="3"/>
+          <circle cx="64" cy="94" r="7" fill="#ef4444"/>
+          <polygon points="70,36 94,42 76,52" fill="#ef4444" stroke="#fde047" stroke-width="1"/>
+          <polygon points="16,66 42,56 42,102 28,116 16,102" fill="#b45309" stroke="#fde047" stroke-width="2.5"/>
+          <rect x="118" y="18" width="7" height="122" fill="#d97706" stroke="#451a03" stroke-width="1.5"/>
+          <polygon points="125,16 156,36 142,50 125,62" fill="#38bdf8" stroke="#e0f2fe" stroke-width="2"/>
         </svg>`,
+
+        // M_MIMIC. 噬人偽裝寶箱怪 (鐵鍊狂暴寶箱怪 + 猩紅魔眼與巨舌)
         'M_MIMIC': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <rect x="26" y="42" width="108" height="84" rx="10" fill="#78350f" stroke="#facc15" stroke-width="5"/>
-          <rect x="34" y="68" width="92" height="38" fill="#450a0a"/>
-          <polygon points="40,68 48,84 56,68 64,84 72,68 80,84 88,68 96,84 104,68 112,84 120,68" fill="#ffffff"/>
-          <path d="M70,88 Q80,128 98,118" stroke="#ec4899" stroke-width="12" fill="none" stroke-linecap="round"/>
-          <circle cx="58" cy="54" r="7" fill="#ef4444"/><circle cx="102" cy="54" r="7" fill="#ef4444"/>
+          <ellipse cx="80" cy="142" rx="48" ry="10" fill="rgba(0,0,0,0.55)"/>
+          <path d="M22,72 Q80,22 138,72 Z" fill="#92400e" stroke="#facc15" stroke-width="4"/>
+          <rect x="24" y="70" width="112" height="62" rx="8" fill="#78350f" stroke="#facc15" stroke-width="4"/>
+          <rect x="32" y="66" width="96" height="44" fill="#450a0a"/>
+          <polygon points="36,66 45,86 54,66 63,86 72,66 81,86 90,66 99,86 108,66 117,86 124,66" fill="#ffffff"/>
+          <polygon points="40,110 49,94 58,110 67,94 76,110 85,94 94,110 103,94 112,110 120,94" fill="#fde047"/>
+          <path d="M72,90 Q82,138 112,124" stroke="#ec4899" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <circle cx="56" cy="54" r="8" fill="#ef4444" stroke="#fff" stroke-width="2"/>
+          <circle cx="104" cy="54" r="8" fill="#ef4444" stroke="#fff" stroke-width="2"/>
         </svg>`,
+
+        // A. 卷一首領・千年鍵垢巨魔 (霸氣熔岩黑金裝甲 + 背後大漠威壓法陣)
         'A': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <circle cx="80" cy="84" r="56" fill="rgba(245,158,11,0.22)"/>
-          <polygon points="34,42 18,14 54,32" fill="#facc15"/><polygon points="126,42 142,14 106,32" fill="#facc15"/>
-          <rect x="36" y="36" width="88" height="88" rx="18" fill="#57534e" stroke="#fbbf24" stroke-width="4.5"/>
-          <polygon points="52,64 74,72 56,80" fill="#ef4444"/><polygon points="108,64 86,72 104,80" fill="#ef4444"/>
-          <rect x="52" y="94" width="56" height="16" rx="4" fill="#1c1917" stroke="#fde047" stroke-width="2"/>
+          <circle cx="80" cy="82" r="64" fill="rgba(245,158,11,0.22)"/>
+          <circle cx="80" cy="82" r="58" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
+          <polygon points="36,44 10,8 58,30" fill="#facc15" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="124,44 150,8 102,30" fill="#facc15" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="10,60 36,42 38,94 14,88" fill="#44403c" stroke="#f59e0b" stroke-width="3"/>
+          <polygon points="150,60 124,42 122,94 146,88" fill="#44403c" stroke="#f59e0b" stroke-width="3"/>
+          <rect x="34" y="34" width="92" height="94" rx="18" fill="#292524" stroke="#fbbf24" stroke-width="4.5"/>
+          <rect x="46" y="42" width="20" height="14" rx="3" fill="#44403c" stroke="#a8a29e" stroke-width="1.5"/>
+          <rect x="94" y="42" width="20" height="14" rx="3" fill="#44403c" stroke="#a8a29e" stroke-width="1.5"/>
+          <polygon points="48,64 74,74 52,82" fill="#ef4444" stroke="#fde047" stroke-width="1.5"/>
+          <polygon points="112,64 86,74 108,82" fill="#ef4444" stroke="#fde047" stroke-width="1.5"/>
+          <rect x="48" y="92" width="64" height="22" rx="5" fill="#450a0a" stroke="#f97316" stroke-width="2.5"/>
+          <polygon points="54,92 62,104 70,92 78,104 86,92 94,104 102,92" fill="#fde047"/>
         </svg>`,
+
+        // D. 卷二首領・格式化鐮刀死神 (幽冥紫金法袍 + 雙手寒冰雷射巨鐮)
         'D': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <path d="M126,18 Q42,8 22,56 Q68,36 118,48 Z" fill="#22d3ee" stroke="#e0f2fe" stroke-width="2.5"/>
-          <line x1="122" y1="20" x2="104" y2="144" stroke="#fbbf24" stroke-width="6"/>
-          <path d="M40,138 L54,44 L80,26 L106,44 L120,138 Z" fill="#1e1b4b" stroke="#a855f7" stroke-width="3.5"/>
-          <circle cx="68" cy="60" r="6" fill="#22d3ee"/><circle cx="92" cy="60" r="6" fill="#22d3ee"/>
+          <circle cx="80" cy="82" r="60" fill="rgba(168,85,247,0.2)"/>
+          <circle cx="80" cy="82" r="54" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-dasharray="10 6"/>
+          <path d="M134,14 Q30,-4 8,62 Q64,34 124,48 Z" fill="#22d3ee" stroke="#ffffff" stroke-width="3"/>
+          <line x1="128" y1="16" x2="102" y2="148" stroke="#facc15" stroke-width="6.5" stroke-linecap="round"/>
+          <polygon points="56,32 68,14 80,26 92,14 104,32" fill="#facc15" stroke="#fef08a" stroke-width="1.5"/>
+          <path d="M34,142 L48,42 L80,24 L112,42 L126,142 L98,128 L80,142 L62,128 Z" fill="#1e1b4b" stroke="#c084fc" stroke-width="3.5"/>
+          <circle cx="80" cy="62" r="20" fill="#090d16" stroke="#a855f7" stroke-width="2"/>
+          <circle cx="70" cy="60" r="6" fill="#22d3ee"/><circle cx="70" cy="60" r="2.5" fill="#ffffff"/>
+          <circle cx="90" cy="60" r="6" fill="#22d3ee"/><circle cx="90" cy="60" r="2.5" fill="#ffffff"/>
         </svg>`,
+
+        // G. 卷三首領・深淵駭客傀儡師 (六芒星傀儡十字架 + 假面魔導師)
         'G': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <circle cx="80" cy="82" r="54" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-dasharray="8 6"/>
-          <path d="M36,136 L50,46 L80,30 L110,46 L124,136 Z" fill="#3b0764" stroke="#fbbf24" stroke-width="4"/>
-          <circle cx="80" cy="66" r="22" fill="#f8fafc" stroke="#9333ea" stroke-width="2.5"/>
-          <polygon points="68,62 77,66 70,71" fill="#dc2626"/><polygon points="92,62 83,66 90,71" fill="#dc2626"/>
+          <circle cx="80" cy="82" r="58" fill="none" stroke="#e879f9" stroke-width="3" stroke-dasharray="8 5"/>
+          <rect x="24" y="14" width="112" height="8" rx="4" fill="#facc15" stroke="#78350f" stroke-width="2"/>
+          <line x1="36" y1="22" x2="46" y2="88" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3 3"/>
+          <line x1="124" y1="22" x2="114" y2="88" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3 3"/>
+          <path d="M30,138 L46,44 L80,28 L114,44 L130,138 Z" fill="#3b0764" stroke="#facc15" stroke-width="4"/>
+          <circle cx="80" cy="64" r="23" fill="#f8fafc" stroke="#9333ea" stroke-width="3"/>
+          <path d="M80,41 L80,87" stroke="#c084fc" stroke-width="2"/>
+          <polygon points="64,58 76,64 66,70" fill="#e11d48"/>
+          <polygon points="96,58 84,64 94,70" fill="#0284c7"/>
+          <path d="M68,76 Q80,84 92,76" stroke="#9333ea" stroke-width="3" fill="none"/>
         </svg>`,
+
+        // K. 終極魔神・暗黑勒索魔神 (六翼墮天使黑金鎧甲 + 萬年加密鎖頭核心 + 雙手滅世雷球)
         'K': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-          <path d="M60,74 L4,22 L18,82 L48,96 Z M100,74 L156,22 L142,82 L112,96 Z" fill="#4c0519" stroke="#f43f5e" stroke-width="3"/>
-          <polygon points="46,42 56,12 72,30 80,6 88,30 104,12 114,42" fill="#facc15" stroke="#fef08a" stroke-width="2.5"/>
-          <rect x="42" y="42" width="76" height="84" rx="16" fill="#18181b" stroke="#f43f5e" stroke-width="4"/>
-          <polygon points="56,64 76,72 60,78" fill="#22d3ee"/><polygon points="104,64 84,72 100,78" fill="#22d3ee"/>
-          <circle cx="80" cy="98" r="14" fill="#facc15" stroke="#78350f" stroke-width="2.5"/>
-          <rect x="77" y="95" width="6" height="10" fill="#18181b"/>
+          <defs>
+            <radialGradient id="bossCore">
+              <stop offset="0%" stop-color="#fde047"/>
+              <stop offset="60%" stop-color="#e11d48"/>
+              <stop offset="100%" stop-color="#4c0519"/>
+            </radialGradient>
+          </defs>
+          <circle cx="80" cy="80" r="68" fill="url(#bossCore)" opacity="0.28"/>
+          <circle cx="80" cy="80" r="62" fill="none" stroke="#f43f5e" stroke-width="3" stroke-dasharray="14 6"/>
+          <path d="M56,64 L2,12 L14,54 L50,74 Z M52,80 L0,62 L12,96 L48,96 Z M48,96 L8,118 L26,142 L54,112 Z" fill="#4c0519" stroke="#fb7185" stroke-width="2.5"/>
+          <path d="M104,64 L158,12 L146,54 L110,74 Z M108,80 L160,62 L148,96 L112,96 Z M112,96 L152,118 L134,142 L106,112 Z" fill="#4c0519" stroke="#fb7185" stroke-width="2.5"/>
+          <circle cx="20" cy="82" r="12" fill="#e11d48" stroke="#fde047" stroke-width="2.5"/>
+          <circle cx="140" cy="82" r="12" fill="#e11d48" stroke="#fde047" stroke-width="2.5"/>
+          <polygon points="44,40 54,6 70,28 80,2 90,28 106,6 116,40" fill="#facc15" stroke="#ffffff" stroke-width="2.5"/>
+          <rect x="40" y="40" width="80" height="90" rx="16" fill="#09090b" stroke="#facc15" stroke-width="4.5"/>
+          <polygon points="52,56 72,62 56,66" fill="#fde047"/>
+          <polygon points="108,56 88,62 104,66" fill="#fde047"/>
+          <polygon points="50,68 76,76 56,82" fill="#22d3ee"/>
+          <polygon points="110,68 84,76 104,82" fill="#22d3ee"/>
+          <line x1="42" y1="78" x2="118" y2="122" stroke="#f59e0b" stroke-width="4"/>
+          <line x1="118" y1="78" x2="42" y2="122" stroke="#f59e0b" stroke-width="4"/>
+          <circle cx="80" cy="100" r="16" fill="#facc15" stroke="#78350f" stroke-width="3"/>
+          <circle cx="80" cy="97" r="4" fill="#09090b"/>
+          <rect x="77.5" y="97" width="5" height="10" fill="#09090b"/>
         </svg>`
       };
       return monsterSVGs[key] || monsterSVGs['1'];
@@ -1487,6 +1732,7 @@
       wrongAnswerPenalty: false,
       parryWindowActive: false,
       parrySucceeded: false,
+      parryProgress: 0,
       gunbladeWindowActive: false,
       gunbladeTriggered: false,
       gunbladeCursor: 0,
@@ -1704,11 +1950,34 @@
         c.fillStyle = "#10b981";
         c.beginPath(); c.arc(px + 22, py + 22, 12, 0, Math.PI * 2); c.fill();
       } else if (cell === 'C') {
-        c.fillStyle = "#78350f";
-        fillRoundRect(c, px + 9, py + 13, 26, 18, 3);
-        c.strokeStyle = "#fbbf24"; c.lineWidth = 2; c.stroke();
+        // ★ 3D 立體鎏金藍寶石百寶箱 + 呼吸星芒 ★
+        const glowAlpha = 0.25 + Math.sin(time * 0.006) * 0.12;
+        c.fillStyle = `rgba(250, 204, 21, ${glowAlpha})`;
+        c.beginPath(); c.ellipse(px + 22, py + 28, 19, 9, 0, 0, Math.PI * 2); c.fill();
+        c.fillStyle = "rgba(0,0,0,0.5)";
+        c.beginPath(); c.ellipse(px + 22, py + 34, 15, 5, 0, 0, Math.PI * 2); c.fill();
+
+        c.fillStyle = "#7c2d12";
+        fillRoundRect(c, px + 8, py + 19, 28, 15, 3);
+        c.strokeStyle = "#facc15"; c.lineWidth = 2; c.stroke();
+
+        c.fillStyle = "#9a3412";
+        c.beginPath();
+        c.moveTo(px + 7, py + 20);
+        c.quadraticCurveTo(px + 22, py + 8, px + 37, py + 20);
+        c.closePath();
+        c.fill();
+        c.strokeStyle = "#fde047"; c.lineWidth = 2; c.stroke();
+
         c.fillStyle = "#facc15";
-        c.fillRect(px + 19, py + 20, 6, 5);
+        fillRoundRect(c, px + 18, py + 17, 8, 9, 2);
+        c.fillStyle = "#38bdf8";
+        c.beginPath(); c.arc(px + 22, py + 21.5, 2.5, 0, Math.PI * 2); c.fill();
+
+        const starY = py + 9 + Math.sin(time * 0.008 + gx) * 2.5;
+        c.fillStyle = "#fef08a";
+        c.beginPath(); c.arc(px + 14, starY, 1.8, 0, Math.PI * 2); c.fill();
+        c.beginPath(); c.arc(px + 30, starY + 2, 1.4, 0, Math.PI * 2); c.fill();
       } else if (cell === 'P' || cell === 'B') {
         c.save();
         c.translate(px + 22, py + 22);
@@ -2444,7 +2713,6 @@
         }
       }
       bar.innerHTML = html;
-      // 同步更新頂部快捷補血補魔數字
       const qHp = document.getElementById('quick-hp-count');
       if (qHp) qHp.innerText = player.potions.hp;
       const qMp = document.getElementById('quick-mp-count');
@@ -2511,52 +2779,88 @@
       updateUI();
     }
     // =========================================================
-    // ★ 下半部開始：FF8 慢速優雅節奏版（槍刃板機 1.35 秒 + 格擋 1.2 秒） ★
+    // ★ 下半部開始：FF8 硬核挑戰平衡版（護盾減傷 + BOSS二階段狂暴 + 限時答題） ★
     // （直接貼在「上半部」的 startCanvasBattle 結尾大括號 } 後面即可）
     // =========================================================
+    let quizTimerInterval = null;
+    let quizTimeRemaining = 15;
+
+    // 動態強化當前交戰怪獸的數值（不需修改上半部也能讓怪獸與 BOSS 大幅變強！）
+    function ensureMonsterHardcoreStats(m) {
+      if (!m || m.hardcoreScaled) return;
+      m.hardcoreScaled = true;
+      const hpMult = m.isSubBoss ? 2.1 : 1.65;
+      const atkMult = m.isSubBoss ? 1.42 : 1.32;
+      const defMult = m.isSubBoss ? 1.40 : 1.28;
+
+      m.maxHp = Math.round(m.maxHp * hpMult);
+      m.hp = m.maxHp;
+      m.atk = Math.round(m.atk * atkMult);
+      m.def = Math.round(m.def * defMult);
+      m.maxShield = (m.maxShield || 2) + 1;
+      m.shield = m.maxShield;
+      m.enraged = false;
+      battleState.parryStreak = 0;
+    }
+
+    // 極限技門檻收緊：需瀕死 (HP <= 30%) 或累積 2 次完美格擋才可發動！
     function isLimitBreakReady() {
-      return (player.hp <= getMaxHp() * 0.55) || battleState.limitReady;
+      return (player.hp <= getMaxHp() * 0.30) || battleState.limitReady;
     }
 
     // 空白鍵與滑鼠點擊：同時支援「敵襲完美格擋」與「我方攻擊時的 FF8 槍刃板機 (Gunblade Trigger)！」
     function triggerParry() {
       if (!battleState.active) return;
 
-      // 1. FF8 槍刃板機判定 (紅框範圍放寬為 0.54 ~ 0.86，中心 0.70，容錯率大幅提升！)
+      // 1. FF8 槍刃板機判定 (紅框精準區收斂為 0.60 ~ 0.80，中心 0.70)
       if (battleState.gunbladeWindowActive && !battleState.gunbladeTriggered) {
         const diff = Math.abs(battleState.gunbladeCursor - 0.70);
-        if (diff <= 0.18) {
+        if (diff <= 0.11) {
           battleState.gunbladeTriggered = true;
           playSFX('heavy');
           battleState.screenShake = 20;
           battleState.flashScreenAlpha = 0.65;
           spawnShockwave(560, 240, "#fde047");
           spawnHitSparks(560, 240, "#ef4444", "#fde047", 36);
-          spawnFloatingText(560, 175, "💥 GUNBLADE TRIGGER!! (1.5x)", "#fde047", 26);
+          spawnFloatingText(560, 175, "💥 GUNBLADE TRIGGER!! (1.4x)", "#fde047", 26);
         } else {
           battleState.gunbladeWindowActive = false;
-          spawnFloatingText(240, 230, "太早按了！(MISS)", "#a8a29e", 18);
+          spawnFloatingText(240, 230, "時機偏差！(MISS)", "#a8a29e", 18);
         }
         return;
       }
 
-      // 2. 敵方攻擊瞬間：完美格擋 (並直接充能下一回合 Limit Break！)
+      // 2. 敵方攻擊瞬間：完美格擋 (需累積 2 次格擋才充能 Limit Break！)
       if (battleState.parryWindowActive && !battleState.parrySucceeded) {
+        // 必須在預警進度達 35% 之後按才算精準格擋，防止無腦連打空白鍵
+        if ((battleState.parryProgress || 0) < 0.35) {
+          battleState.parryWindowActive = false;
+          spawnFloatingText(230, 235, "⚠️ 太早格擋！破防受擊！", "#fb7185", 20);
+          return;
+        }
         battleState.parrySucceeded = true;
-        battleState.limitReady = true;
+        battleState.parryStreak = (battleState.parryStreak || 0) + 1;
         playSFX('parry');
         spawnHitSparks(230, 310, "#38bdf8", "#fde047", 32);
-        spawnFloatingText(230, 235, "✨ 完美格擋 & 極限技充能！", "#38bdf8", 24);
+
+        if (battleState.parryStreak >= 2) {
+          battleState.limitReady = true;
+          battleState.parryStreak = 0;
+          spawnFloatingText(230, 235, "✨ 二連格擋！極限技覺醒！", "#fde047", 24);
+        } else {
+          spawnFloatingText(230, 235, "🛡️ 精準格擋！(減傷50%｜集氣1/2)", "#38bdf8", 22);
+        }
       }
     }
 
     function renderBattleScene(time) {
       const m = battleState.monster;
+      ensureMonsterHardcoreStats(m);
       const meta = mapDataList[currentMapIdx];
 
       ctx.save();
 
-      // --- 1. FF8 動態 3D 環繞運鏡 (放慢擺動頻率，視覺更舒適) ---
+      // --- 1. FF8 動態 3D 環繞運鏡 ---
       let targetZoom = 1.0;
       let camPanX = Math.sin(time * 0.0008) * 16;
       let camPanY = Math.cos(time * 0.0011) * 7;
@@ -2595,6 +2899,10 @@
       if (battleState.gfSummonTimer > 0) {
         skyGrad.addColorStop(0, "#020617");
         skyGrad.addColorStop(1, "#3b0764");
+      } else if (m.enraged) {
+        skyGrad.addColorStop(0, "#1f050a");
+        skyGrad.addColorStop(0.6, "#4c0519");
+        skyGrad.addColorStop(1, meta.wallFront);
       } else {
         skyGrad.addColorStop(0, "#090d16");
         skyGrad.addColorStop(0.6, "#1e1b4b");
@@ -2608,7 +2916,7 @@
       ctx.globalAlpha = 0.25;
       for (let i = 0; i < 5; i++) {
         const px = 90 + i * 160 + Math.sin(time * 0.001 + i) * 12;
-        ctx.fillStyle = m.isSubBoss ? "#f43f5e" : "#38bdf8";
+        ctx.fillStyle = (m.isSubBoss || m.enraged) ? "#f43f5e" : "#38bdf8";
         ctx.beginPath();
         ctx.moveTo(px, horizonY);
         ctx.lineTo(px + 28, horizonY - 120);
@@ -2628,7 +2936,7 @@
 
       // 3D 放射狀透視地板線
       ctx.save();
-      ctx.strokeStyle = "rgba(56, 189, 248, 0.22)";
+      ctx.strokeStyle = m.enraged ? "rgba(244, 63, 94, 0.28)" : "rgba(56, 189, 248, 0.22)";
       ctx.lineWidth = 1.5;
       const vanishX = mainCanvas.width * 0.48;
       for (let i = -8; i <= 8; i++) {
@@ -2666,6 +2974,18 @@
         ctx.stroke();
         ctx.strokeStyle = "#38bdf8";
         ctx.strokeRect(-75, -75, 150, 150);
+        ctx.restore();
+      }
+
+      // 若怪獸還有護盾，繪製半透明藍色AT防護罩光球 (提醒玩家需先破盾！)
+      if (!m.isStunned && m.shield > 0) {
+        ctx.save();
+        ctx.translate(monsterX, monsterY);
+        ctx.strokeStyle = m.enraged ? "rgba(244, 63, 94, 0.65)" : "rgba(56, 189, 248, 0.55)";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, 58 + Math.sin(time * 0.01) * 3, 0, Math.PI * 2);
+        ctx.stroke();
         ctx.restore();
       }
 
@@ -2753,25 +3073,29 @@
       ctx.restore(); // 結束 3D 攝影機變換，以下繪製固定於螢幕上的 FF8 經典 HUD！
 
       // --- 4. FF8 經典灰藍漸層 UI 視窗 ---
-      drawFF8Window(ctx, 16, 14, 370, 78);
-      ctx.fillStyle = "#fde047";
+      drawFF8Window(ctx, 16, 14, 385, 78);
+      ctx.fillStyle = m.enraged ? "#fb7185" : "#fde047";
       ctx.font = "900 14px 'Noto Sans TC', sans-serif";
-      ctx.fillText(`SCAN ▸ Lv.${m.lv} ${m.name}`, 30, 36);
+      ctx.fillText(`SCAN ▸ Lv.${m.lv} ${m.name} ${m.enraged ? '🔥[狂暴]' : ''}`, 30, 36);
 
       let shieldIcons = "";
       for (let i = 0; i < m.maxShield; i++) shieldIcons += (i < m.shield) ? "🛡️" : "◇";
       ctx.fillStyle = m.isStunned ? "#fde047" : "#7dd3fc";
       ctx.font = "bold 11.5px sans-serif";
-      ctx.fillText(m.isStunned ? "💥 BREAK 破防暈眩中 (傷害 1.6x)" : `護盾：${shieldIcons} ｜ 攻:${m.atk} 防:${m.def}`, 30, 55);
+      ctx.fillText(
+        m.isStunned ? "💥 BREAK 破防暈眩中 (承受 1.6x 傷害)" : `護盾(減傷45%)：${shieldIcons}｜攻:${m.atk} 防:${m.def}`,
+        30,
+        55
+      );
 
       ctx.fillStyle = "#090d16";
-      ctx.fillRect(30, 64, 340, 11);
+      ctx.fillRect(30, 64, 355, 11);
       const mHpRatio = Math.max(0, m.hp / m.maxHp);
-      const mBarGrad = ctx.createLinearGradient(30, 0, 370, 0);
+      const mBarGrad = ctx.createLinearGradient(30, 0, 385, 0);
       mBarGrad.addColorStop(0, "#e11d48");
       mBarGrad.addColorStop(1, "#fbbf24");
       ctx.fillStyle = mBarGrad;
-      ctx.fillRect(30, 64, 340 * mHpRatio, 11);
+      ctx.fillRect(30, 64, 355 * mHpRatio, 11);
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 10px monospace";
       ctx.fillText(`HP ${m.hp} / ${m.maxHp}`, 165, 73);
@@ -2788,13 +3112,13 @@
       } else {
         ctx.fillStyle = "#94a3b8";
         ctx.font = "bold 11px monospace";
-        ctx.fillText("ATB  ████████ FULL", 615, 35);
+        ctx.fillText(`格擋集氣 [${battleState.parryStreak || 0}/2]`, 615, 35);
       }
 
       ctx.fillStyle = "#38bdf8";
       ctx.font = "bold 12px monospace";
       ctx.fillText(`HP`, 470, 56);
-      ctx.fillStyle = player.hp <= getMaxHp() * 0.5 ? "#fde047" : "#ffffff";
+      ctx.fillStyle = player.hp <= getMaxHp() * 0.3 ? "#fde047" : "#ffffff";
       ctx.font = "900 15px monospace";
       ctx.fillText(`${player.hp}/${getMaxHp()}`, 498, 56);
 
@@ -2809,7 +3133,7 @@
       ctx.font = "11px sans-serif";
       ctx.fillText(`🗡️ ${player.equipped.weapon.name} ｜ 🛡️ 防禦 ${getTotalDef()}`, 470, 76);
 
-      // --- 5. FF8 招牌《Renzokuken 槍刃板機時機條》UI (已放慢速度並加寬紅區！) ---
+      // --- 5. FF8 招牌《Renzokuken 槍刃板機時機條》UI (精準紅框 20%) ---
       if (battleState.gunbladeWindowActive) {
         const barX = 186, barY = 362, barW = 420, barH = 34;
         drawFF8Window(ctx, barX - 12, barY - 28, barW + 24, barH + 40);
@@ -2824,36 +3148,39 @@
         ctx.lineWidth = 2;
         ctx.strokeRect(barX, barY, barW, barH);
 
-        // 加寬版紅色最佳擊發區 (0.54 ~ 0.86，佔比 32% 更好按中！)
-        const hitX = barX + barW * 0.54;
-        const hitW = barW * 0.32;
-        ctx.fillStyle = "rgba(239, 68, 68, 0.82)";
+        // 精準紅色擊發區 (0.60 ~ 0.80)
+        const hitX = barX + barW * 0.60;
+        const hitW = barW * 0.20;
+        ctx.fillStyle = "rgba(239, 68, 68, 0.85)";
         ctx.fillRect(hitX, barY + 2, hitW, barH - 4);
         ctx.fillStyle = "#ffffff";
-        ctx.font = "900 12px monospace";
-        ctx.fillText("★ TRIGGER! (按空白鍵) ★", hitX + 8, barY + 21);
+        ctx.font = "900 11px monospace";
+        ctx.fillText("TRIGGER!", hitX + 12, barY + 21);
 
         // 推進金色光標
         const curX = barX + Math.min(1, battleState.gunbladeCursor) * barW;
         ctx.fillStyle = "#fde047";
-        ctx.fillRect(curX - 5, barY - 4, 10, barH + 8);
+        ctx.fillRect(curX - 4, barY - 4, 8, barH + 8);
       }
 
-      // --- 6. 敵襲完美格擋提示（含視覺倒數計時條，1.2 秒充裕反應！） ---
+      // --- 6. 敵襲完美格擋提示（需等藍色進度條進入後半段才可按！） ---
       if (battleState.parryWindowActive && !battleState.parrySucceeded) {
-        drawFF8Window(ctx, 186, 170, 420, 56);
+        drawFF8Window(ctx, 186, 168, 420, 58);
         ctx.fillStyle = "#fde047";
-        ctx.font = "900 15px 'Noto Sans TC', sans-serif";
+        ctx.font = "900 14.5px 'Noto Sans TC', sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText("⚡ 敵襲預警！按【空白鍵】或點擊畫面施展完美格擋！", 396, 195);
+        ctx.fillText("⚡ 敵襲蓄力中！當光條進入【右側藍框】時按空白鍵格擋！", 396, 193);
         ctx.textAlign = "left";
 
-        // 格擋倒數進度條
-        const remainRatio = Math.max(0, 1 - (battleState.parryProgress || 0));
         ctx.fillStyle = "#090d16";
-        ctx.fillRect(206, 206, 380, 10);
-        ctx.fillStyle = "#38bdf8";
-        ctx.fillRect(206, 206, 380 * remainRatio, 10);
+        ctx.fillRect(206, 204, 380, 12);
+        // 有效格擋區間標示 (35% ~ 100%)
+        ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
+        ctx.fillRect(206 + 380 * 0.35, 204, 380 * 0.65, 12);
+
+        const curParryW = Math.min(1, battleState.parryProgress || 0) * 380;
+        ctx.fillStyle = (battleState.parryProgress || 0) >= 0.35 ? "#38bdf8" : "#94a3b8";
+        ctx.fillRect(206, 204, curParryW, 12);
       }
 
       // --- 7. FF8 頂部經典招式名橫幅 ---
@@ -2893,7 +3220,7 @@
     }
 
     // =========================================================
-    // 9. 戰鬥特效與答題詠唱邏輯 (慢速優化版)
+    // 9. 戰鬥特效與限時 15 秒答題詠唱邏輯
     // =========================================================
     function spawnHitSparks(x, y, c1, c2, count = 24) {
       for (let i = 0; i < count; i++) {
@@ -2924,35 +3251,30 @@
 
     function prepareAction(skillId) {
       if (!battleState.active || battleState.turnBusy) return;
+      ensureMonsterHardcoreStats(battleState.monster);
       const sk = skillCatalog.find(s => s.id === skillId);
       if (!sk) return;
 
       if (player.mp < sk.mpCost) {
         playSFX('trap');
-        addLog(`💧 靈力(MP)不足！施展【${sk.name}】需要 ${sk.mpCost} 點靈力，請先服用行動聚靈丹或使用疾風劍氣！`, "text-sky-300 font-bold");
+        addLog(`💧 靈力(MP)不足！施展【${sk.name}】需要 ${sk.mpCost} 點靈力，請先服用聚靈丹或使用疾風劍氣！`, "text-sky-300 font-bold");
         return;
       }
 
-      if (sk.type === 'heal') {
-        setBattleButtonsDisabled(true);
-        player.mp -= sk.mpCost;
-        const healAmt = Math.max(35, Math.floor(getMaxHp() * 0.42));
-        player.hp = Math.min(getMaxHp(), player.hp + healAmt);
-        battleState.defDebuff = 0;
-        playSFX('coin');
-        spawnHitSparks(230, 310, "#34d399", "#a7f3d0", 28);
-        spawnFloatingText(230, 240, `+${healAmt}`, "#4ade80", 26);
-        addLog(`🌿 施展恢復魔法【${sk.name}】，恢復 ${healAmt} 點 HP 並淨化破甲狀態！`, "text-emerald-400 font-bold");
-        updateUI();
-        setTimeout(() => executeMonsterTurn(), 950);
-        return;
-      }
-
+      // 療傷招式現在也需要通過知識詠唱考驗！
       battleState.pendingSkillId = skillId;
       openQuizModalForSkill(sk);
     }
 
+    function clearQuizTimer() {
+      if (quizTimerInterval) {
+        clearInterval(quizTimerInterval);
+        quizTimerInterval = null;
+      }
+    }
+
     function openQuizModalForSkill(sk) {
+      clearQuizTimer();
       const qObj = drawNextQuestion();
       battleState.currentQuiz = qObj;
 
@@ -2963,7 +3285,9 @@
       }
       battleState.shuffledOpts = indexedOpts;
 
-      document.getElementById('quiz-category').innerText = `📜 【${qObj.cat}】詠唱：${sk.name}`;
+      quizTimeRemaining = 15;
+      const catEl = document.getElementById('quiz-category');
+      catEl.innerText = `📜 【${qObj.cat}】詠唱：${sk.name} (⏱️ 剩餘 ${quizTimeRemaining} 秒)`;
       document.getElementById('quiz-question').innerText = qObj.q;
 
       const labels = ['A', 'B', 'C', 'D'];
@@ -2980,9 +3304,37 @@
       fb.innerHTML = '';
 
       document.getElementById('quiz-modal').classList.remove('hidden');
+
+      // 啟動 15 秒限時答題倒數
+      quizTimerInterval = setInterval(() => {
+        quizTimeRemaining--;
+        catEl.innerText = `📜 【${qObj.cat}】詠唱：${sk.name} (⏱️ 剩餘 ${quizTimeRemaining} 秒)`;
+        if (quizTimeRemaining <= 0) {
+          clearQuizTimer();
+          handleQuizTimeout();
+        }
+      }, 1000);
+    }
+
+    function handleQuizTimeout() {
+      const buttons = document.querySelectorAll('.quiz-opt-btn');
+      buttons.forEach(b => b.disabled = true);
+      playSFX('trap');
+      battleState.wrongAnswerPenalty = true;
+      const qObj = battleState.currentQuiz;
+      const rightOpt = battleState.shuffledOpts.find(o => o.isCorrect);
+      const fb = document.getElementById('quiz-feedback');
+      fb.classList.remove('hidden');
+      fb.className = "mt-4 p-3 rounded-xl border border-rose-500/60 bg-rose-950/90 text-rose-200 text-xs leading-relaxed";
+      fb.innerHTML = `
+        <div>⏰ <b>詠唱逾時（超過 15 秒）！正解為：【${rightOpt ? rightOpt.text : ''}】</b></div>
+        <div class="mt-1 text-stone-300">${qObj.exp}</div>
+        <button onclick="confirmWrongAnswerContinue()" class="mt-2.5 w-full py-2 bg-rose-600 hover:bg-rose-500 text-white font-black rounded-lg text-xs">時間耗盡！準備格擋敵方 1.45 倍狂暴反擊</button>
+      `;
     }
 
     function submitQuizAnswer(choiceIdx) {
+      clearQuizTimer();
       const buttons = document.querySelectorAll('.quiz-opt-btn');
       buttons.forEach(b => b.disabled = true);
 
@@ -2996,22 +3348,28 @@
         player.stats.correct++;
         battleState.wrongAnswerPenalty = false;
         fb.className = "mt-4 p-3 rounded-xl border border-emerald-500/60 bg-emerald-950/80 text-emerald-200 text-xs leading-relaxed";
-        fb.innerHTML = `✅ <b>詠唱成功！準備衝刺進攻（等黃色光標滑入紅框時按空白鍵觸發 1.5 倍暴擊！）</b><br>${qObj.exp}`;
+        fb.innerHTML = `✅ <b>詠唱成功！準備進攻（光標滑入紅框時按空白鍵觸發 1.4 倍暴擊與額外破盾！）</b><br>${qObj.exp}`;
         updateUI();
 
         setTimeout(() => {
           document.getElementById('quiz-modal').classList.add('hidden');
           executePlayerSkill(battleState.pendingSkillId);
-        }, 900);
+        }, 850);
       } else {
         playSFX('trap');
+        // 答錯也會消耗一半招式 MP！
+        const sk = skillCatalog.find(s => s.id === battleState.pendingSkillId);
+        if (sk && sk.mpCost > 0) {
+          player.mp = Math.max(0, player.mp - Math.ceil(sk.mpCost * 0.5));
+          updateUI();
+        }
         battleState.wrongAnswerPenalty = true;
         const rightOpt = battleState.shuffledOpts.find(o => o.isCorrect);
         fb.className = "mt-4 p-3 rounded-xl border border-rose-500/60 bg-rose-950/90 text-rose-200 text-xs leading-relaxed";
         fb.innerHTML = `
-          <div>❌ <b>詠唱失誤！正解為：【${rightOpt ? rightOpt.text : ''}】</b></div>
+          <div>❌ <b>詠唱失誤（反噬消耗靈力）！正解為：【${rightOpt ? rightOpt.text : ''}】</b></div>
           <div class="mt-1 text-stone-300">${qObj.exp}</div>
-          <button onclick="confirmWrongAnswerContinue()" class="mt-2.5 w-full py-2 bg-rose-600 hover:bg-rose-500 text-white font-black rounded-lg text-xs">記住觀念了，準備格擋敵方反擊</button>
+          <button onclick="confirmWrongAnswerContinue()" class="mt-2.5 w-full py-2 bg-rose-600 hover:bg-rose-500 text-white font-black rounded-lg text-xs">記住觀念了，準備格擋敵方 1.45 倍狂暴反擊</button>
         `;
       }
     }
@@ -3019,15 +3377,29 @@
     function confirmWrongAnswerContinue() {
       document.getElementById('quiz-modal').classList.add('hidden');
       setBattleButtonsDisabled(true);
-      addLog("⚠️ 詠唱失誤招式潰散！敵方趁隙發動 1.25 倍狂暴反擊！", "text-rose-400 font-bold");
+      addLog("⚠️ 詠唱失誤招式潰散！敵方趁隙發動 1.45 倍狂暴反擊！", "text-rose-400 font-bold");
       setTimeout(() => executeMonsterTurn(), 500);
     }
 
-    // ★ 放慢版 FF8 槍刃板機：1350ms (1.35秒) 充裕反應時間，且一旦按成功立即斬擊！ ★
     function executePlayerSkill(skillId) {
       setBattleButtonsDisabled(true);
       const sk = skillCatalog.find(s => s.id === skillId) || skillCatalog[0];
       const m = battleState.monster;
+
+      // 處理療傷技能
+      if (sk.type === 'heal') {
+        player.mp = Math.max(0, player.mp - sk.mpCost);
+        const healAmt = Math.max(30, Math.floor(getMaxHp() * 0.36));
+        player.hp = Math.min(getMaxHp(), player.hp + healAmt);
+        battleState.defDebuff = 0;
+        playSFX('coin');
+        spawnHitSparks(230, 310, "#34d399", "#a7f3d0", 28);
+        spawnFloatingText(230, 240, `+${healAmt}`, "#4ade80", 26);
+        addLog(`🌿 施展恢復魔法【${sk.name}】，恢復 ${healAmt} 點 HP 並淨化破甲狀態！`, "text-emerald-400 font-bold");
+        updateUI();
+        setTimeout(() => executeMonsterTurn(), 900);
+        return;
+      }
 
       const isLimit = isLimitBreakReady();
       battleState.limitReady = false;
@@ -3046,13 +3418,12 @@
       battleState.gunbladeCursor = 0;
 
       const startTime = performance.now();
-      const duration = 1350; // ★ 從 620ms 放慢至 1350ms，學生可以從容看準再按！
+      const duration = 1350;
 
       const gbTick = setInterval(() => {
         const elapsed = performance.now() - startTime;
         battleState.gunbladeCursor = elapsed / duration;
 
-        // 如果已經成功擊發板機，或時間走完，立即結算揮劍傷害！
         if (battleState.gunbladeTriggered || elapsed >= duration) {
           clearInterval(gbTick);
           battleState.gunbladeWindowActive = false;
@@ -3069,20 +3440,22 @@
       let rawDmg = atk;
       let ignoreDef = false;
 
-      if (sk.id === 'slash') rawDmg = atk * 1.05;
-      else if (sk.id === 'thunder') rawDmg = atk * 1.85;
-      else if (sk.id === 'pierce') { rawDmg = atk * 1.35; ignoreDef = true; }
-      else if (sk.id === 'vamp') rawDmg = atk * 1.40;
-      else if (sk.id === 'twin') rawDmg = atk * 2.30;
+      // 略微收斂技能倍率，強化策略配招重要性
+      if (sk.id === 'slash') rawDmg = atk * 1.0;
+      else if (sk.id === 'thunder') rawDmg = atk * 1.65;
+      else if (sk.id === 'pierce') { rawDmg = atk * 1.28; ignoreDef = true; }
+      else if (sk.id === 'vamp') rawDmg = atk * 1.25;
+      else if (sk.id === 'twin') rawDmg = atk * 1.95;
       else if (sk.id === 'shield') {
-        rawDmg = atk * 1.30;
-        battleState.defBuff += 14;
+        rawDmg = atk * 1.20;
+        battleState.defBuff += 12;
         const buffBadge = document.getElementById('battle-buff-badge');
         buffBadge.classList.remove('hidden');
         buffBadge.innerText = `🛡️ 金鐘護體 (+${battleState.atkBuff}攻/+${battleState.defBuff}防)`;
       }
-      else if (sk.id === 'ultimate') { rawDmg = atk * 2.60; ignoreDef = true; }
+      else if (sk.id === 'ultimate') { rawDmg = atk * 2.25; ignoreDef = true; }
 
+      // 先判定護盾削減
       let totalBreak = sk.shieldBreak + (battleState.gunbladeTriggered ? 1 : 0);
       let brokeJustNow = false;
       if (!m.isStunned && m.shield > 0) {
@@ -3097,11 +3470,17 @@
       }
 
       const effectiveDef = ignoreDef ? 0 : m.def;
-      let finalDmg = Math.max(8, Math.round(rawDmg - effectiveDef * 0.65 + (Math.random() * 4 - 2)));
+      let finalDmg = Math.max(5, Math.round(rawDmg - effectiveDef * 0.85 + (Math.random() * 4 - 2)));
 
-      if (m.isStunned) finalDmg = Math.round(finalDmg * 1.6);
-      if (battleState.gunbladeTriggered) finalDmg = Math.round(finalDmg * 1.5);
-      if (isLimit) finalDmg = Math.round(finalDmg * 1.35);
+      // ★ 硬核關鍵機制：若敵方護盾尚未擊碎，受到 45% 護盾減傷！擊碎護盾才觸發 1.55 倍破防傷害！
+      if (m.isStunned) {
+        finalDmg = Math.round(finalDmg * 1.55);
+      } else if (m.shield > 0) {
+        finalDmg = Math.max(4, Math.round(finalDmg * 0.55));
+      }
+
+      if (battleState.gunbladeTriggered) finalDmg = Math.round(finalDmg * 1.4);
+      if (isLimit) finalDmg = Math.round(finalDmg * 1.3);
 
       m.hp = Math.max(0, m.hp - finalDmg);
       battleState.monsterFlash = 16;
@@ -3119,28 +3498,41 @@
         }, h * 150);
       }
 
+      const shieldMitigated = !m.isStunned && m.shield > 0;
       spawnFloatingText(
         560,
         220,
-        `${battleState.gunbladeTriggered ? '💥 ' : ''}-${finalDmg}`,
-        (battleState.gunbladeTriggered || m.isStunned) ? "#fde047" : "#ffffff",
-        (battleState.gunbladeTriggered || isLimit) ? 32 : 26
+        `${battleState.gunbladeTriggered ? '💥 ' : ''}-${finalDmg}${shieldMitigated ? ' (護盾減傷)' : ''}`,
+        (battleState.gunbladeTriggered || m.isStunned) ? "#fde047" : (shieldMitigated ? "#94a3b8" : "#ffffff"),
+        (battleState.gunbladeTriggered || isLimit) ? 30 : 22
       );
 
       if (sk.id === 'vamp') {
-        const drainHp = Math.max(12, Math.round(finalDmg * 0.5));
+        const drainHp = Math.max(8, Math.round(finalDmg * 0.42));
         player.hp = Math.min(getMaxHp(), player.hp + drainHp);
         spawnFloatingText(230, 245, `+${drainHp}`, "#4ade80", 24);
       }
 
       addLog(
-        `🗡️ 施展【${sk.name}】${battleState.gunbladeTriggered ? '（🔥槍刃板機暴擊 1.5x！）' : ''}${isLimit ? '（⚡極限技爆發！）' : ''}造成 ${finalDmg} 點傷害！`,
+        `🗡️ 施展【${sk.name}】造成 ${finalDmg} 點傷害！${shieldMitigated ? '（⚠️敵方護盾未破，傷害減免 45%！）' : ''}`,
         "text-amber-300 font-bold"
       );
+
+      // ★ BOSS 半血二階段狂暴覺醒機制 (HP <= 45% 觸發一次) ★
+      if (m.isSubBoss && m.hp > 0 && m.hp <= m.maxHp * 0.45 && !m.enraged) {
+        m.enraged = true;
+        m.isStunned = false;
+        m.shield = m.maxShield;
+        m.atk = Math.round(m.atk * 1.35);
+        playSFX('heavy');
+        spawnShockwave(560, 245, "#f43f5e");
+        spawnFloatingText(560, 150, "🔥 BOSS 狂暴覺醒！攻擊暴增 & 護盾全滿！", "#fb7185", 24);
+        addLog(`🔥 【警告】${m.name} 進入二階段狂暴狀態！攻擊力暴增 1.35 倍並重整所有護盾！`, "text-rose-400 font-black");
+      }
+
       updateUI();
       renderBattleSkillBar();
 
-      // ★ 延長斬擊後的回位與喘息時間 (850ms)
       setTimeout(() => {
         battleState.heroOffsetX = 0;
         if (m.hp <= 0) {
@@ -3151,7 +3543,6 @@
       }, 850);
     }
 
-    // ★ 放慢版敵方回合：格擋反應視窗拉長至 1200ms (1.2秒)，並附帶視覺倒數條 ★
     function executeMonsterTurn() {
       if (!battleState.active) return;
       const m = battleState.monster;
@@ -3160,8 +3551,8 @@
       if (m.isStunned) {
         m.isStunned = false;
         m.shield = m.maxShield;
-        spawnFloatingText(560, 215, "🔄 暈眩跳過回合", "#38bdf8", 22);
-        addLog(`💫 【${m.name}】因護盾破碎暈眩無法行動，重整了 ${m.maxShield} 層護盾！`, "text-cyan-300 font-bold");
+        spawnFloatingText(560, 215, "🔄 暈眩結束・護盾重整", "#38bdf8", 22);
+        addLog(`💫 【${m.name}】從暈眩中甦醒，重整了 ${m.maxShield} 層護盾！`, "text-cyan-300 font-bold");
         setBattleButtonsDisabled(false);
         return;
       }
@@ -3173,7 +3564,7 @@
       battleState.bannerTimer = 65;
 
       const parryStart = performance.now();
-      const parryDuration = 1200; // ★ 從 560ms 拉長為 1200ms (1.2秒)！
+      const parryDuration = 1200;
 
       const parryTick = setInterval(() => {
         const elapsed = performance.now() - parryStart;
@@ -3184,8 +3575,7 @@
           return;
         }
 
-        // 若已成功按下格擋或 1.2 秒預警結束，立即執行怪獸撲擊結算
-        if (battleState.parrySucceeded || elapsed >= parryDuration) {
+        if (battleState.parrySucceeded || !battleState.parryWindowActive || elapsed >= parryDuration) {
           clearInterval(parryTick);
           battleState.parryWindowActive = false;
           resolveMonsterAttack(m);
@@ -3197,23 +3587,24 @@
       if (!battleState.active) return;
       battleState.monsterOffsetX = -160;
 
-      const useSpecial = (battleState.turnCount % 2 === 0);
-      let rawAtk = m.atk * (useSpecial ? 1.22 : 1.0);
+      const useSpecial = (battleState.turnCount % 2 === 0) || m.enraged;
+      let rawAtk = m.atk * (useSpecial ? 1.28 : 1.05);
       if (battleState.wrongAnswerPenalty) {
-        rawAtk *= 1.25;
+        rawAtk *= 1.45; // 答錯或逾時承受 1.45 倍重擊！
         battleState.wrongAnswerPenalty = false;
       }
 
-      const pDef = (useSpecial && m.skillType === 'ignore_def') ? Math.floor(getTotalDef() * 0.5) : getTotalDef();
-      let dmg = Math.max(4, Math.round(rawAtk - pDef * 0.75));
+      const pDef = (useSpecial && m.skillType === 'ignore_def') ? Math.floor(getTotalDef() * 0.45) : getTotalDef();
+      let dmg = Math.max(8, Math.round(rawAtk - pDef * 0.65));
 
       if (battleState.parrySucceeded) {
-        dmg = Math.max(1, Math.round(dmg * 0.3));
+        dmg = Math.max(4, Math.round(dmg * 0.50)); // 格擋減傷 50%
         m.shield = Math.max(0, m.shield - 1);
-        addLog(`🛡️ 【完美格擋成功】減免 70% 傷害、震碎敵方 1 層護盾，並觸發下回合 LIMIT BREAK 極限技！`, "text-cyan-300 font-black");
+        addLog(`🛡️ 【精準格擋】減免 50% 傷害並反震削去敵方 1 層護盾！`, "text-cyan-300 font-black");
       } else {
+        battleState.parryStreak = 0; // 未格擋則中斷連段集氣
         playSFX('hit');
-        battleState.screenShake = 15;
+        battleState.screenShake = 16;
       }
 
       player.hp = Math.max(0, player.hp - dmg);
@@ -3223,26 +3614,26 @@
 
       if (useSpecial && !battleState.parrySucceeded) {
         if (m.skillType === 'drain_mp') {
-          const lostMp = Math.min(player.mp, 8);
+          const lostMp = Math.min(player.mp, 12);
           player.mp -= lostMp;
-          addLog(`🌪️ ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並吸走 ${lostMp} 點靈力！`, "text-orange-300");
+          addLog(`🌪️ ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並吸乾 ${lostMp} 點靈力！`, "text-orange-300");
         } else if (m.skillType === 'steal_gold') {
-          const stolen = Math.min(player.gold, 12);
+          const stolen = Math.min(player.gold, 18);
           player.gold -= stolen;
           addLog(`🔥 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並趁亂奪走 ${stolen} 銀兩！`, "text-orange-300");
         } else if (m.skillType === 'vampire') {
-          const healM = Math.round(dmg * 0.5);
+          const healM = Math.round(dmg * 0.65);
           m.hp = Math.min(m.maxHp, m.hp + healM);
           spawnFloatingText(560, 215, `+${healM}`, "#4ade80", 22);
           addLog(`🪝 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並吸取 ${healM} 點生命！`, "text-rose-300");
         } else if (m.skillType === 'break_def') {
-          battleState.defDebuff += 5;
-          addLog(`🐴 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並震裂護甲 (-5 防禦)！`, "text-rose-300");
+          battleState.defDebuff += 7;
+          addLog(`🐴 ${m.name} 施展【${m.skillName}】，造成 ${dmg} 傷害並震碎護甲 (-7 防禦)！`, "text-rose-300");
         } else {
           addLog(`👹 ${m.name} 施展【${m.skillName}】，對少俠造成 ${dmg} 點重創！`, "text-rose-300");
         }
       } else {
-        addLog(`👹 ${m.name} 發動撲擊，造成 ${dmg} 點傷害。`, "text-stone-300");
+        addLog(`👹 ${m.name} 發動猛烈撲擊，造成 ${dmg} 點傷害。`, "text-stone-300");
       }
 
       updateUI();
@@ -3267,7 +3658,7 @@
       player.gold += m.gold;
       player.stats.kills++;
 
-      addLog(`🏆 斬除【${m.name}】！獲得 ${m.exp} 歷練(EXP) 與 🪙 ${m.gold} 銀兩！`, "text-yellow-300 font-black");
+      addLog(`🏆 斬除強敵【${m.name}】！獲得 ${m.exp} 歷練(EXP) 與 🪙 ${m.gold} 銀兩！`, "text-yellow-300 font-black");
 
       checkLevelUp();
       battleState.active = false;
@@ -3299,15 +3690,16 @@
       }
     }
 
+    // 升級經驗門檻提高，鼓勵學生探索迷宮、開啟寶箱與購買高階裝備
     function checkLevelUp() {
       while (player.exp >= player.nextExp) {
         player.exp -= player.nextExp;
         player.lv++;
-        player.nextExp = Math.round(player.nextExp * 1.38 + 15);
-        player.baseMaxHp += 26;
-        player.baseMaxMp += 14;
-        player.baseAtk += 5;
-        player.baseDef += 3;
+        player.nextExp = Math.round(player.nextExp * 1.52 + 22);
+        player.baseMaxHp += 20;
+        player.baseMaxMp += 10;
+        player.baseAtk += 4;
+        player.baseDef += 2;
         player.hp = getMaxHp();
         player.mp = getMaxMp();
 
@@ -3319,21 +3711,23 @@
           }
           addLog(`🌟 【境界突破 Lv.${player.lv}】命/靈全滿，並領悟新武學【${sk.name}】！`, "text-yellow-300 font-black");
         } else {
-          addLog(`🌟 【境界突破 Lv.${player.lv}】各項屬性大幅提升，命與靈完全恢復！`, "text-yellow-300 font-black");
+          addLog(`🌟 【境界突破 Lv.${player.lv}】各項屬性提升，命與靈完全恢復！`, "text-yellow-300 font-black");
         }
         renderBattleSkillBar();
       }
     }
 
+    // 戰敗懲罰加重：遺失 30% 銀兩，且復活後僅恢復 75% HP/MP
     function handlePlayerDefeat() {
+      clearQuizTimer();
       playSFX('trap');
       battleState.active = false;
       document.getElementById('battle-ui-overlay').classList.add('hidden');
 
-      const lostGold = Math.floor(player.gold * 0.15);
+      const lostGold = Math.floor(player.gold * 0.30);
       player.gold = Math.max(0, player.gold - lostGold);
-      player.hp = getMaxHp();
-      player.mp = getMaxMp();
+      player.hp = Math.max(25, Math.floor(getMaxHp() * 0.75));
+      player.mp = Math.max(15, Math.floor(getMaxMp() * 0.75));
 
       const meta = mapDataList[currentMapIdx];
       hero.x = meta.startX * TILE_SIZE + TILE_SIZE / 2;
@@ -3342,62 +3736,84 @@
 
       updateUI();
       saveGameProgress();
-      addLog(`💫 系統當機重啟！古月長老將你救回起點並恢復全滿狀態（遺失 ${lostGold} 銀兩）。`, "text-rose-400 font-black");
+      addLog(`💫 不敵妖魔當機重啟！被救回起點並遺失 30% 銀兩（共 ${lostGold} Bytes），請添購神兵或丹藥再戰！`, "text-rose-400 font-black");
     }
 
     function fleeBattle() {
       if (!battleState.active || battleState.turnBusy) return;
+      if (battleState.monster && battleState.monster.isSubBoss) {
+        playSFX('trap');
+        addLog("⚠️ 守門首領已封鎖退路，BOSS 戰無法中途撤退！", "text-rose-400 font-black");
+        return;
+      }
       playSFX('slash');
       battleState.active = false;
       document.getElementById('battle-ui-overlay').classList.add('hidden');
       hero.invulnerableUntil = performance.now() + 2200;
-      addLog("🏃 施展御風輕功撤退回迷宮！（獲得 2 秒無敵閃避時間）", "text-sky-300 font-bold");
+      addLog("🏃 施展御風輕功撤退回迷宮！", "text-sky-300 font-bold");
     }
 
     // =========================================================
-    // 10. 丹藥使用與西域光華鍛造坊（紙娃娃換裝室）
+    // 10. 丹藥使用（戰鬥中吃藥會消耗回合！）與西域光華鍛造坊
     // =========================================================
     function usePotion(type) {
       initAudio();
+      if (battleState.active && battleState.turnBusy) {
+        return addLog("⏳ 敵方行動中，無法服用丹藥！", "text-rose-400");
+      }
+
       const key = (type === 'Scroll') ? 'scroll' : type;
+      let consumedInBattle = false;
 
       if (key === 'hp') {
         if (player.potions.hp <= 0) return addLog("❌ 乖乖金創藥已用盡！可至鍛造坊添購。", "text-rose-400");
         if (player.hp >= getMaxHp()) return addLog("💡 目前命(HP)已滿，無須服用金創藥。", "text-amber-300");
         player.potions.hp--;
-        player.hp = Math.min(getMaxHp(), player.hp + 65);
+        player.hp = Math.min(getMaxHp(), player.hp + 60);
+        consumedInBattle = true;
         playSFX('coin');
-        addLog("🏺 服用【綠色乖乖金創藥】，恢復 65 點命(HP)！", "text-emerald-400 font-bold");
+        addLog("🏺 服用【綠色乖乖金創藥】，恢復 60 點命(HP)！", "text-emerald-400 font-bold");
       } else if (key === 'mp') {
         if (player.potions.mp <= 0) return addLog("❌ 行動聚靈丹已用盡！可至鍛造坊添購。", "text-rose-400");
         if (player.mp >= getMaxMp()) return addLog("💡 目前靈(MP)已滿，無須服用聚靈丹。", "text-sky-300");
         player.potions.mp--;
-        player.mp = Math.min(getMaxMp(), player.mp + 40);
+        player.mp = Math.min(getMaxMp(), player.mp + 35);
+        consumedInBattle = true;
         playSFX('coin');
-        addLog("⚡ 服用【行動電源聚靈丹】，恢復 40 點靈(MP)！", "text-sky-400 font-bold");
+        addLog("⚡ 服用【行動電源聚靈丹】，恢復 35 點靈(MP)！", "text-sky-400 font-bold");
       } else if (key === 'superHp') {
         if (player.potions.superHp <= 0) return addLog("❌ 尚無伺服器大補丸！可從寶箱或鍛造坊取得。", "text-rose-400");
         player.potions.superHp--;
-        player.hp = Math.min(getMaxHp(), player.hp + 160);
+        player.hp = Math.min(getMaxHp(), player.hp + 150);
         battleState.defDebuff = 0;
+        consumedInBattle = true;
         playSFX('coin');
-        addLog("🍱 服用【伺服器重組大補丸】，恢復 160 點命(HP)並解除破甲狀態！", "text-amber-300 font-black");
+        addLog("🍱 服用【伺服器重組大補丸】，恢復 150 點命(HP)並解除破甲狀態！", "text-amber-300 font-black");
       } else if (key === 'scroll') {
         if (player.potions.scroll <= 0) return addLog("❌ 尚無超頻狂暴卷軸！可從寶箱或鍛造坊取得。", "text-rose-400");
         player.potions.scroll--;
         if (battleState.active) {
-          battleState.atkBuff += 18;
+          battleState.atkBuff += 16;
           const buffBadge = document.getElementById('battle-buff-badge');
           buffBadge.classList.remove('hidden');
           buffBadge.innerText = `✨ 超頻狂暴 (+${battleState.atkBuff}攻/+${battleState.defBuff}防)`;
         } else {
-          player.nextBattleAtkBuff += 18;
+          player.nextBattleAtkBuff += 16;
         }
+        consumedInBattle = true;
         playSFX('parry');
-        addLog("📜 催動【CPU 超頻狂暴卷軸】，武力(ATK)大幅提升 +18！", "text-purple-300 font-black");
+        addLog("📜 催動【CPU 超頻狂暴卷軸】，武力(ATK)提升 +16！", "text-purple-300 font-black");
       }
+
       updateUI();
       saveGameProgress();
+
+      // ★ 若在戰鬥中使用丹藥，關閉行囊視窗並消耗本回合（怪獸立刻反擊）！
+      if (battleState.active && consumedInBattle) {
+        document.getElementById('hero-bag-modal').classList.add('hidden');
+        setBattleButtonsDisabled(true);
+        setTimeout(() => executeMonsterTurn(), 650);
+      }
     }
 
     function openShopModal(defaultTab) {
